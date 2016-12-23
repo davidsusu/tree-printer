@@ -1,0 +1,6 @@
+*.class
+*.dex
+*.dex.zip
+*.java.swp
+*.java.swo
+bin/
