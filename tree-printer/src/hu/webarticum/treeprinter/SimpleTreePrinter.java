@@ -13,14 +13,14 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 	private String liningNode = " |-";
 	private String liningLastNode = " '-";
 
-	private NodeDecorator nodeDecorator;
+	private NodePrettifier nodePrettifier;
 	
 	public SimpleTreePrinter() {
 		this(null);
 	}
 
-	public SimpleTreePrinter(NodeDecorator nodeDecorator) {
-		this("   " , " | ", " |-", " '-", nodeDecorator);
+	public SimpleTreePrinter(NodePrettifier nodePrettifier) {
+		this("   " , " | ", " |-", " '-", nodePrettifier);
 	}
 
 	public SimpleTreePrinter(
@@ -31,13 +31,18 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 	
 	public SimpleTreePrinter(
 		String liningSpace, String liningGeneral, String liningNode, String liningLastNode,
-		NodeDecorator nodeDecorator
+		NodePrettifier nodePrettifier
 	) {
 		this.liningSpace = liningSpace;
 		this.liningGeneral = liningGeneral;
 		this.liningNode = liningNode;
 		this.liningLastNode = liningLastNode;
-		this.nodeDecorator = nodeDecorator;
+		this.nodePrettifier = nodePrettifier;
+	}
+
+	@Override
+	public void setNodePrettifier(NodePrettifier nodePrettifier) {
+		this.nodePrettifier = nodePrettifier;
 	}
 	
 	@Override
@@ -48,9 +53,10 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 	private void printSub(TreeNode node, Appendable out, String prefix, int type) {
 		int connectOffset;
 		String content;
-		if (nodeDecorator != null) {
-			content = nodeDecorator.getDecoratedContent(node);
-			connectOffset = nodeDecorator.getOffset();
+		if (nodePrettifier != null) {
+			NodePrettifier.PrettifierResult prettifierResult = nodePrettifier.prettify(node);
+			content = prettifierResult.content;
+			connectOffset = prettifierResult.offsetY;
 		} else {
 			content = node.getContent();
 			connectOffset = 0;
