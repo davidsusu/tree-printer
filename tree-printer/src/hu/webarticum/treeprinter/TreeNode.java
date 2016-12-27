@@ -6,10 +6,8 @@ public interface TreeNode {
 	
 	public String getContent();
 	
-	// XXX
+	// TODO: width/height contentWidth/~Height contentOffsetX/~Y ?
 	public int getOffsetX();
-	
-	// XXX
 	public int getOffsetY();
 	
 	public List<TreeNode> getChildren();
