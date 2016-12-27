@@ -1,8 +1,5 @@
 package hu.webarticum.treeprinter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 	
 	public static void main(String[] args) {
@@ -44,38 +41,10 @@ public class Main {
 		(new SimpleTreePrinter()).print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
 	}
 	
-	static private class TestNode implements TreeNode {
-		
-		final String content;
-		
-		List<TestNode> children = new ArrayList<TestNode>();
+	static private class TestNode extends SimpleTreeNode {
 		
 		TestNode(String content) {
-			this.content = content;
-		}
-		
-		void addChild(TestNode childNode) {
-			children.add(childNode);
-		}
-
-		@Override
-		public String getContent() {
-			return content;
-		}
-
-		@Override
-		public int getOffsetX() {
-			return 0;
-		}
-
-		@Override
-		public int getOffsetY() {
-			return 0;
-		}
-
-		@Override
-		public List<TreeNode> getChildren() {
-			return new ArrayList<TreeNode>(children);
+			super(content);
 		}
 
 		@Override
@@ -83,11 +52,6 @@ public class Main {
 			return (content.isEmpty() || content.charAt(0) != '(');
 		}
 		
-		@Override
-		public String toString() {
-			return getContent();
-		}
-
 	}
 	
 }
