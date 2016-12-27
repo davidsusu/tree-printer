@@ -35,6 +35,14 @@ abstract public class AbstractTreeNodeDecorator implements TreeNode {
 	public TreeNode getDecoratedNode() {
 		return decoratedNode;
 	}
+
+	public TreeNode getInmostNode() {
+		if (decoratedNode instanceof AbstractTreeNodeDecorator) {
+			return ((AbstractTreeNodeDecorator)decoratedNode).getInmostNode();
+		} else {
+			return decoratedNode;
+		}
+	}
 	
 	@Override
 	public String getContent() {
