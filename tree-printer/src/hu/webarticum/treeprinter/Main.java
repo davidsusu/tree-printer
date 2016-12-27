@@ -35,27 +35,13 @@ public class Main {
 		subSubNode23.addChild(subSubSubNode232);
 		subSubNode31.addChild(subSubSubNode311);
 
-		SimpleTreePrinter printer1 = new SimpleTreePrinter(new BorderNodePrettifier('#'));
-		
-		SimpleTreePrinter printer2 = new SimpleTreePrinter(new NodePrettifier() {
-			
-			BorderNodePrettifier borderPrettifier = new BorderNodePrettifier();
-			
-			@Override
-			public PrettifierResult prettify(TreeNode node) {
-				String content = node.getContent();
-				if (content.equals("BBB")) {
-					return borderPrettifier.prettify(node);
-				} else {
-					return new PrettifierResult(content, 0, 0);
-				}
-			}
-			
-		});
+		(new SimpleTreePrinter()).print(rootNode);
 
-		printer1.print(rootNode);
-		System.out.println("\n.....................\n");
-		printer2.print(rootNode);
+		System.out.println();
+		System.out.println("=====================");
+		System.out.println();
+		
+		(new SimpleTreePrinter()).print(new BorderTreeNodeDecorator(rootNode));
 	}
 	
 	static private class TestNode implements TreeNode {
@@ -78,15 +64,30 @@ public class Main {
 		}
 
 		@Override
+		public int getOffsetX() {
+			return 0;
+		}
+
+		@Override
+		public int getOffsetY() {
+			return 0;
+		}
+
+		@Override
 		public List<TreeNode> getChildren() {
 			return new ArrayList<TreeNode>(children);
+		}
+
+		@Override
+		public boolean isDecorable() {
+			return (content.isEmpty() || content.charAt(0) != '(');
 		}
 		
 		@Override
 		public String toString() {
 			return getContent();
 		}
-		
+
 	}
 	
 }

@@ -13,54 +13,26 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 	private String liningNode = " |-";
 	private String liningLastNode = " '-";
 
-	private NodePrettifier nodePrettifier;
-	
 	public SimpleTreePrinter() {
-		this(null);
-	}
-
-	public SimpleTreePrinter(NodePrettifier nodePrettifier) {
-		this("   " , " | ", " |-", " '-", nodePrettifier);
-	}
-
-	public SimpleTreePrinter(
-		String liningSpace, String liningGeneral, String liningNode, String liningLastNode
-	) {
-		this(liningSpace, liningGeneral, liningNode, liningLastNode, null);
+		this("   " , " | ", " |-", " '-");
 	}
 	
-	public SimpleTreePrinter(
-		String liningSpace, String liningGeneral, String liningNode, String liningLastNode,
-		NodePrettifier nodePrettifier
-	) {
+	public SimpleTreePrinter(String liningSpace, String liningGeneral, String liningNode, String liningLastNode) {
 		this.liningSpace = liningSpace;
 		this.liningGeneral = liningGeneral;
 		this.liningNode = liningNode;
 		this.liningLastNode = liningLastNode;
-		this.nodePrettifier = nodePrettifier;
 	}
 
-	@Override
-	public void setNodePrettifier(NodePrettifier nodePrettifier) {
-		this.nodePrettifier = nodePrettifier;
-	}
-	
 	@Override
 	public void print(TreeNode rootNode, Appendable out) {
 		printSub(rootNode, out, "", NODE_ROOT);
 	}
 	
 	private void printSub(TreeNode node, Appendable out, String prefix, int type) {
-		int connectOffset;
-		String content;
-		if (nodePrettifier != null) {
-			NodePrettifier.PrettifierResult prettifierResult = nodePrettifier.prettify(node);
-			content = prettifierResult.content;
-			connectOffset = prettifierResult.offsetY;
-		} else {
-			content = node.getContent();
-			connectOffset = 0;
-		}
+		String content = node.getContent();
+		int connectOffset = node.getOffsetY();
+		
 		String[] lines = content.split("\n");
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
@@ -78,6 +50,7 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 				writeln(out, prefix + itemPrefix + line);
 			}
 		}
+		
 		List<TreeNode> childNodes = node.getChildren();
 		int childNodeCount = childNodes.size();
 		for (int i = 0; i < childNodeCount; i++) {
