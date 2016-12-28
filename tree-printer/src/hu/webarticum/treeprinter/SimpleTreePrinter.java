@@ -31,7 +31,7 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 	
 	private void printSub(TreeNode node, Appendable out, String prefix, int type) {
 		String content = node.getContent();
-		int connectOffset = node.getOffsetY();
+		int connectOffset = node.getInsets()[0];
 		
 		String[] lines = content.split("\n");
 		for (int i = 0; i < lines.length; i++) {

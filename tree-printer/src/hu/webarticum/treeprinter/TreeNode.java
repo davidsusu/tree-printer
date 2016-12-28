@@ -5,10 +5,8 @@ import java.util.List;
 public interface TreeNode {
 	
 	public String getContent();
-	
-	// TODO: width/height contentWidth/~Height contentOffsetX/~Y ?
-	public int getOffsetX();
-	public int getOffsetY();
+
+	public int[] getInsets();
 	
 	public List<TreeNode> getChildren();
 

@@ -7,22 +7,19 @@ public class SimpleTreeNode implements TreeNode {
 
 	protected final String content;
 	
-	protected final int offsetX;
-	
-	protected final int offsetY;
+	protected final int[] insets;
 	
 	protected List<TreeNode> children = new ArrayList<TreeNode>();
 
 	public SimpleTreeNode(String content) {
-		this(content, 0, 0);
+		this(content, 0, 0, 0, 0);
 	}
 
-	public SimpleTreeNode(String content, int offsetX, int offsetY) {
+	public SimpleTreeNode(String content, int... insets) {
 		this.content = content;
-		this.offsetX = offsetX;
-		this.offsetY = offsetY;
+		this.insets = insets.clone();
 	}
-	
+
 	void addChild(TreeNode childNode) {
 		children.add(childNode);
 	}
@@ -33,13 +30,8 @@ public class SimpleTreeNode implements TreeNode {
 	}
 
 	@Override
-	public int getOffsetX() {
-		return offsetX;
-	}
-
-	@Override
-	public int getOffsetY() {
-		return offsetY;
+	public int[] getInsets() {
+		return new int[] {insets[0], insets[1], insets[2], insets[3]};
 	}
 
 	@Override

@@ -89,13 +89,14 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 	}
 
 	@Override
-	public int getOffsetX() {
-		return decoratedNode.getOffsetX() + 1;
-	}
-	
-	@Override
-	public int getOffsetY() {
-		return decoratedNode.getOffsetY() + 1;
+	public int[] getInsets() {
+		int[] innerInsets = decoratedNode.getInsets();
+		return new int[] {
+			innerInsets[0] + 1,
+			innerInsets[1] + 1,
+			innerInsets[2] + 1,
+			innerInsets[3] + 1,
+		};
 	}
 	
 	@Override

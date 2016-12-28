@@ -42,7 +42,7 @@ public class Main {
 	}
 	
 	static private class TestNode extends SimpleTreeNode {
-		
+
 		TestNode(String content) {
 			super(content);
 		}

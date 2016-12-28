@@ -71,13 +71,8 @@ public class FsTreeNode implements TreeNode {
 	}
 
 	@Override
-	public int getOffsetX() {
-		return 0;
-	}
-
-	@Override
-	public int getOffsetY() {
-		return 0;
+	public int[] getInsets() {
+		return new int[] {0, 0, 0, 0};
 	}
 
 	@Override

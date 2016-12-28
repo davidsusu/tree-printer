@@ -70,13 +70,14 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 	}
 
 	@Override
-	public int getOffsetX() {
-		return decoratedNode.getOffsetX() + leftPad;
-	}
-	
-	@Override
-	public int getOffsetY() {
-		return decoratedNode.getOffsetY() + topPad;
+	public int[] getInsets() {
+		int[] innerInsets = decoratedNode.getInsets();
+		return new int[] {
+			innerInsets[0] + topPad,
+			innerInsets[1] + rightPad,
+			innerInsets[2] + bottomPad,
+			innerInsets[3] + leftPad,
+		};
 	}
 	
 	@Override

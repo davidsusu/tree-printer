@@ -45,23 +45,10 @@ abstract public class AbstractTreeNodeDecorator implements TreeNode {
 	}
 	
 	@Override
-	public String getContent() {
-		
-		// TODO
-		
-		return null;
+	public int[] getInsets() {
+		return decoratedNode.getInsets();
 	}
-
-	@Override
-	public int getOffsetX() {
-		return decoratedNode.getOffsetX();
-	}
-
-	@Override
-	public int getOffsetY() {
-		return decoratedNode.getOffsetY();
-	}
-
+	
 	@Override
 	public boolean isDecorable() {
 		return decorable;
