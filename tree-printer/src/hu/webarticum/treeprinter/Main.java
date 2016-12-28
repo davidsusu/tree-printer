@@ -37,6 +37,12 @@ public class Main {
 		System.out.println();
 		System.out.println("=====================");
 		System.out.println();
+
+		(new SimpleTreePrinter(false, true)).print(rootNode);
+
+		System.out.println();
+		System.out.println("=====================");
+		System.out.println();
 		
 		(new SimpleTreePrinter()).print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
 	}

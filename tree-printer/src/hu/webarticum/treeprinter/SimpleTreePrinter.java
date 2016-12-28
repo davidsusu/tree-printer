@@ -8,28 +8,41 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 	private final int NODE_GENERAL = 1;
 	private final int NODE_LAST = 2;
 
-	private String liningSpace = "   ";
-	private String liningGeneral = " | ";
-	private String liningNode = " |-";
-	private String liningLastNode = " '-";
+	private final String liningSpace;
+	private final String liningGeneral;
+	private final String liningNode;
+	private final String liningLastNode;
+	private final String liningInset;
+	private final boolean displayRoot;
+	private final boolean align;
 
 	public SimpleTreePrinter() {
-		this("   " , " | ", " |-", " '-");
+		this(true, false);
+	}
+
+	public SimpleTreePrinter(boolean displayRoot, boolean align) {
+		this("   " , " | ", " |-", " '-", "---", displayRoot, align);
 	}
 	
-	public SimpleTreePrinter(String liningSpace, String liningGeneral, String liningNode, String liningLastNode) {
+	public SimpleTreePrinter(
+		String liningSpace, String liningGeneral, String liningNode, String liningLastNode, String liningInset,
+		boolean displayRoot, boolean align
+	) {
 		this.liningSpace = liningSpace;
 		this.liningGeneral = liningGeneral;
 		this.liningNode = liningNode;
 		this.liningLastNode = liningLastNode;
+		this.liningInset = liningInset;
+		this.displayRoot = displayRoot;
+		this.align = align;
 	}
 
 	@Override
 	public void print(TreeNode rootNode, Appendable out) {
-		printSub(rootNode, out, "", NODE_ROOT);
+		printSub(rootNode, out, "", NODE_ROOT, align ? Util.getDepth(rootNode) : 0);
 	}
 	
-	private void printSub(TreeNode node, Appendable out, String prefix, int type) {
+	private void printSub(TreeNode node, Appendable out, String prefix, int type, int inset) {
 		String content = node.getContent();
 		int connectOffset = node.getInsets()[0];
 		
@@ -37,7 +50,9 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
 			if (type == NODE_ROOT) {
-				writeln(out, prefix + line);
+				if (displayRoot) {
+					writeln(out, prefix + line);
+				}
 			} else {
 				String itemPrefix;
 				if (i < connectOffset) {
@@ -46,6 +61,14 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 					itemPrefix = (type == NODE_LAST) ? liningLastNode : liningNode;
 				} else {
 					itemPrefix = (type == NODE_LAST) ? liningSpace : liningGeneral;
+				}
+				if (inset > 0) {
+					String insetString = (i == connectOffset) ? liningInset : liningSpace;
+					StringBuilder insetBuilder = new StringBuilder();
+					for (int j = 0; j < inset; j++) {
+						insetBuilder.append(insetString);
+					}
+					itemPrefix += insetBuilder.toString();
 				}
 				writeln(out, prefix + itemPrefix + line);
 			}
@@ -57,7 +80,8 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 			TreeNode childNode = childNodes.get(i);
 			boolean childIsLast = (i == childNodeCount - 1);
 			String subPrefix = (type == NODE_ROOT) ? prefix : prefix + ((type == NODE_LAST) ? liningSpace : liningGeneral);
-			printSub(childNode, out, subPrefix, childIsLast ? NODE_LAST : NODE_GENERAL);
+			int subInset = Math.max(0, inset - 1);
+			printSub(childNode, out, subPrefix, childIsLast ? NODE_LAST : NODE_GENERAL, subInset);
 		}
 	}
 	
