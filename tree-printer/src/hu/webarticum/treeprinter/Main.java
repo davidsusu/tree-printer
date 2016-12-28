@@ -27,10 +27,12 @@ public class Main {
 		subNode2.addChild(subSubNode22);
 		subNode2.addChild(subSubNode23);
 		subNode2.addChild(subSubNode24);
+		subNode2.addChild(null);
 		subNode3.addChild(subSubNode31);
 		subSubNode23.addChild(subSubSubNode231);
 		subSubNode23.addChild(subSubSubNode232);
 		subSubNode31.addChild(subSubSubNode311);
+		subSubNode31.addChild(null);
 
 		(new SimpleTreePrinter()).print(rootNode);
 
