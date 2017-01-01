@@ -92,7 +92,7 @@ public class LineBuffer {
 			beforePad = "";
 		}
 
-		int textLineLength = contextLine.length();
+		int textLineLength = textLine.length();
 		
 		String afterContent;
 		
