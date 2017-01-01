@@ -24,7 +24,11 @@ public class Util {
 		while (true) {
 			List<TreeNode> newLevelNodes = new ArrayList<TreeNode>();
 			for (TreeNode levelNode: levelNodes) {
-				newLevelNodes.addAll(levelNode.getChildren());
+				for (TreeNode childNode: levelNode.getChildren()) {
+					if (childNode != null) {
+						newLevelNodes.add(childNode);
+					}
+				}
 			}
 			if (newLevelNodes.isEmpty()) {
 				break;

@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SimpleTreePrinter extends AbstractTreePrinter {
@@ -75,6 +76,7 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
 		}
 		
 		List<TreeNode> childNodes = node.getChildren();
+		childNodes.removeAll(Collections.singleton(null));
 		int childNodeCount = childNodes.size();
 		for (int i = 0; i < childNodeCount; i++) {
 			TreeNode childNode = childNodes.get(i);
