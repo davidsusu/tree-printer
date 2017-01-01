@@ -49,19 +49,19 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
 		StringBuilder padContentBuilder = new StringBuilder();
 		for (int i = 0; i < topPad; i++) {
-			repeat(padContentBuilder, ' ', leftPad + longestLineLength + rightPad);
+			Util.repeat(padContentBuilder, ' ', leftPad + longestLineLength + rightPad);
 			padContentBuilder.append('\n');
 		}
 
 		for (String line: contentLines) {
-			repeat(padContentBuilder, ' ', leftPad);
+			Util.repeat(padContentBuilder, ' ', leftPad);
 			padContentBuilder.append(line);
-			repeat(padContentBuilder, ' ', longestLineLength - line.length() + rightPad);
+			Util.repeat(padContentBuilder, ' ', longestLineLength - line.length() + rightPad);
 			padContentBuilder.append('\n');
 		}
 		
 		for (int i = 0; i < bottomPad; i++) {
-			repeat(padContentBuilder, ' ', leftPad + longestLineLength + rightPad);
+			Util.repeat(padContentBuilder, ' ', leftPad + longestLineLength + rightPad);
 			padContentBuilder.append('\n');
 		}
 		

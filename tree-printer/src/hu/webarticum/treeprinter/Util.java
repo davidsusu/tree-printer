@@ -22,5 +22,17 @@ public class Util {
 		}
 		return depth;
 	}
+
+	static public String repeat(char character, int repeats) {
+		StringBuilder resultBuilder = new StringBuilder();
+		repeat(resultBuilder, character, repeats);
+		return resultBuilder.toString();
+	}
 	
+	static public void repeat(StringBuilder stringBuilder, char character, int repeats) {
+		for (int i = 0; i < repeats; i ++) {
+			stringBuilder.append(character);
+		}
+	}
+
 }

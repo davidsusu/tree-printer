@@ -67,12 +67,6 @@ abstract public class AbstractTreeNodeDecorator implements TreeNode {
 		return decoratedChildren;
 	}
 	
-	protected void repeat(StringBuilder stringBuilder, char character, int repeats) {
-		for (int i = 0; i < repeats; i ++) {
-			stringBuilder.append(character);
-		}
-	}
-
 	abstract protected TreeNode decorateChild(TreeNode childNode);
 
 }

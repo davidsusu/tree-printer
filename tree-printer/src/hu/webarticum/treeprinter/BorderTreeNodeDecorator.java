@@ -70,18 +70,18 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 		}
 		StringBuilder borderedContentBuilder = new StringBuilder();
 		borderedContentBuilder.append(topLeft);
-		repeat(borderedContentBuilder, top, longestLineLength);
+		Util.repeat(borderedContentBuilder, top, longestLineLength);
 		borderedContentBuilder.append(topRight);
 		borderedContentBuilder.append("\n");
 		for (String contentLine: contentLines) {
 			borderedContentBuilder.append(left);
 			borderedContentBuilder.append(contentLine);
-			repeat(borderedContentBuilder, ' ', longestLineLength - contentLine.length());
+			Util.repeat(borderedContentBuilder, ' ', longestLineLength - contentLine.length());
 			borderedContentBuilder.append(right);
 			borderedContentBuilder.append("\n");
 		}
 		borderedContentBuilder.append(bottomLeft);
-		repeat(borderedContentBuilder, bottom, longestLineLength);
+		Util.repeat(borderedContentBuilder, bottom, longestLineLength);
 		borderedContentBuilder.append(bottomRight);
 		String borderedContent = borderedContentBuilder.toString();
 		
