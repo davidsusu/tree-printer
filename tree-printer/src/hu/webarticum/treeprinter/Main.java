@@ -45,6 +45,12 @@ public class Main {
 		System.out.println();
 		
 		(new SimpleTreePrinter()).print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
+
+		System.out.println();
+		System.out.println("=====================");
+		System.out.println();
+		
+		(new PartitionedTreePrinter()).print(rootNode);
 	}
 	
 	static private class TestNode extends SimpleTreeNode {

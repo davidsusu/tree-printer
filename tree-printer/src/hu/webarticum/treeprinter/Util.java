@@ -5,6 +5,18 @@ import java.util.List;
 
 public class Util {
 	
+	static public int[] getContentDimension(String content) {
+		int longsetLineLength = 0;
+		String[] lines = content.split("\n");
+		for (String line: lines) {
+			int lineLength = line.length();
+			if (lineLength > longsetLineLength) {
+				longsetLineLength = lineLength;
+			}
+		}
+		return new int[] {longsetLineLength, lines.length};
+	}
+	
 	static public int getDepth(TreeNode treeNode) {
 		List<TreeNode> levelNodes = new ArrayList<TreeNode>();
 		levelNodes.add(treeNode);
