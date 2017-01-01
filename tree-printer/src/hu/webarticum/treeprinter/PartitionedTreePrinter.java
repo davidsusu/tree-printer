@@ -39,14 +39,11 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 			Map<TreeNode, int[]> newPositionMap = new HashMap<TreeNode, int[]>();
 			for (Map.Entry<TreeNode, int[]> entry: positionMap.entrySet()) {
 				TreeNode node = entry.getKey();
-				int[] dimension = Util.getContentDimension(node.getContent());
 				int[] positions = entry.getValue();
 				int row = positions[0];
 				int col = positions[1];
-				int connection = positions[3];
-				int left = positions[2];
+				int connection = positions[2];
 				int height = positions[4];
-				int width = widthMap.get(node);
 				Map<TreeNode, int[]> childrenPositionMap = new HashMap<TreeNode, int[]>();
 				int childCol = col;
 				List<TreeNode> children = node.getChildren();
@@ -75,11 +72,7 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 						int[] childPositionItem = childEntry.getValue();
 						childPositionItem[0] += connectionRows;
 						int childRow = childPositionItem[0];
-						int childLeft = childPositionItem[2];
-
-						
-						System.out.println("buffer.write(" + childRow + ", " + childLeft + ", " + childNode.getContent() + ");");
-						
+						int childLeft = childPositionItem[1];
 						buffer.write(childRow, childLeft, childNode.getContent());
 					}
 					
@@ -101,8 +94,11 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 	
 	// TODO: aligning strategies
 	private int[] alignNode(int position, int width, int contentWidth) {
-		// TODO: contentLeft, connectionPosition
-		return new int[] {position, position};
+		//return new int[] {position, position};
+		
+		int halfContentWidth = contentWidth / 2;
+		int left = position + (width / 2) - contentWidth + halfContentWidth;
+		return new int[] {left, left + halfContentWidth};
 	}
 	
 	// FIXME: references vs ad hoc decorators
@@ -157,7 +153,7 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 		
 		return 2;
 	}
-
+	
 }
 
 
