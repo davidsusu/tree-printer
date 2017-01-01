@@ -64,7 +64,6 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 						childConnections[i] = childAlign[1];
 					}
 					
-					System.out.println(Arrays.toString(childConnections));
 					int connectionRows = printConnections(buffer, row + height, connection, childConnections);
 					
 					for (Map.Entry<TreeNode, int[]> childEntry: childrenPositionMap.entrySet()) {
@@ -72,7 +71,7 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 						int[] childPositionItem = childEntry.getValue();
 						childPositionItem[0] += connectionRows;
 						int childRow = childPositionItem[0];
-						int childLeft = childPositionItem[1];
+						int childLeft = childPositionItem[1]; // XXX
 						buffer.write(childRow, childLeft, childNode.getContent());
 					}
 					
