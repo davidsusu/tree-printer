@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PartitionedTreePrinter extends AbstractTreePrinter {
+public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     private final int margin;
     
-    public PartitionedTreePrinter() {
+    public TraditionalTreePrinter() {
         this(1);
     }
     
-    public PartitionedTreePrinter(int margin) {
+    public TraditionalTreePrinter(int margin) {
         this.margin = margin;
     }
     

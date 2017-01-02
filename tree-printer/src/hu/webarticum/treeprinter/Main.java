@@ -34,25 +34,25 @@ public class Main {
         subSubNode31.addChild(subSubSubNode311);
         subSubNode31.addChild(null);
 
-        (new SimpleTreePrinter()).print(rootNode);
+        (new ListingTreePrinter()).print(rootNode);
 
         System.out.println();
         System.out.println("=====================");
         System.out.println();
 
-        (new SimpleTreePrinter(false, true)).print(new PadTreeNodeDecorator(rootNode, true, true, true, 0, 0, 1, 0));
+        (new ListingTreePrinter(false, true)).print(new PadTreeNodeDecorator(rootNode, true, true, true, 0, 0, 1, 0));
 
         System.out.println();
         System.out.println("=====================");
         System.out.println();
         
-        (new SimpleTreePrinter()).print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
+        (new ListingTreePrinter()).print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
 
         System.out.println();
         System.out.println("=====================");
         System.out.println();
 
-        (new PartitionedTreePrinter()).print(new BorderTreeNodeDecorator(rootNode));
+        (new TraditionalTreePrinter()).print(new BorderTreeNodeDecorator(rootNode));
     }
     
     static private class TestNode extends SimpleTreeNode {

@@ -3,7 +3,7 @@ package hu.webarticum.treeprinter;
 import java.util.Collections;
 import java.util.List;
 
-public class SimpleTreePrinter extends AbstractTreePrinter {
+public class ListingTreePrinter extends AbstractTreePrinter {
 
     private final int NODE_ROOT = 0;
     private final int NODE_GENERAL = 1;
@@ -17,15 +17,15 @@ public class SimpleTreePrinter extends AbstractTreePrinter {
     private final boolean displayRoot;
     private final boolean align;
 
-    public SimpleTreePrinter() {
+    public ListingTreePrinter() {
         this(true, false);
     }
 
-    public SimpleTreePrinter(boolean displayRoot, boolean align) {
+    public ListingTreePrinter(boolean displayRoot, boolean align) {
         this("   " , " | ", " |-", " '-", "---", displayRoot, align);
     }
     
-    public SimpleTreePrinter(
+    public ListingTreePrinter(
         String liningSpace, String liningGeneral, String liningNode, String liningLastNode, String liningInset,
         boolean displayRoot, boolean align
     ) {
