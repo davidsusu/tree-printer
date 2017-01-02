@@ -23,27 +23,27 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
         int rootWidth = collectWidths(widthMap, rootNode);
         
-        Map<TreeNode, PositionItem> positionMap = new HashMap<TreeNode, PositionItem>();
+        Map<TreeNode, Positioning> positionMap = new HashMap<TreeNode, Positioning>();
         
         String rootContent = rootNode.getContent();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
-        int[] rootAlign = alignNode(0, rootWidth, rootContentDimension[0]);
-        positionMap.put(rootNode, new PositionItem(0, 0, rootAlign[1], rootAlign[0], rootContentDimension[1]));
+        Aligning rootAligning = alignNode(0, rootWidth, rootContentDimension[0]);
+        positionMap.put(rootNode, new Positioning(0, 0, rootAligning.bottomConnection, rootAligning.left, rootContentDimension[1]));
         
         LineBuffer buffer = new LineBuffer(out);
         
-        buffer.write(0, rootAlign[0], rootContent);
+        buffer.write(0, rootAligning.left, rootContent);
         
         buffer.flush();
         
         while (true) {
-            Map<TreeNode, PositionItem> newPositionMap = new HashMap<TreeNode, PositionItem>();
+            Map<TreeNode, Positioning> newPositionMap = new HashMap<TreeNode, Positioning>();
             List<Integer> childBottoms = new ArrayList<Integer>();
-            for (Map.Entry<TreeNode, PositionItem> entry: positionMap.entrySet()) {
+            for (Map.Entry<TreeNode, Positioning> entry: positionMap.entrySet()) {
                 TreeNode node = entry.getKey();
-                PositionItem positionItem = entry.getValue();
-                Map<TreeNode, PositionItem> childrenPositionMap = new HashMap<TreeNode, PositionItem>();
-                int childCol = positionItem.col;
+                Positioning positioning = entry.getValue();
+                Map<TreeNode, Positioning> childrenPositionMap = new HashMap<TreeNode, Positioning>();
+                int childCol = positioning.col;
                 List<TreeNode> children = node.getChildren();
                 children.removeAll(Collections.singleton(null));
                 
@@ -55,23 +55,23 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                         int childWidth = widthMap.get(childNode);
                         String childContent = childNode.getContent();
                         int[] childContentDimension = Util.getContentDimension(childContent);
-                        int[] childAlign = alignNode(childCol, childWidth, childContentDimension[0]);
-                        PositionItem childPositionItem = new PositionItem(
-                            positionItem.row + positionItem.height, childCol,
-                            childAlign[1], childAlign[0], childContentDimension[1]
+                        Aligning childAligning = alignNode(childCol, childWidth, childContentDimension[0]);
+                        Positioning childPositioning = new Positioning(
+                            positioning.row + positioning.height, childCol,
+                            childAligning.bottomConnection, childAligning.left, childContentDimension[1]
                         );
-                        childrenPositionMap.put(childNode, childPositionItem);
+                        childrenPositionMap.put(childNode, childPositioning);
                         childCol += childWidth + margin;
-                        childConnections[i] = childAlign[1];
+                        childConnections[i] = childAligning.topConnection;
                     }
                     
                     int connectionRows = printConnections(
-                        buffer, positionItem.row + positionItem.height, positionItem.connection, childConnections
+                        buffer, positioning.row + positioning.height, positioning.connection, childConnections
                     );
                     
-                    for (Map.Entry<TreeNode, PositionItem> childEntry: childrenPositionMap.entrySet()) {
+                    for (Map.Entry<TreeNode, Positioning> childEntry: childrenPositionMap.entrySet()) {
                         TreeNode childNode = childEntry.getKey();
-                        PositionItem childPositionItem = childEntry.getValue();
+                        Positioning childPositionItem = childEntry.getValue();
                         childPositionItem.row += connectionRows;
                         buffer.write(childPositionItem.row, childPositionItem.left, childNode.getContent());
                         childBottoms.add(childPositionItem.row + childPositionItem.height);
@@ -100,11 +100,11 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     }
     
     // TODO: aligning strategies
-    private int[] alignNode(int position, int width, int contentWidth) {
-        //return new int[] {position, position};
-        
+    private Aligning alignNode(int position, int width, int contentWidth) {
         int left = position + (width - contentWidth) / 2;
-        return new int[] {left, left + (contentWidth / 2)};
+        int topConnection = left + (contentWidth / 2);
+        int bottomConnection = topConnection;
+        return new Aligning(left, topConnection, bottomConnection);
     }
     
     // FIXME: references vs ad hoc decorators
@@ -159,20 +159,36 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         
         return 2;
     }
-    
-    private class PositionItem {
-        
-        int row = 0;
-        
-        int col = 0;
-        
-        int connection = 0;
-        
-        int left = 0;
-        
-        int height = 0;
 
-        PositionItem(int row, int col, int connection, int left, int height) {
+    private class Aligning {
+
+        int left;
+
+        int topConnection;
+
+        int bottomConnection;
+
+        Aligning(int left, int topConnection, int bottomConnection) {
+            this.left = left;
+            this.topConnection = topConnection;
+            this.bottomConnection = bottomConnection;
+        }
+        
+    }
+    
+    private class Positioning {
+        
+        int row;
+        
+        int col;
+        
+        int connection;
+        
+        int left;
+        
+        int height;
+
+        Positioning(int row, int col, int connection, int left, int height) {
             this.row = row;
             this.col = col;
             this.connection = connection;
