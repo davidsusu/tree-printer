@@ -3,7 +3,7 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleTreeNode implements TreeNode {
+public class SimpleTreeNode extends AbstractTreeNode {
 
 	protected final String content;
 	
@@ -37,16 +37,6 @@ public class SimpleTreeNode implements TreeNode {
 	@Override
 	public List<TreeNode> getChildren() {
 		return new ArrayList<TreeNode>(children);
-	}
-
-	@Override
-	public boolean isDecorable() {
-		return true;
-	}
-	
-	@Override
-	public String toString() {
-		return getContent();
 	}
 
 }

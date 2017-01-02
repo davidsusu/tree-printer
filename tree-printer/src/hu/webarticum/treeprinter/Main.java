@@ -40,7 +40,7 @@ public class Main {
 		System.out.println("=====================");
 		System.out.println();
 
-		(new SimpleTreePrinter(false, true)).print(rootNode);
+		(new SimpleTreePrinter(false, true)).print(new PadTreeNodeDecorator(rootNode, true, true, true, 0, 0, 1, 0));
 
 		System.out.println();
 		System.out.println("=====================");
@@ -51,8 +51,8 @@ public class Main {
 		System.out.println();
 		System.out.println("=====================");
 		System.out.println();
-		
-		(new PartitionedTreePrinter()).print(rootNode);
+
+		(new PartitionedTreePrinter()).print(new BorderTreeNodeDecorator(rootNode));
 	}
 	
 	static private class TestNode extends SimpleTreeNode {

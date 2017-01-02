@@ -22,6 +22,7 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 	public void print(TreeNode rootNode, Appendable out) {
 		Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
 		int rootWidth = collectWidths(widthMap, rootNode);
+		
 		Map<TreeNode, PositionItem> positionMap = new HashMap<TreeNode, PositionItem>();
 		
 		String rootContent = rootNode.getContent();

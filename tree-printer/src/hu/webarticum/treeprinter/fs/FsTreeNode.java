@@ -8,9 +8,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import hu.webarticum.treeprinter.AbstractTreeNode;
 import hu.webarticum.treeprinter.TreeNode;
 
-public class FsTreeNode implements TreeNode {
+public class FsTreeNode extends AbstractTreeNode {
 	
 	private final File file;
 	
@@ -68,11 +69,6 @@ public class FsTreeNode implements TreeNode {
 	@Override
 	public String getContent() {
 		return file.getName();
-	}
-
-	@Override
-	public int[] getInsets() {
-		return new int[] {0, 0, 0, 0};
 	}
 
 	@Override

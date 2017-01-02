@@ -5,6 +5,8 @@ import java.util.List;
 public interface TreeNode {
 	
 	public String getContent();
+	
+	public TreeNode getOriginalNode();
 
 	public int[] getInsets();
 	
