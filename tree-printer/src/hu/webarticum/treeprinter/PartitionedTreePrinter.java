@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,10 +33,11 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 		
 		buffer.write(0, rootAlign[0], rootContent);
 		
-		// TODO: buffer.flush
+		buffer.flush();
 		
 		while (true) {
 			Map<TreeNode, PositionItem> newPositionMap = new HashMap<TreeNode, PositionItem>();
+			List<Integer> childBottoms = new ArrayList<Integer>();
 			for (Map.Entry<TreeNode, PositionItem> entry: positionMap.entrySet()) {
 				TreeNode node = entry.getKey();
 				PositionItem positionItem = entry.getValue();
@@ -70,20 +72,25 @@ public class PartitionedTreePrinter extends AbstractTreePrinter {
 						TreeNode childNode = childEntry.getKey();
 						PositionItem childPositionItem = childEntry.getValue();
 						childPositionItem.row += connectionRows;
-						int childRow = childPositionItem.row;
-						int childLeft = childPositionItem.left;
-						buffer.write(childRow, childLeft, childNode.getContent());
+						buffer.write(childPositionItem.row, childPositionItem.left, childNode.getContent());
+						childBottoms.add(childPositionItem.row + childPositionItem.height);
 					}
 					
 					newPositionMap.putAll(childrenPositionMap);
 				}
 			}
 
-			// TODO: buffer.flush
-			
 			if (newPositionMap.isEmpty()) {
 				break;
 			} else {
+				int minimumChildBottom = Integer.MAX_VALUE;
+				for (int bottomValue: childBottoms) {
+					if (bottomValue < minimumChildBottom) {
+						minimumChildBottom = bottomValue;
+					}
+				}
+				buffer.flush(minimumChildBottom);
+				
 				positionMap = newPositionMap;
 			}
 		}
