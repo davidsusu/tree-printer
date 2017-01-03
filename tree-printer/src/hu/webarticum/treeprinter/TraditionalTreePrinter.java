@@ -164,7 +164,6 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         return 2;
     }
     
-    // TODO: align children areas...
     public interface Aligner {
         
         public Align alignNode(TreeNode node, int position, int width, int contentWidth);
