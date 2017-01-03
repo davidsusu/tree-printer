@@ -56,7 +56,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                 
                 if (!children.isEmpty()) {
                     int childCount = children.size();
-                    int[] childConnections = new int[childCount];
+                    List<Integer> childConnections = new ArrayList<Integer>(childCount);
                     for (int i = 0; i < childCount; i++) {
                         int childCol = childrenAlign[i];
                         TreeNode childNode = children.get(i);
@@ -69,7 +69,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                             childAlign.bottomConnection, childAlign.left, childContentDimension[1]
                         );
                         childrenPositionMap.put(childNode, childPositioning);
-                        childConnections[i] = childAlign.topConnection;
+                        childConnections.add(childAlign.topConnection);
                     }
                     
                     int connectionRows = liner.printConnections(
@@ -303,43 +303,134 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     public interface Liner {
         
-        public int printConnections(LineBuffer buffer, int row, int topConnection, int[] bottomConnections);
+        public int printConnections(LineBuffer buffer, int row, int topConnection, List<Integer> bottomConnections);
         
     }
     
     public static class DefaultLiner implements Liner {
 
-        @Override
-        public int printConnections(LineBuffer buffer, int row, int topConnection, int[] bottomConnections) {
-            int start = Math.min(topConnection, bottomConnections[0]);
-            int end = Math.max(topConnection, bottomConnections[bottomConnections.length - 1]);
-            
-            StringBuilder aboveLineBuilder = new StringBuilder();
-            for (int i = start; i <= end; i++) {
-                char character;
-                if (i == topConnection) {
-                    character = '|';
-                } else if (i == start || i == end) {
-                    character = ' ';
-                } else {
-                    character = '_';
-                }
-                aboveLineBuilder.append(character);
-            }
-            buffer.write(row, start, aboveLineBuilder.toString());
+        private final char topConnectionChar;
+        private final char bracketLeftChar;
+        private final char bracketChar;
+        private final char bracketTopChar;
+        private final char bracketTopLeftChar;
+        private final char bracketTopRightChar;
+        private final char bracketBottomChar;
+        private final char bracketTopAndBottomChar;
+        private final char bracketTopAndBottomLeftChar;
+        private final char bracketTopAndBottomRightChar;
+        private final char bracketRightChar;
+        private final char bracketOnlyChar;
+        private final char bottomConnectionChar;
 
-            StringBuilder belowLineBuilder = new StringBuilder();
-            int position = start;
-            for (int bottomConnection: bottomConnections) {
-                for (int i = position; i < bottomConnection; i++) {
-                    belowLineBuilder.append(' ');
-                }
-                belowLineBuilder.append('|');
-                position = bottomConnection + 1;
-            }
-            buffer.write(row + 1, start, belowLineBuilder.toString());
+        private final int topHeight;
+        private final int bottomHeight;
+
+        private final boolean displayBracket;
+        
+        public DefaultLiner() {
+            this('|', ' ', '_', '|', '|', '|', '_', '|', '|', '|', ' ', '|', '|', 0, 1, true);
+        }
+        
+        public DefaultLiner(
+            char topConnectionChar, char bracketLeftChar, char bracketChar,
+            char bracketTopChar, char bracketTopLeftChar, char bracketTopRightChar, char bracketBottomChar,
+            char bracketTopAndBottomChar, char bracketTopAndBottomLeftChar, char bracketTopAndBottomRightChar,
+            char bracketRightChar, char bracketOnlyChar, char bottomConnectionChar,
+            int topHeight, int bottomHeight, boolean displayBracket
+        ) {
+            this.topConnectionChar = topConnectionChar;
+            this.bracketLeftChar = bracketLeftChar;
+            this.bracketChar = bracketChar;
+            this.bracketTopChar = bracketTopChar;
+            this.bracketTopLeftChar = bracketTopLeftChar;
+            this.bracketTopRightChar = bracketTopRightChar;
+            this.bracketBottomChar = bracketBottomChar;
+            this.bracketTopAndBottomChar = bracketTopAndBottomChar;
+            this.bracketTopAndBottomLeftChar = bracketTopAndBottomLeftChar;
+            this.bracketTopAndBottomRightChar = bracketTopAndBottomRightChar;
+            this.bracketRightChar = bracketRightChar;
+            this.bracketOnlyChar = bracketOnlyChar;
+            this.bottomConnectionChar = bottomConnectionChar;
+            this.topHeight = topHeight;
+            this.bottomHeight = bottomHeight;
+            this.displayBracket = displayBracket;
+        }
+        
+        @Override
+        public int printConnections(LineBuffer buffer, int row, int topConnection, List<Integer> bottomConnections) {
+            int start = Math.min(topConnection, bottomConnections.get(0));
+            int end = Math.max(topConnection, bottomConnections.get(bottomConnections.size() - 1));
+            int topHeightWithBracket = topHeight + (displayBracket ? 1 : 0);
+            int fullHeight = topHeightWithBracket + bottomHeight;
             
-            return 2;
+            {
+                StringBuilder topConnectionLineBuilder = new StringBuilder();
+                Util.repeat(topConnectionLineBuilder, ' ', topConnection - start);
+                topConnectionLineBuilder.append(topConnectionChar);
+                String topConnectionLine = topConnectionLineBuilder.toString();
+                for (int i = 0; i < topHeight; i++) {
+                    buffer.write(row + i, start, topConnectionLine);
+                }
+            }
+            
+            {
+                StringBuilder bracketLineBuilder = new StringBuilder();
+                for (int i = start; i <= end; i++) {
+                    char character;
+                    if (start == end) {
+                        character = bracketOnlyChar;
+                    } else if (i == topConnection) {
+                        if (bottomConnections.contains(i)) {
+                            if (i == start) {
+                                character = bracketTopAndBottomLeftChar;
+                            } else if (i == end) {
+                                character = bracketTopAndBottomRightChar;
+                            } else {
+                                character = bracketTopAndBottomChar;
+                            }
+                        } else {
+                            if (i == start) {
+                                character = bracketTopLeftChar;
+                            } else if (i == end) {
+                                character = bracketTopRightChar;
+                            } else {
+                                character = bracketTopChar;
+                            }
+                        }
+                    } else if (i == start) {
+                        character = bracketLeftChar;
+                    } else if (i == end) {
+                        character = bracketRightChar;
+                    } else {
+                        if (bottomConnections.contains(i)) {
+                            character = bracketBottomChar;
+                        } else {
+                            character = bracketChar;
+                        }
+                    }
+                    bracketLineBuilder.append(character);
+                }
+                buffer.write(row + topHeight, start, bracketLineBuilder.toString());
+            }
+            
+            {
+                StringBuilder bottomConnectionLineBuilder = new StringBuilder();
+                int position = start;
+                for (int bottomConnection: bottomConnections) {
+                    for (int i = position; i < bottomConnection; i++) {
+                        bottomConnectionLineBuilder.append(' ');
+                    }
+                    bottomConnectionLineBuilder.append(bottomConnectionChar);
+                    position = bottomConnection + 1;
+                }
+                String bottomConnectionLine = bottomConnectionLineBuilder.toString();
+                for (int i = topHeightWithBracket; i < fullHeight; i++) {
+                    buffer.write(row + i, start, bottomConnectionLine);
+                }
+            }
+            
+            return fullHeight;
         }
         
     }
