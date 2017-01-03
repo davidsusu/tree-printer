@@ -9,15 +9,20 @@ import java.util.Map;
 public class TraditionalTreePrinter extends AbstractTreePrinter {
 
     static public final Aligner DEFAULT_ALIGNER = new DefaultAligner();
-    
+
+    static public final Liner DEFAULT_LINER = new DefaultLiner();
+
     private final Aligner aligner;
+
+    private final Liner liner;
     
     public TraditionalTreePrinter() {
-        this(DEFAULT_ALIGNER);
+        this(DEFAULT_ALIGNER, DEFAULT_LINER);
     }
     
-    public TraditionalTreePrinter(Aligner aligner) {
+    public TraditionalTreePrinter(Aligner aligner, Liner liner) {
         this.aligner = aligner;
+        this.liner = liner;
     }
     
     @Override
@@ -67,7 +72,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                         childConnections[i] = childAlign.topConnection;
                     }
                     
-                    int connectionRows = printConnections(
+                    int connectionRows = liner.printConnections(
                         buffer, position.row + position.height, position.connection, childConnections
                     );
                     
@@ -99,39 +104,6 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         }
         
         buffer.flush();
-    }
-    
-    // TODO: lining strategies
-    private int printConnections(LineBuffer buffer, int row, int topConnection, int[] bottomConnections) {
-        int start = Math.min(topConnection, bottomConnections[0]);
-        int end = Math.max(topConnection, bottomConnections[bottomConnections.length - 1]);
-        
-        StringBuilder aboveLineBuilder = new StringBuilder();
-        for (int i = start; i <= end; i++) {
-            char character;
-            if (i == topConnection) {
-                character = '|';
-            } else if (i == start || i == end) {
-                character = ' ';
-            } else {
-                character = '_';
-            }
-            aboveLineBuilder.append(character);
-        }
-        buffer.write(row, start, aboveLineBuilder.toString());
-
-        StringBuilder belowLineBuilder = new StringBuilder();
-        int position = start;
-        for (int bottomConnection: bottomConnections) {
-            for (int i = position; i < bottomConnection; i++) {
-                belowLineBuilder.append(' ');
-            }
-            belowLineBuilder.append('|');
-            position = bottomConnection + 1;
-        }
-        buffer.write(row + 1, start, belowLineBuilder.toString());
-        
-        return 2;
     }
     
     public interface Aligner {
@@ -325,6 +297,49 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
             this.left = left;
             this.topConnection = topConnection;
             this.bottomConnection = bottomConnection;
+        }
+        
+    }
+    
+    public interface Liner {
+        
+        public int printConnections(LineBuffer buffer, int row, int topConnection, int[] bottomConnections);
+        
+    }
+    
+    public static class DefaultLiner implements Liner {
+
+        @Override
+        public int printConnections(LineBuffer buffer, int row, int topConnection, int[] bottomConnections) {
+            int start = Math.min(topConnection, bottomConnections[0]);
+            int end = Math.max(topConnection, bottomConnections[bottomConnections.length - 1]);
+            
+            StringBuilder aboveLineBuilder = new StringBuilder();
+            for (int i = start; i <= end; i++) {
+                char character;
+                if (i == topConnection) {
+                    character = '|';
+                } else if (i == start || i == end) {
+                    character = ' ';
+                } else {
+                    character = '_';
+                }
+                aboveLineBuilder.append(character);
+            }
+            buffer.write(row, start, aboveLineBuilder.toString());
+
+            StringBuilder belowLineBuilder = new StringBuilder();
+            int position = start;
+            for (int bottomConnection: bottomConnections) {
+                for (int i = position; i < bottomConnection; i++) {
+                    belowLineBuilder.append(' ');
+                }
+                belowLineBuilder.append('|');
+                position = bottomConnection + 1;
+            }
+            buffer.write(row + 1, start, belowLineBuilder.toString());
+            
+            return 2;
         }
         
     }
