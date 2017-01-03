@@ -10,31 +10,20 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
 
     static public final Aligner DEFAULT_ALIGNER = new DefaultAligner();
     
-    private final int margin;
-    
     private final Aligner aligner;
     
     public TraditionalTreePrinter() {
-        this(1, DEFAULT_ALIGNER);
+        this(DEFAULT_ALIGNER);
     }
     
-    public TraditionalTreePrinter(int margin) {
-        this(margin, DEFAULT_ALIGNER);
-    }
-
     public TraditionalTreePrinter(Aligner aligner) {
-        this(1, aligner);
-    }
-    
-    public TraditionalTreePrinter(int margin, Aligner aligner) {
-        this.margin = margin;
         this.aligner = aligner;
     }
     
     @Override
     public void print(TreeNode rootNode, Appendable out) {
         Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
-        int rootWidth = collectWidths(widthMap, rootNode);
+        int rootWidth = aligner.collectWidths(widthMap, rootNode);
         
         Map<TreeNode, Position> positionMap = new HashMap<TreeNode, Position>();
         
@@ -58,7 +47,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                 Map<TreeNode, Position> childrenPositionMap = new HashMap<TreeNode, Position>();
                 List<TreeNode> children = node.getChildren();
                 children.removeAll(Collections.singleton(null));
-                int[] childrenAlign = aligner.alignChildren(node, children, position.col, margin, widthMap);
+                int[] childrenAlign = aligner.alignChildren(node, children, position.col, widthMap);
                 
                 if (!children.isEmpty()) {
                     int childCount = children.size();
@@ -112,25 +101,6 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         buffer.flush();
     }
     
-    private int collectWidths(Map<TreeNode, Integer> widthMap, TreeNode node) {
-        int contentWidth = Util.getContentDimension(node.getContent())[0];
-        int childrenWidth = 0;
-        boolean first = true;
-        List<TreeNode> children = node.getChildren();
-        children.removeAll(Collections.singleton(null));
-        for (TreeNode childNode: children) {
-            if (first) {
-                first = false;
-            } else {
-                childrenWidth += margin;
-            }
-            childrenWidth += collectWidths(widthMap, childNode);
-        }
-        int nodeWidth = Math.max(contentWidth, childrenWidth);
-        widthMap.put(node, nodeWidth);
-        return nodeWidth;
-    }
-    
     // TODO: lining strategies
     private int printConnections(LineBuffer buffer, int row, int topConnection, int[] bottomConnections) {
         int start = Math.min(topConnection, bottomConnections[0]);
@@ -168,7 +138,9 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         
         public Align alignNode(TreeNode node, int position, int width, int contentWidth);
         
-        public int[] alignChildren(TreeNode parentNode, List<TreeNode> children, int position, int margin, Map<TreeNode, Integer> widthMap);
+        public int[] alignChildren(TreeNode parentNode, List<TreeNode> children, int position, Map<TreeNode, Integer> widthMap);
+        
+        public int collectWidths(Map<TreeNode, Integer> widthMap, TreeNode node);
         
     }
     
@@ -190,20 +162,26 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         private final int bottomConnectionAlign;
         private final int bottomConnectionOffset;
         private final int childrenAlign;
+        private final int gap;
 
         public DefaultAligner() {
             this(CENTER);
         }
 
         public DefaultAligner(int align) {
-            this(align, 0, CONNECT_TO_CONTENT, align, 0, CONNECT_TO_CONTENT, align, 0, align);
+            this(align, 1);
+        }
+        
+        public DefaultAligner(int align, int gap) {
+            this(align, 0, CONNECT_TO_CONTENT, align, 0, CONNECT_TO_CONTENT, align, 0, align, gap);
         }
         
         public DefaultAligner(
             int contentAlign, int contentOffset,
             int topConnectionConnect, int topConnectionAlign, int topConnectionOffset,
             int bottomConnectionConnect, int bottomConnectionAlign, int bottomConnectionOffset,
-            int childrenAlign
+            int childrenAlign,
+            int gap
         ) {
             this.contentAlign = contentAlign;
             this.contentOffset = contentOffset;
@@ -214,6 +192,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
             this.bottomConnectionAlign = bottomConnectionAlign;
             this.bottomConnectionOffset = bottomConnectionOffset;
             this.childrenAlign = childrenAlign;
+            this.gap = gap;
         }
 
         @Override
@@ -281,7 +260,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         }
 
         @Override
-        public int[] alignChildren(TreeNode parentNode, List<TreeNode> children, int position, int margin, Map<TreeNode, Integer> widthMap) {
+        public int[] alignChildren(TreeNode parentNode, List<TreeNode> children, int position, Map<TreeNode, Integer> widthMap) {
             int[] result = new int[children.size()];
             int childrenCount = children.size();
             int childrenWidth = 0;
@@ -291,7 +270,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                 if (first) {
                     first = false;
                 } else {
-                    childrenWidth += margin;
+                    childrenWidth += gap;
                 }
                 int childWidth = widthMap.get(childNode);
                 result[i] = position + childrenWidth;
@@ -310,6 +289,26 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                 }
             }
             return result;
+        }
+        
+        @Override
+        public int collectWidths(Map<TreeNode, Integer> widthMap, TreeNode node) {
+            int contentWidth = Util.getContentDimension(node.getContent())[0];
+            int childrenWidth = 0;
+            boolean first = true;
+            List<TreeNode> children = node.getChildren();
+            children.removeAll(Collections.singleton(null));
+            for (TreeNode childNode: children) {
+                if (first) {
+                    first = false;
+                } else {
+                    childrenWidth += gap;
+                }
+                childrenWidth += collectWidths(widthMap, childNode);
+            }
+            int nodeWidth = Math.max(contentWidth, childrenWidth);
+            widthMap.put(node, nodeWidth);
+            return nodeWidth;
         }
         
     }
