@@ -1,0 +1,91 @@
+# TODO list
+
+
+## ListingTreePrinter: connected lines in aligned mode
+
+ - optionally?
+
+root
+ |--+----sub1-line1
+ |  |    sub1-line2
+ |  |    sub1-line2
+ |  |
+ |  '--+-sub1.1
+ |     |
+ |     |-sub1.1.1
+ |     |
+ |     '-sub1.1.2
+ |
+ '-------sub2
+
+
+## TraditionalTreePrinter: bundled alterantive liners
+
+        A
+      //|\\
+     // | \\
+    //  |  \\
+   //   |   \\
+  //    |   | \
+ / |    |   | |
+/  |    |   | |
+B  C    D   E F
+   |   / \
+  xxx yy zz
+
+## CompactBinaryTreePrinter
+
+ - can be buffered
+
+    A
+   / \
+  B   C
+ / \   \
+D   E   F
+ \     / \
+  G   /   \
+     /     \
+    H       I
+   / \     / \
+  J   K   L   M
+     /     \
+    N       O
+             \
+              P
+
+
+## NestedBoxesTreePrinter
+
+ - can be buffered
+
+,----+----------------------,
+|root|                      |
++----'                      |
+| ,------, ,------+-------, |
+| |child1| |child2|       | |
+| '------' +------'       | |
+|          | ,----------, | |
+|          | | subchild | | |
+|          | '----------' | |
+|          '--------------' |
+'---------------------------'
+
+
+## Use UTF-8 box drawing characters
+
+ - optionally
+ - global ASCII / UTF-8 mode
+
+root
+ ├──┬────sub1-line1
+ │  │    sub1-line2
+ │  │    sub1-line2
+ │  │
+ │  └──┬─sub1.1
+ │     │
+ │     ├─sub1.1.1
+ │     │
+ │     └─sub1.1.1
+ │
+ └───────sub2
+ 
