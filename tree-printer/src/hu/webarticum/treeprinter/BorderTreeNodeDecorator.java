@@ -12,7 +12,21 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private final char left;
     
     public BorderTreeNodeDecorator(TreeNode decoratedNode) {
-        this(decoratedNode, '.', '-', '.', '|', '\'', '-', '`', '|');
+        this(decoratedNode, UnicodeMode.isUnicodeDefault());
+    }
+
+    public BorderTreeNodeDecorator(TreeNode decoratedNode, boolean useUnicode) {
+        this(
+            decoratedNode,
+            useUnicode ? '┌' : '.',
+            useUnicode ? '─' : '-',
+            useUnicode ? '┐' : '.',
+            useUnicode ? '│' : '|',
+            useUnicode ? '┘' : '\'',
+            useUnicode ? '─' : '-',
+            useUnicode ? '└' : '`',
+            useUnicode ? '│' : '|'
+        );
     }
 
     public BorderTreeNodeDecorator(TreeNode decoratedNode, char character) {

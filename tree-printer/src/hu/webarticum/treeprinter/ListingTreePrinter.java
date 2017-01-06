@@ -21,8 +21,23 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         this(true, false);
     }
 
+    public ListingTreePrinter(boolean useUnicode) {
+        this(useUnicode, true, false);
+    }
+
     public ListingTreePrinter(boolean displayRoot, boolean align) {
-        this("   " , " | ", " |-", " '-", "---", displayRoot, align);
+        this(UnicodeMode.isUnicodeDefault(), displayRoot, align);
+    }
+
+    public ListingTreePrinter(boolean useUnicode, boolean displayRoot, boolean align) {
+        this(
+            useUnicode ? "   " : "   ",
+            useUnicode ? " │ " : " | ",
+            useUnicode ? " ├─" : " |-",
+            useUnicode ? " └─" : " '-",
+            useUnicode ? "───" : "---",
+            displayRoot, align
+        );
     }
     
     public ListingTreePrinter(

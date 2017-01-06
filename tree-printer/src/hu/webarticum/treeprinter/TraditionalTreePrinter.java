@@ -327,9 +327,28 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         private final int bottomHeight;
 
         private final boolean displayBracket;
-        
+
         public DefaultLiner() {
-            this('|', ' ', '_', '|', '|', '|', '_', '|', '|', '|', ' ', '|', '|', 0, 1, true);
+            this(UnicodeMode.isUnicodeDefault());
+        }
+
+        public DefaultLiner(boolean useUnicode) {
+            this(
+                useUnicode ? '│' : '|',
+                useUnicode ? '┌' : ' ',
+                useUnicode ? '─' : '_',
+                useUnicode ? '┴' : '|',
+                useUnicode ? '└' : '|',
+                useUnicode ? '┘' : '|',
+                useUnicode ? '┬' : '_',
+                useUnicode ? '┼' : '|',
+                useUnicode ? '├' : '|',
+                useUnicode ? '┤' : '|',
+                useUnicode ? '┐' : ' ',
+                useUnicode ? '│' : '|',
+                useUnicode ? '│' : '|',
+                0, 1, true
+            );
         }
         
         public DefaultLiner(

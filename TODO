@@ -69,23 +69,3 @@ D   E   F
 |          | '----------' | |
 |          '--------------' |
 '---------------------------'
-
-
-## Use UTF-8 box drawing characters
-
- - optionally
- - global ASCII / UTF-8 mode
-
-root
- ├──┬────sub1-line1
- │  │    sub1-line2
- │  │    sub1-line2
- │  │
- │  └──┬─sub1.1
- │     │
- │     ├─sub1.1.1
- │     │
- │     └─sub1.1.1
- │
- └───────sub2
- 
