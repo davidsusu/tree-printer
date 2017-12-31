@@ -300,6 +300,14 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
             private int childrenAlign = CENTER;
             private int gap = 1;
 
+            public Builder align(int align) {
+                this.contentAlign = align;
+                this.topConnectionAlign = align;
+                this.bottomConnectionAlign = align;
+                this.childrenAlign = align;
+                return this;
+            }
+
             public Builder contentAlign(int contentAlign) {
                 this.contentAlign = contentAlign;
                 return this;
