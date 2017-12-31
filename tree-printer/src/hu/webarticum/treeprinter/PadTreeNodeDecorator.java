@@ -88,4 +88,87 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         );
     }
     
+    public static Builder createBuilder() {
+        return new Builder();
+    }
+    
+    public static class Builder {
+
+        private Boolean decorable = null;
+        private boolean inherit = true;
+        private boolean forceInherit = false;
+
+        private int topPad = 0;
+        private int rightPad = 0;
+        private int bottomPad = 0;
+        private int leftPad = 0;
+
+        public Builder decorable(boolean decorable) {
+            this.decorable = decorable;
+            return this;
+        }
+
+        public Builder decorableAuto() {
+            this.decorable = null;
+            return this;
+        }
+
+        public Builder inherit(boolean inherit) {
+            this.inherit = inherit;
+            return this;
+        }
+
+        public Builder inherit(boolean inherit, boolean forceInherit) {
+            this.inherit = inherit;
+            this.forceInherit = forceInherit;
+            return this;
+        }
+
+        public Builder forceInherit(boolean forceInherit) {
+            this.forceInherit = forceInherit;
+            return this;
+        }
+        
+        public Builder pad(int pad) {
+            return pad(pad, pad, pad, pad);
+        }
+
+        public Builder pad(int topPad, int rightPad, int bottomPad, int leftPad) {
+            this.topPad = topPad;
+            this.rightPad = rightPad;
+            this.bottomPad = bottomPad;
+            this.leftPad = leftPad;
+            return this;
+        }
+
+        public Builder topPad(int topPad) {
+            this.topPad = topPad;
+            return this;
+        }
+
+        public Builder rightPad(int rightPad) {
+            this.rightPad = rightPad;
+            return this;
+        }
+
+        public Builder bottomPad(int bottomPad) {
+            this.bottomPad = bottomPad;
+            return this;
+        }
+
+        public Builder leftPad(int leftPad) {
+            this.leftPad = leftPad;
+            return this;
+        }
+        
+        public PadTreeNodeDecorator buildFor(TreeNode node) {
+            return new PadTreeNodeDecorator(
+                node,
+                decorable, inherit, forceInherit,
+                topPad, rightPad, bottomPad, leftPad
+            );
+        }
+        
+    }
+    
 }

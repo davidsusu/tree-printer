@@ -40,6 +40,12 @@ public class Main {
         System.out.println("=====================");
         System.out.println();
 
+        ListingTreePrinter.createBuilder().ascii().liningSpace("...").build().print(rootNode);
+
+        System.out.println();
+        System.out.println("=====================");
+        System.out.println();
+
         (new ListingTreePrinter(false, true)).print(new PadTreeNodeDecorator(rootNode, true, true, true, 0, 0, 1, 0));
 
         System.out.println();

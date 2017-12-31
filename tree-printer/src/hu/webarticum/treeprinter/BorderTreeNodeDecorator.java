@@ -2,6 +2,14 @@ package hu.webarticum.treeprinter;
 
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
+    public static final char[] BORDER_CHARS_ASCII = new char[] {
+        '.', '-', '.', '|', '\'', '-', '`', '|'
+    };
+    
+    public static final char[] BORDER_CHARS_UNICODE = new char[] {
+        '┌', '─', '┐', '│', '┘', '─', '└', '│'
+    };
+    
     private final char topLeft;
     private final char top;
     private final char topRight;
@@ -18,14 +26,14 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     public BorderTreeNodeDecorator(TreeNode decoratedNode, boolean useUnicode) {
         this(
             decoratedNode,
-            useUnicode ? '┌' : '.',
-            useUnicode ? '─' : '-',
-            useUnicode ? '┐' : '.',
-            useUnicode ? '│' : '|',
-            useUnicode ? '┘' : '\'',
-            useUnicode ? '─' : '-',
-            useUnicode ? '└' : '`',
-            useUnicode ? '│' : '|'
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[0],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[1],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[2],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[3],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[4],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[5],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[6],
+            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[7]
         );
     }
 
@@ -122,5 +130,117 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
             bottomRight, bottom, bottomLeft, left
         );
     }
+
+    public static Builder createBuilder() {
+        return new Builder();
+    }
     
+    public static class Builder {
+
+        private Boolean decorable = null;
+        private boolean inherit = true;
+        private boolean forceInherit = false;
+
+        private char[] characters = (
+            UnicodeMode.isUnicodeDefault() ?
+            BORDER_CHARS_UNICODE :
+            BORDER_CHARS_ASCII
+        ).clone();
+        
+        public Builder decorable(boolean decorable) {
+            this.decorable = decorable;
+            return this;
+        }
+
+        public Builder decorableAuto() {
+            this.decorable = null;
+            return this;
+        }
+
+        public Builder inherit(boolean inherit) {
+            this.inherit = inherit;
+            return this;
+        }
+
+        public Builder inherit(boolean inherit, boolean forceInherit) {
+            this.inherit = inherit;
+            this.forceInherit = forceInherit;
+            return this;
+        }
+
+        public Builder forceInherit(boolean forceInherit) {
+            this.forceInherit = forceInherit;
+            return this;
+        }
+        
+        public Builder ascii() {
+            this.characters = BORDER_CHARS_ASCII.clone();
+            return this;
+        }
+        
+        public Builder unicode() {
+            this.characters = BORDER_CHARS_UNICODE.clone();
+            return this;
+        }
+        
+        public Builder characters(
+            char topLeft, char top, char topRight, char right,
+            char bottomRight, char bottom, char bottomLeft, char left
+        ) {
+            this.characters = new char[] {
+                topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left
+            };
+            return this;
+        }
+
+        public Builder topLeft(char topLeft) {
+            this.characters[0] = topLeft;
+            return this;
+        }
+
+        public Builder top(char top) {
+            this.characters[1] = top;
+            return this;
+        }
+
+        public Builder topRight(char topRight) {
+            this.characters[2] = topRight;
+            return this;
+        }
+
+        public Builder right(char right) {
+            this.characters[3] = right;
+            return this;
+        }
+
+        public Builder bottomRight(char bottomRight) {
+            this.characters[4] = bottomRight;
+            return this;
+        }
+
+        public Builder bottom(char bottom) {
+            this.characters[5] = bottom;
+            return this;
+        }
+
+        public Builder bottomLeft(char bottomLeft) {
+            this.characters[6] = bottomLeft;
+            return this;
+        }
+
+        public Builder left(char left) {
+            this.characters[7] = left;
+            return this;
+        }
+        
+        public BorderTreeNodeDecorator buildFor(TreeNode node) {
+            return new BorderTreeNodeDecorator(
+                node,
+                decorable, inherit, forceInherit,
+                characters[0], characters[1], characters[2], characters[3],
+                characters[4], characters[5], characters[6], characters[7]
+            );
+        }
+        
+    }
 }

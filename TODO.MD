@@ -1,14 +1,6 @@
 # TODO list
 
 
-## Write a useful README
-
-
-## Use builders instead of intricate constructors
-
-    ListingTreePrinter.createBuilder().useUnicode(true).topConnectionChar('¤').topHeight(3).build();
-
-
 ## ListingTreePrinter: connected lines in aligned mode
 
 Optionally?
@@ -26,20 +18,6 @@ Optionally?
      |
      '-------sub2
 
-
-## TraditionalTreePrinter: bundled alterantive liners
-
-            A
-          //|\\
-         // | \\
-        //  |  \\
-       //   |   \\
-      //    |   | \
-     / |    |   | |
-    /  |    |   | |
-    B  C    D   E F
-       |   / \
-      xxx yy zz
 
 ## CompactBinaryTreePrinter
 

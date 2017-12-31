@@ -283,6 +283,85 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
             return nodeWidth;
         }
         
+        public static Builder createBuilder() {
+            return new Builder();
+        }
+        
+        public static class Builder {
+
+            private int contentAlign = CENTER;
+            private int contentOffset = 0;
+            private int topConnectionConnect = CONNECT_TO_CONTENT;
+            private int topConnectionAlign = CENTER;
+            private int topConnectionOffset = 0;
+            private int bottomConnectionConnect = CONNECT_TO_CONTENT;
+            private int bottomConnectionAlign = CENTER;
+            private int bottomConnectionOffset = 0;
+            private int childrenAlign = CENTER;
+            private int gap = 1;
+
+            public Builder contentAlign(int contentAlign) {
+                this.contentAlign = contentAlign;
+                return this;
+            }
+
+            public Builder contentOffset(int contentOffset) {
+                this.contentOffset = contentOffset;
+                return this;
+            }
+
+            public Builder topConnectionConnect(int topConnectionConnect) {
+                this.topConnectionConnect = topConnectionConnect;
+                return this;
+            }
+
+            public Builder topConnectionAlign(int topConnectionAlign) {
+                this.topConnectionAlign = topConnectionAlign;
+                return this;
+            }
+
+            public Builder topConnectionOffset(int topConnectionOffset) {
+                this.topConnectionOffset = topConnectionOffset;
+                return this;
+            }
+
+            public Builder bottomConnectionConnect(int bottomConnectionConnect) {
+                this.bottomConnectionConnect = bottomConnectionConnect;
+                return this;
+            }
+
+            public Builder bottomConnectionAlign(int bottomConnectionAlign) {
+                this.bottomConnectionAlign = bottomConnectionAlign;
+                return this;
+            }
+
+            public Builder bottomConnectionOffset(int bottomConnectionOffset) {
+                this.bottomConnectionOffset = bottomConnectionOffset;
+                return this;
+            }
+
+            public Builder childrenAlign(int childrenAlign) {
+                this.childrenAlign = childrenAlign;
+                return this;
+            }
+
+            public Builder gap(int gap) {
+                this.gap = gap;
+                return this;
+            }
+
+            public DefaultAligner build() {
+                return new DefaultAligner(
+                    contentAlign, contentOffset,
+                    topConnectionConnect, topConnectionAlign, topConnectionOffset,
+                    bottomConnectionConnect, bottomConnectionAlign, bottomConnectionOffset,
+                    childrenAlign,
+                    gap
+                );
+            }
+            
+        }
+        
     }
 
     public static class Align {
@@ -309,6 +388,14 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     public static class DefaultLiner implements Liner {
 
+        public static final char[] LINE_CHARS_ASCII = new char[] {
+            '|', ' ', '_', '|', '|', '|', '_', '|', '|', '|', ' ',  '|', '|'
+        };
+        
+        public static final char[] LINE_CHARS_UNICODE = new char[] {
+            '│', '┌', '─', '┴',  '└', '┘', '┬', '┼', '├', '┤', '┐', '│', '│'
+        };
+        
         private final char topConnectionChar;
         private final char bracketLeftChar;
         private final char bracketChar;
@@ -334,19 +421,19 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
 
         public DefaultLiner(boolean useUnicode) {
             this(
-                useUnicode ? '│' : '|',
-                useUnicode ? '┌' : ' ',
-                useUnicode ? '─' : '_',
-                useUnicode ? '┴' : '|',
-                useUnicode ? '└' : '|',
-                useUnicode ? '┘' : '|',
-                useUnicode ? '┬' : '_',
-                useUnicode ? '┼' : '|',
-                useUnicode ? '├' : '|',
-                useUnicode ? '┤' : '|',
-                useUnicode ? '┐' : ' ',
-                useUnicode ? '│' : '|',
-                useUnicode ? '│' : '|',
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[0],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[1],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[2],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[3],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[4],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[5],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[6],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[7],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[8],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[9],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[10],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[11],
+                (useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII)[12],
                 0, 1, true
             );
         }
@@ -450,6 +537,138 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
             }
             
             return fullHeight;
+        }
+        
+        public static Builder createBuilder() {
+            return new Builder();
+        }
+        
+        public static class Builder {
+
+            private int topHeight = 0;
+            private int bottomHeight = 1;
+            private boolean displayBracket = true;
+            
+            private char[] characters = (
+                UnicodeMode.isUnicodeDefault() ?
+                LINE_CHARS_UNICODE :
+                LINE_CHARS_ASCII
+            ).clone();
+
+            public Builder topHeight(int topHeight) {
+                this.topHeight = topHeight;
+                return this;
+            }
+
+            public Builder bottomHeight(int bottomHeight) {
+                this.bottomHeight = bottomHeight;
+                return this;
+            }
+
+            public Builder displayBracket(boolean displayBracket) {
+                this.displayBracket = displayBracket;
+                return this;
+            }
+
+            public Builder ascii() {
+                this.characters = LINE_CHARS_ASCII.clone();
+                return this;
+            }
+
+            public Builder unicode() {
+                this.characters = LINE_CHARS_UNICODE.clone();
+                return this;
+            }
+
+            public Builder characters(
+                char topConnectionChar, char bracketLeftChar, char bracketChar,
+                char bracketTopChar, char bracketTopLeftChar, char bracketTopRightChar, char bracketBottomChar,
+                char bracketTopAndBottomChar, char bracketTopAndBottomLeftChar, char bracketTopAndBottomRightChar,
+                char bracketRightChar, char bracketOnlyChar, char bottomConnectionChar
+            ) {
+                this.characters = new char[] {
+                    topConnectionChar, bracketLeftChar, bracketChar,
+                    bracketTopChar, bracketTopLeftChar, bracketTopRightChar, bracketBottomChar,
+                    bracketTopAndBottomChar, bracketTopAndBottomLeftChar, bracketTopAndBottomRightChar,
+                    bracketRightChar, bracketOnlyChar, bottomConnectionChar
+                };
+                return this;
+            }
+
+            public Builder topConnectionChar(char topConnectionChar) {
+                this.characters[0] = topConnectionChar;
+                return this;
+            }
+
+            public Builder bracketLeftChar(char bracketLeftChar) {
+                this.characters[1] = bracketLeftChar;
+                return this;
+            }
+
+            public Builder bracketChar(char bracketChar) {
+                this.characters[2] = bracketChar;
+                return this;
+            }
+
+            public Builder bracketTopChar(char bracketTopChar) {
+                this.characters[3] = bracketTopChar;
+                return this;
+            }
+
+            public Builder bracketTopLeftChar(char bracketTopLeftChar) {
+                this.characters[4] = bracketTopLeftChar;
+                return this;
+            }
+
+            public Builder bracketTopRightChar(char bracketTopRightChar) {
+                this.characters[5] = bracketTopRightChar;
+                return this;
+            }
+
+            public Builder bracketBottomChar(char bracketBottomChar) {
+                this.characters[6] = bracketBottomChar;
+                return this;
+            }
+
+            public Builder bracketTopAndBottomChar(char bracketTopAndBottomChar) {
+                this.characters[7] = bracketTopAndBottomChar;
+                return this;
+            }
+
+            public Builder bracketTopAndBottomLeftChar(char bracketTopAndBottomLeftChar) {
+                this.characters[8] = bracketTopAndBottomLeftChar;
+                return this;
+            }
+
+            public Builder bracketTopAndBottomRightChar(char bracketTopAndBottomRightChar) {
+                this.characters[9] = bracketTopAndBottomRightChar;
+                return this;
+            }
+
+            public Builder bracketRightChar(char bracketRightChar) {
+                this.characters[10] = bracketRightChar;
+                return this;
+            }
+
+            public Builder bracketOnlyChar(char bracketOnlyChar) {
+                this.characters[11] = bracketOnlyChar;
+                return this;
+            }
+
+            public Builder bottomConnectionChar(char bottomConnectionChar) {
+                this.characters[12] = bottomConnectionChar;
+                return this;
+            }
+
+            public DefaultLiner build() {
+                return new DefaultLiner(
+                    characters[0], characters[1], characters[2], characters[3], characters[4],
+                    characters[5], characters[6], characters[7], characters[8], characters[9],
+                    characters[10], characters[11], characters[12],
+                    topHeight, bottomHeight, displayBracket
+                );
+            }
+            
         }
         
     }
