@@ -25,9 +25,9 @@ natural foods
  ├─ vegetables
  │  ├─ tomato
  │  ├─ carrot
- │  │ ┌──────────F
+ │  │ A──────────B
  │  └─│ broccoli │
- │    └──────────┘
+ │    C──────────D
  └─ seeds
     ├─ walnut
     └─ peanut
