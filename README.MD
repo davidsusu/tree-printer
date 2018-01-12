@@ -2,7 +2,38 @@
 
 Simple Java library for visualizing tree structures in the command line.
 
-## Generate a tree
+```
+natural foods
+ ├─ fruits
+ │  ├─ apple
+ │  ├─ banana
+ │  ├─ mango
+ │  ├─ lorem and
+ │  │  impsum
+ │  │ ┌──────────────────┐
+ │  │ │        ?         │
+ │  ├─│    ┌───┴───┐     │
+ │  │ │ orange mandarine │
+ │  │ └──────────────────┘
+ │  │ ┌────────────────────────────────┐
+ │  │ │        berry-like              │
+ │  │ │     ┌──────┴───────┐           │
+ │  └─│   grape          berry         │
+ │    │  ┌──┴─┐       ┌────┴─────┐     │
+ │    │ red white strawberry raspberry │
+ │    └────────────────────────────────┘
+ ├─ vegetables
+ │  ├─ tomato
+ │  ├─ carrot
+ │  │ ┌──────────F
+ │  └─│ broccoli │
+ │    └──────────┘
+ └─ seeds
+    ├─ walnut
+    └─ peanut
+```
+
+## Constructing trees
 
 A *tree* is a hierarchical structure built from *nodes*. Any tree is given by its root node.
 
@@ -102,9 +133,9 @@ Decorators inherit by default, but you can change this behavior.
 
 ## ASCII vs Unicode mode
 
-Built-in objects that prints lines or borders have a built in set of characters both for ASCII and Unicode mode. Unicode mode is the default, by default. Affected classes have a constructor (and builder) parameter `useUnicode`. You can globally turn off (and on) the unicode mode with `UnicodeMode.setUnicodeAsDefault()`.
+Built-in objects that prints lines or borders have a built-in set of characters both for ASCII and Unicode mode. Unicode mode is the default, by default. Affected classes have a constructor (and builder) parameter `useUnicode`. You can globally turn off (and on) the unicode mode with `UnicodeMode.setUnicodeAsDefault()`.
 
-The first example in ASCII mode:
+The first example with ASCII rendering:
 
 ```java
 ListingTreePrinter.createBuilder().ascii().build().print(rootNode);
