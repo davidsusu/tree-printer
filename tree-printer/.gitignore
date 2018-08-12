@@ -3,6 +3,7 @@
 *.dex.zip
 *.java.swp
 *.java.swo
-bin/
-/.gradle/
+.directory
+/bin/
 /build/
+/.gradle/
