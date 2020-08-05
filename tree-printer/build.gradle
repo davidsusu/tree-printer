@@ -39,40 +39,42 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: project.ext.mavenRepositoryUrl) {
-                authentication(
-                    userName: project.ext.mavenRepositoryUsername,
-                    password: project.ext.mavenRepositoryPassword
-                )
-            }
-            beforeDeployment { MavenDeployment deployment ->
-                signing.signPom(deployment)
-            }
-            pom.artifactId = project.name
-            pom.project {
-                name = project.name
-                description = project.description
-                url = websiteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
+if (project.ext.properties.containsKey('mavenRepositoryUrl')) {
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: project.ext.mavenRepositoryUrl) {
+                    authentication(
+                        userName: project.ext.mavenRepositoryUsername,
+                        password: project.ext.mavenRepositoryPassword
+                    )
+                }
+                beforeDeployment { MavenDeployment deployment ->
+                    signing.signPom(deployment)
+                }
+                pom.artifactId = project.name
+                pom.project {
+                    name = project.name
+                    description = project.description
+                    url = websiteUrl
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
                     }
-                }
-                scm {
-                    connection 'scm:git:' + scmUrl
-                    developerConnection 'scm:git:' + scmUrl
-                    url scmUrl
-                }
-                developers {
-                    developer {
-                        id = 'davidsusu'
-                        name = 'Dávid Horváth'
-                        email = 'horvath@webarticum.hu'
+                    scm {
+                        connection 'scm:git:' + scmUrl
+                        developerConnection 'scm:git:' + scmUrl
+                        url scmUrl
+                    }
+                    developers {
+                        developer {
+                            id = 'davidsusu'
+                            name = 'Dávid Horváth'
+                            email = 'horvath@webarticum.hu'
+                        }
                     }
                 }
             }
