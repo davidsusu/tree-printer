@@ -18,19 +18,6 @@ public abstract class AbstractTreeNode implements TreeNode {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof TreeNode)) {
-            return false;
-        }
-        return (this.getOriginalNode() == ((TreeNode)other).getOriginalNode());
-    }
-    
-    @Override
-    public int hashCode() {
-        return System.identityHashCode(getOriginalNode());
-    }
-
-    @Override
     public String toString() {
         return getContent();
     }
