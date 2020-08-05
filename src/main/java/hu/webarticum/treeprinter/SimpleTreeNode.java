@@ -20,7 +20,7 @@ public class SimpleTreeNode extends AbstractTreeNode {
         this.insets = insets.clone();
     }
 
-    void addChild(TreeNode childNode) {
+    public void addChild(TreeNode childNode) {
         children.add(childNode);
     }
 
