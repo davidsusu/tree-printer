@@ -61,7 +61,7 @@ public class Main {
         (new TraditionalTreePrinter()).print(new BorderTreeNodeDecorator(rootNode));
     }
     
-    static private class TestNode extends SimpleTreeNode {
+    private static class TestNode extends SimpleTreeNode {
 
         TestNode(String content) {
             super(content);

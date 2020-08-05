@@ -13,9 +13,9 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         "   ", " │ ", " ├─", " └─", "───"
     };
     
-    private final int NODE_ROOT = 0;
-    private final int NODE_GENERAL = 1;
-    private final int NODE_LAST = 2;
+    private static final int NODE_ROOT = 0;
+    private static final int NODE_GENERAL = 1;
+    private static final int NODE_LAST = 2;
 
     private final String liningSpace;
     private final String liningGeneral;
@@ -104,11 +104,8 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         for (int i = 0; i < childNodeCount; i++) {
             TreeNode childNode = childNodes.get(i);
             boolean childIsLast = (i == childNodeCount - 1);
-            String subPrefix =
-                type == NODE_ROOT ?
-                prefix :
-                prefix + ((type == NODE_LAST) ? liningSpace : liningGeneral)
-            ;
+            String lining = type == NODE_LAST ? liningSpace : liningGeneral;
+            String subPrefix = type == NODE_ROOT ? prefix : prefix + lining;
             int subInset = Math.max(0, inset - 1);
             printSub(childNode, out, subPrefix, childIsLast ? NODE_LAST : NODE_GENERAL, subInset);
         }

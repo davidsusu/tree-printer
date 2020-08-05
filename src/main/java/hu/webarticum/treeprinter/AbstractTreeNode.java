@@ -1,6 +1,6 @@
 package hu.webarticum.treeprinter;
 
-abstract public class AbstractTreeNode implements TreeNode {
+public abstract class AbstractTreeNode implements TreeNode {
 
     @Override
     public TreeNode getOriginalNode() {

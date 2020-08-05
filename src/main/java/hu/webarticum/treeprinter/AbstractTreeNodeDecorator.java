@@ -3,7 +3,7 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class AbstractTreeNodeDecorator extends AbstractTreeNode {
+public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     
     protected final TreeNode decoratedNode;
 
@@ -66,6 +66,6 @@ abstract public class AbstractTreeNodeDecorator extends AbstractTreeNode {
         return decoratedChildren;
     }
 
-    abstract protected TreeNode decorateChild(TreeNode childNode);
+    protected abstract TreeNode decorateChild(TreeNode childNode);
 
 }

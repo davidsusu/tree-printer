@@ -90,24 +90,25 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 longestLineLength = lineLength;
             }
         }
-        StringBuilder borderedContentBuilder = new StringBuilder();
-        borderedContentBuilder.append(topLeft);
-        Util.repeat(borderedContentBuilder, top, longestLineLength);
-        borderedContentBuilder.append(topRight);
-        borderedContentBuilder.append("\n");
-        for (String contentLine: contentLines) {
-            borderedContentBuilder.append(left);
-            borderedContentBuilder.append(contentLine);
-            Util.repeat(borderedContentBuilder, ' ', longestLineLength - contentLine.length());
-            borderedContentBuilder.append(right);
-            borderedContentBuilder.append("\n");
-        }
-        borderedContentBuilder.append(bottomLeft);
-        Util.repeat(borderedContentBuilder, bottom, longestLineLength);
-        borderedContentBuilder.append(bottomRight);
-        String borderedContent = borderedContentBuilder.toString();
         
-        return borderedContent;
+        StringBuilder resultBuilder = new StringBuilder();
+        
+        resultBuilder.append(topLeft);
+        Util.repeat(resultBuilder, top, longestLineLength);
+        resultBuilder.append(topRight);
+        resultBuilder.append("\n");
+        for (String contentLine: contentLines) {
+            resultBuilder.append(left);
+            resultBuilder.append(contentLine);
+            Util.repeat(resultBuilder, ' ', longestLineLength - contentLine.length());
+            resultBuilder.append(right);
+            resultBuilder.append("\n");
+        }
+        resultBuilder.append(bottomLeft);
+        Util.repeat(resultBuilder, bottom, longestLineLength);
+        resultBuilder.append(bottomRight);
+        
+        return resultBuilder.toString();
     }
 
     @Override

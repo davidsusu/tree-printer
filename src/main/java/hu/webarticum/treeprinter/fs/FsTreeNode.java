@@ -21,7 +21,7 @@ public class FsTreeNode extends AbstractTreeNode {
     
     private final boolean decorable;
 
-    static public final FileFilter DEFAULT_FILE_FILTER = new FileFilter() {
+    public static final FileFilter DEFAULT_FILE_FILTER = new FileFilter() {
         
         @Override
         public boolean accept(File file) {
@@ -30,7 +30,7 @@ public class FsTreeNode extends AbstractTreeNode {
         
     };
     
-    static public final Comparator<File> DEFAULT_COMPARATOR = new Comparator<File>() {
+    public static final Comparator<File> DEFAULT_COMPARATOR = new Comparator<File>() {
 
         @Override
         public int compare(File file1, File file2) {
@@ -78,8 +78,8 @@ public class FsTreeNode extends AbstractTreeNode {
         if (subFileArray != null && subFileArray.length > 0) {
             List<File> subFiles = new ArrayList<File>(Arrays.asList(subFileArray));
             Collections.sort(subFiles, comparator);
-            for (File file: subFiles) {
-                childNodes.add(new FsTreeNode(file, filter, comparator, decorable));
+            for (File subFile: subFiles) {
+                childNodes.add(new FsTreeNode(subFile, filter, comparator, decorable));
             }
         }
         return childNodes;

@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class TraditionalTreePrinter extends AbstractTreePrinter {
 
-    static public final Aligner DEFAULT_ALIGNER = new DefaultAligner();
+	public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
 
-    static public final Liner DEFAULT_LINER = new DefaultLiner();
+    public static final Liner DEFAULT_LINER = new DefaultLiner();
 
     private final Aligner aligner;
 
@@ -118,12 +118,12 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     public static class DefaultAligner implements Aligner {
 
-        public static int LEFT = 0;
-        public static int CENTER = 1;
-        public static int RIGHT = 2;
+        public static final int LEFT = 0;
+        public static final int CENTER = 1;
+        public static final int RIGHT = 2;
 
-        public static int CONNECT_TO_CONTENT = 0;
-        public static int CONNECT_TO_CONTEXT = 1;
+        public static final int CONNECT_TO_CONTENT = 0;
+        public static final int CONNECT_TO_CONTEXT = 1;
         
         private final int contentAlign;
         private final int contentOffset;

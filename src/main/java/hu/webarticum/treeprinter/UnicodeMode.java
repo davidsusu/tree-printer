@@ -2,13 +2,13 @@ package hu.webarticum.treeprinter;
 
 public class UnicodeMode {
     
-    static private boolean enabled = true;
+	private static boolean enabled = true;
     
-    static public void setUnicodeAsDefault(boolean enabled) {
+	public static void setUnicodeAsDefault(boolean enabled) {
         UnicodeMode.enabled = enabled;
     }
 
-    static public boolean isUnicodeDefault() {
+	public static boolean isUnicodeDefault() {
         return enabled;
     }
     

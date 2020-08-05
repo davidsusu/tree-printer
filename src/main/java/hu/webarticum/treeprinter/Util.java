@@ -3,9 +3,13 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Util {
+public final class Util {
+	
+	private Util() {
+		// utility class
+	}
     
-    static public int[] getContentDimension(String content) {
+	public static int[] getContentDimension(String content) {
         int longsetLineLength = 0;
         String[] lines = content.split("\n");
         for (String line: lines) {
@@ -17,7 +21,7 @@ public class Util {
         return new int[] {longsetLineLength, lines.length};
     }
     
-    static public int getDepth(TreeNode treeNode) {
+    public static int getDepth(TreeNode treeNode) {
         List<TreeNode> levelNodes = new ArrayList<TreeNode>();
         levelNodes.add(treeNode);
         int depth = 0;
@@ -39,13 +43,13 @@ public class Util {
         return depth;
     }
 
-    static public String repeat(char character, int repeats) {
+    public static String repeat(char character, int repeats) {
         StringBuilder resultBuilder = new StringBuilder();
         repeat(resultBuilder, character, repeats);
         return resultBuilder.toString();
     }
     
-    static public void repeat(StringBuilder stringBuilder, char character, int repeats) {
+    public static void repeat(StringBuilder stringBuilder, char character, int repeats) {
         for (int i = 0; i < repeats; i ++) {
             stringBuilder.append(character);
         }

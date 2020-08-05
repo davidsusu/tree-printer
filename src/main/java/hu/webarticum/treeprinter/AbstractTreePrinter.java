@@ -2,7 +2,7 @@ package hu.webarticum.treeprinter;
 
 import java.io.IOException;
 
-abstract public class AbstractTreePrinter implements TreePrinter {
+public abstract class AbstractTreePrinter implements TreePrinter {
 
     @Override
     public void print(TreeNode rootNode) {
