@@ -1,9 +1,0 @@
-*.class
-*.dex
-*.dex.zip
-*.java.swp
-*.java.swo
-.directory
-/bin/
-/build/
-/.gradle/
