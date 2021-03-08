@@ -22,4 +22,17 @@ public abstract class AbstractTreeNode implements TreeNode {
         return getContent();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AbstractTreeNode)) {
+            return false;
+        }
+        return this.getContent().equals(((AbstractTreeNode) obj).getContent());
+    }
+
+    @Override
+    public int hashCode() {
+        return getContent().hashCode();
+    }
+
 }
