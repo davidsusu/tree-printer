@@ -1,5 +1,9 @@
 # TODO list
 
+## Fix design
+Don't use TreeNode as a map key in TraditionalTreePrinter.Aligner.alignChildren (--> v2.0).
+Currently, AbstractTreeNode has equals() as a workaround for this problem
+(see: https://github.com/davidsusu/tree-printer/issues/3).
 
 ## ListingTreePrinter: connected lines in aligned mode
 
