@@ -1,12 +1,15 @@
-apply plugin: 'java'
-apply plugin: 'signing'
-apply plugin: 'maven'
+plugins {
+    id 'java-library'
+    id 'signing'
+    id 'maven'
+    id 'com.palantir.git-version' version '0.12.3'
+}
 
 sourceCompatibility = "1.6";
 targetCompatibility = "1.6";
 
 group = 'hu.webarticum'
-version = '1.0'
+version = gitVersion().replaceFirst('^v', '').replaceFirst('\\.dirty$', '')
 description = 'Simple Java library for visualizing tree structures in the command line'
 
 def scmUrl = 'https://github.com/davidsusu/tree-printer.git'
