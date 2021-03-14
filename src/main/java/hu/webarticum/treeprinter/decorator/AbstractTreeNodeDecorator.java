@@ -29,6 +29,10 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     }
 
     public AbstractTreeNodeDecorator(TreeNode decoratedNode, boolean decorable, boolean inherit, boolean forceInherit) {
+        if (decoratedNode == null) {
+            throw new IllegalArgumentException("Decorated node must not be null");
+        }
+        
         this.decoratedNode = decoratedNode;
         this.decorable = decorable;
         this.inherit = inherit;
