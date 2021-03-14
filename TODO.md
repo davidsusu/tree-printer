@@ -1,11 +1,15 @@
 # TODO list
 
-## Fix design
-Don't use TreeNode as a map key in TraditionalTreePrinter.Aligner.alignChildren (--> v2.0).
-Currently, AbstractTreeNode has equals() as a workaround for this problem
-(see: https://github.com/davidsusu/tree-printer/issues/3).
+## Improve code quality
 
-## ListingTreePrinter: connected lines in aligned mode
+Especially: use enums instead of magic parameters and constants.
+
+##  Make TraditionalTreePrinter parallel
+
+This can be achieved with fork-join strategy and a concurrent line buffer.
+
+## Imporve ListingTreePrinter
+### (connected lines in aligned mode)
 
 Optionally?
 
@@ -23,7 +27,7 @@ Optionally?
      '-------sub2
 
 
-## CompactBinaryTreePrinter
+## Add CompactBinaryTreePrinter
 
 Can be buffered
 
@@ -44,7 +48,7 @@ Can be buffered
                   P
 
 
-## NestedBoxesTreePrinter
+## Add NestedBoxesTreePrinter
 
 Can be buffered
 
@@ -61,7 +65,7 @@ Can be buffered
     '---------------------------'
 
 
-## ShadowTreeNodeDecorator
+### ShadowTreeNodeDecorator
 
     ┌───────────┐
     │ Some node │▒
