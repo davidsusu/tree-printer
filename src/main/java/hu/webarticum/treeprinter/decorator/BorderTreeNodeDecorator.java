@@ -127,7 +127,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode) {
+    protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new BorderTreeNodeDecorator(
             childNode,
             decorable, inherit, forceInherit,

@@ -40,7 +40,7 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode) {
+    protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new DefaultFsTreeNodeDecorator(childNode, decorable, inherit, forceInherit);
     }
     

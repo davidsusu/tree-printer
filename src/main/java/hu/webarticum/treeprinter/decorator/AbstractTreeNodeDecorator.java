@@ -61,9 +61,12 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     @Override
     public List<TreeNode> getChildren() {
         List<TreeNode> decoratedChildren = new ArrayList<TreeNode>();
-        for (TreeNode childNode: decoratedNode.getChildren()) {
+        List<TreeNode> decoratedNodeChildren = decoratedNode.getChildren();
+        int childCount = decoratedNodeChildren.size();
+        for (int i = 0; i < childCount; i++) {
+            TreeNode childNode = decoratedNodeChildren.get(i);
             if (inherit && (forceInherit || childNode.isDecorable())) {
-                decoratedChildren.add(decorateChild(childNode));
+                decoratedChildren.add(decorateChild(childNode, i));
             } else {
                 decoratedChildren.add(childNode);
             }
@@ -71,6 +74,6 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
         return decoratedChildren;
     }
 
-    protected abstract TreeNode decorateChild(TreeNode childNode);
+    protected abstract TreeNode decorateChild(TreeNode childNode, int index);
 
 }

@@ -84,7 +84,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode) {
+    protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new PadTreeNodeDecorator(
             childNode, decorable, inherit, forceInherit,
             topPad, rightPad, bottomPad, leftPad
