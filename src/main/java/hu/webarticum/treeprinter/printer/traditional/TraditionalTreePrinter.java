@@ -13,7 +13,7 @@ import hu.webarticum.treeprinter.util.Util;
 
 public class TraditionalTreePrinter extends AbstractTreePrinter {
 
-	public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
+    public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
 
     public static final Liner DEFAULT_LINER = new DefaultLiner();
 
