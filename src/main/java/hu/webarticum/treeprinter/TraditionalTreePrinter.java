@@ -27,7 +27,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     @Override
     public void print(TreeNode rootNode, Appendable out) {
-        TreeNode wrappedRootNode = new ReferenceTreeNode(rootNode);
+        TreeNode wrappedRootNode = new TrackingTreeNode(rootNode);
         
         Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
         int rootWidth = aligner.collectWidths(widthMap, wrappedRootNode);
@@ -108,20 +108,20 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         buffer.flush();
     }
     
-    public static class ReferenceTreeNode implements TreeNode {
+    public static class TrackingTreeNode implements TreeNode {
         
-        public final ReferenceTreeNode parent;
+        public final TrackingTreeNode parent;
         
         public final int index;
         
         public final TreeNode baseNode;
         
 
-        public ReferenceTreeNode(TreeNode baseNode) {
+        public TrackingTreeNode(TreeNode baseNode) {
             this(null, 0, baseNode);
         }
         
-        public ReferenceTreeNode(ReferenceTreeNode parent, int index, TreeNode baseNode) {
+        public TrackingTreeNode(TrackingTreeNode parent, int index, TreeNode baseNode) {
             this.parent = parent;
             this.index = index;
             this.baseNode = baseNode;
@@ -154,7 +154,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
             for (int i = 0; i < childCount; i++) {
                 TreeNode childNode = children.get(i);
                 referencedChildren.add(
-                    childNode != null ? new ReferenceTreeNode(this, i, childNode) : null
+                    childNode != null ? new TrackingTreeNode(this, i, childNode) : null
                 );
             }
             return referencedChildren;
@@ -174,12 +174,12 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         
         @Override
         public boolean equals(Object other) {
-            if (!(other instanceof ReferenceTreeNode)) {
+            if (!(other instanceof TrackingTreeNode)) {
                 return false;
             }
 
-            ReferenceTreeNode otherReferenceTreeNode = (ReferenceTreeNode)other;
-            ReferenceTreeNode otherParent = otherReferenceTreeNode.parent;
+            TrackingTreeNode otherReferenceTreeNode = (TrackingTreeNode)other;
+            TrackingTreeNode otherParent = otherReferenceTreeNode.parent;
             
             if (parent == null) {
                 if (otherParent != null) {
