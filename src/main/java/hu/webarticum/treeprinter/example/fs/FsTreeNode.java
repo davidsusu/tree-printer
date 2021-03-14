@@ -21,31 +21,9 @@ public class FsTreeNode extends AbstractTreeNode {
     
     private final boolean decorable;
 
-    public static final FileFilter DEFAULT_FILE_FILTER = new FileFilter() {
-        
-        @Override
-        public boolean accept(File file) {
-            return !file.isHidden();
-        }
-        
-    };
+    public static final FileFilter DEFAULT_FILE_FILTER = fileItem -> !fileItem.isHidden();
     
-    public static final Comparator<File> DEFAULT_COMPARATOR = new Comparator<File>() {
-
-        @Override
-        public int compare(File file1, File file2) {
-            if (file1.isDirectory()) {
-                if (!file2.isDirectory()) {
-                    return -1;
-                }
-            } else if (file2.isDirectory()) {
-                return 1;
-            }
-            
-            return file1.getName().compareToIgnoreCase(file2.getName());
-        }
-        
-    };
+    public static final Comparator<File> DEFAULT_COMPARATOR = FsTreeNode::compareFiles;
     
     public FsTreeNode() {
         this(new File("."));
@@ -62,6 +40,18 @@ public class FsTreeNode extends AbstractTreeNode {
         this.decorable = decorable;
     }
     
+    private static int compareFiles(File file1, File file2) {
+        if (file1.isDirectory()) {
+            if (!file2.isDirectory()) {
+                return -1;
+            }
+        } else if (file2.isDirectory()) {
+            return 1;
+        }
+        
+        return file1.getName().compareToIgnoreCase(file2.getName());
+    }
+    
     public File getFile() {
         return file;
     }
@@ -73,10 +63,10 @@ public class FsTreeNode extends AbstractTreeNode {
 
     @Override
     public List<TreeNode> getChildren() {
-        List<TreeNode> childNodes = new ArrayList<TreeNode>();
+        List<TreeNode> childNodes = new ArrayList<>();
         File[] subFileArray = file.listFiles(filter);
         if (subFileArray != null && subFileArray.length > 0) {
-            List<File> subFiles = new ArrayList<File>(Arrays.asList(subFileArray));
+            List<File> subFiles = new ArrayList<>(Arrays.asList(subFileArray));
             Collections.sort(subFiles, comparator);
             for (File subFile: subFiles) {
                 childNodes.add(new FsTreeNode(subFile, filter, comparator, decorable));

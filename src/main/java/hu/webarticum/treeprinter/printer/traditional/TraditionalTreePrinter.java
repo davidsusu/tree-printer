@@ -34,10 +34,10 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     public void print(TreeNode rootNode, Appendable out) {
         TreeNode wrappedRootNode = new TrackingTreeNodeDecorator(rootNode);
         
-        Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
+        Map<TreeNode, Integer> widthMap = new HashMap<>();
         int rootWidth = aligner.collectWidths(widthMap, wrappedRootNode);
         
-        Map<TreeNode, Position> positionMap = new HashMap<TreeNode, Position>();
+        Map<TreeNode, Position> positionMap = new HashMap<>();
         
         String rootContent = wrappedRootNode.getContent();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
@@ -51,18 +51,18 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         buffer.flush();
         
         while (true) {
-            Map<TreeNode, Position> newPositionMap = new HashMap<TreeNode, Position>();
-            List<Integer> childBottoms = new ArrayList<Integer>();
+            Map<TreeNode, Position> newPositionMap = new HashMap<>();
+            List<Integer> childBottoms = new ArrayList<>();
             for (Map.Entry<TreeNode, Position> entry: positionMap.entrySet()) {
                 TreeNode node = entry.getKey();
                 Position position = entry.getValue();
-                Map<TreeNode, Position> childrenPositionMap = new HashMap<TreeNode, Position>();
+                Map<TreeNode, Position> childrenPositionMap = new HashMap<>();
                 List<TreeNode> children = node.getChildren();
                 int[] childrenAlign = aligner.alignChildren(node, children, position.col, widthMap);
                 
                 if (!children.isEmpty()) {
                     int childCount = children.size();
-                    List<Integer> childConnections = new ArrayList<Integer>(childCount);
+                    List<Integer> childConnections = new ArrayList<>(childCount);
                     for (int i = 0; i < childCount; i++) {
                         int childCol = childrenAlign[i];
                         TreeNode childNode = children.get(i);

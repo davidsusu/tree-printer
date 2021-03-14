@@ -60,7 +60,7 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
 
     @Override
     public List<TreeNode> getChildren() {
-        List<TreeNode> decoratedChildren = new ArrayList<TreeNode>();
+        List<TreeNode> decoratedChildren = new ArrayList<>();
         List<TreeNode> decoratedNodeChildren = decoratedNode.getChildren();
         int childCount = decoratedNodeChildren.size();
         for (int i = 0; i < childCount; i++) {

@@ -9,7 +9,7 @@ public class SimpleTreeNode extends AbstractTreeNode {
     
     protected final int[] insets;
     
-    protected List<TreeNode> children = new ArrayList<TreeNode>();
+    protected List<TreeNode> children = new ArrayList<>();
 
     public SimpleTreeNode(String content) {
         this(content, 0, 0, 0, 0);
@@ -40,7 +40,7 @@ public class SimpleTreeNode extends AbstractTreeNode {
 
     @Override
     public List<TreeNode> getChildren() {
-        return new ArrayList<TreeNode>(children);
+        return new ArrayList<>(children);
     }
 
 }

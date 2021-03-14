@@ -10,7 +10,7 @@ public class LineBuffer {
     
     private int flushedRowCount = 0;
     
-    private List<String> lines = new ArrayList<String>();
+    private List<String> lines = new ArrayList<>();
     
     public LineBuffer(Appendable out) {
         this.out = out;
@@ -53,7 +53,7 @@ public class LineBuffer {
                 String line = lines.get(i);
                 out.append(line + "\n");
             }
-            lines = new ArrayList<String>(lines.subList(deleteLineCount, currentLineCount));
+            lines = new ArrayList<>(lines.subList(deleteLineCount, currentLineCount));
         }
         
         flushedRowCount = rows;

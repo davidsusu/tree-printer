@@ -24,11 +24,11 @@ public final class Util {
     }
     
     public static int getDepth(TreeNode treeNode) {
-        List<TreeNode> levelNodes = new ArrayList<TreeNode>();
+        List<TreeNode> levelNodes = new ArrayList<>();
         levelNodes.add(treeNode);
         int depth = 0;
         while (true) {
-            List<TreeNode> newLevelNodes = new ArrayList<TreeNode>();
+            List<TreeNode> newLevelNodes = new ArrayList<>();
             for (TreeNode levelNode: levelNodes) {
                 for (TreeNode childNode: levelNode.getChildren()) {
                     if (childNode != null) {
