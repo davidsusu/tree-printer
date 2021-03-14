@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Util {
-	
-	private Util() {
-		// utility class
-	}
     
-	public static int[] getContentDimension(String content) {
+    private Util() {
+        // utility class
+    }
+    
+    public static int[] getContentDimension(String content) {
         int longsetLineLength = 0;
         String[] lines = content.split("\n");
         for (String line: lines) {

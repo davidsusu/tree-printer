@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class TraditionalTreePrinter extends AbstractTreePrinter {
 
-	public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
+    public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
 
     public static final Liner DEFAULT_LINER = new DefaultLiner();
 
@@ -27,8 +27,8 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     @Override
     public void print(TreeNode rootNode, Appendable out) {
-    	TreeNode wrappedRootNode = new ReferenceTreeNode(rootNode);
-    	
+        TreeNode wrappedRootNode = new ReferenceTreeNode(rootNode);
+        
         Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
         int rootWidth = aligner.collectWidths(widthMap, wrappedRootNode);
         
@@ -109,94 +109,94 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     }
     
     public static class ReferenceTreeNode implements TreeNode {
-    	
-    	public final ReferenceTreeNode parent;
-    	
-    	public final int index;
-    	
-    	public final TreeNode baseNode;
-    	
+        
+        public final ReferenceTreeNode parent;
+        
+        public final int index;
+        
+        public final TreeNode baseNode;
+        
 
-    	public ReferenceTreeNode(TreeNode baseNode) {
-    		this(null, 0, baseNode);
-    	}
-    	
-    	public ReferenceTreeNode(ReferenceTreeNode parent, int index, TreeNode baseNode) {
-    		this.parent = parent;
-    		this.index = index;
-    		
-    		// XXX
-    		if (baseNode == null) {
-    			baseNode = new SimpleTreeNode("[NULL]");
-    		}
-    		
-    		this.baseNode = baseNode;
-    	}
-
-
-		@Override
-		public String getContent() {
-			return baseNode.getContent();
-		}
+        public ReferenceTreeNode(TreeNode baseNode) {
+            this(null, 0, baseNode);
+        }
+        
+        public ReferenceTreeNode(ReferenceTreeNode parent, int index, TreeNode baseNode) {
+            this.parent = parent;
+            this.index = index;
+            
+            // XXX
+            if (baseNode == null) {
+                baseNode = new SimpleTreeNode("[NULL]");
+            }
+            
+            this.baseNode = baseNode;
+        }
 
 
-		@Override
-		public TreeNode getOriginalNode() {
-			return baseNode.getOriginalNode();
-		}
+        @Override
+        public String getContent() {
+            return baseNode.getContent();
+        }
 
 
-		@Override
-		public int[] getInsets() {
-			return baseNode.getInsets();
-		}
+        @Override
+        public TreeNode getOriginalNode() {
+            return baseNode.getOriginalNode();
+        }
 
 
-		@Override
-		public List<TreeNode> getChildren() {
-			List<TreeNode> children = baseNode.getChildren();
-			int childCount = children.size();
-			List<TreeNode> referencedChildren = new ArrayList<TreeNode>(childCount);
-			for (int i = 0; i < childCount; i++) {
-				TreeNode childNode = children.get(i);
-				referencedChildren.add(
-					childNode != null ? new ReferenceTreeNode(this, i, childNode) : null
-				);
-			}
-			return referencedChildren;
-		}
+        @Override
+        public int[] getInsets() {
+            return baseNode.getInsets();
+        }
 
 
-		@Override
-		public boolean isDecorable() {
-			return false;
-		}
-		
-		@Override
-		public int hashCode() {
-			int parentHashCode = parent != null ? parent.hashCode(): 0;
-			return (parentHashCode * 37) + index;
-		}
-		
-		@Override
-		public boolean equals(Object other) {
-			if (!(other instanceof ReferenceTreeNode)) {
-				return false;
-			}
+        @Override
+        public List<TreeNode> getChildren() {
+            List<TreeNode> children = baseNode.getChildren();
+            int childCount = children.size();
+            List<TreeNode> referencedChildren = new ArrayList<TreeNode>(childCount);
+            for (int i = 0; i < childCount; i++) {
+                TreeNode childNode = children.get(i);
+                referencedChildren.add(
+                    childNode != null ? new ReferenceTreeNode(this, i, childNode) : null
+                );
+            }
+            return referencedChildren;
+        }
 
-			ReferenceTreeNode otherReferenceTreeNode = (ReferenceTreeNode)other;
-			ReferenceTreeNode otherParent = otherReferenceTreeNode.parent;
-			
-			if (parent == null) {
-				if (otherParent != null) {
-					return false;
-				}
-			} else if (otherParent == null || !parent.equals(otherParent)) {
-				return false;
-			}
-			
-			return index == otherReferenceTreeNode.index;
-		}
+
+        @Override
+        public boolean isDecorable() {
+            return false;
+        }
+        
+        @Override
+        public int hashCode() {
+            int parentHashCode = parent != null ? parent.hashCode(): 0;
+            return (parentHashCode * 37) + index;
+        }
+        
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof ReferenceTreeNode)) {
+                return false;
+            }
+
+            ReferenceTreeNode otherReferenceTreeNode = (ReferenceTreeNode)other;
+            ReferenceTreeNode otherParent = otherReferenceTreeNode.parent;
+            
+            if (parent == null) {
+                if (otherParent != null) {
+                    return false;
+                }
+            } else if (otherParent == null || !parent.equals(otherParent)) {
+                return false;
+            }
+            
+            return index == otherReferenceTreeNode.index;
+        }
 
     }
     
@@ -382,7 +382,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         }
         
         public static class Builder {
-
+            
             private int contentAlign = CENTER;
             private int contentOffset = 0;
             private int topConnectionConnect = CONNECT_TO_CONTENT;
