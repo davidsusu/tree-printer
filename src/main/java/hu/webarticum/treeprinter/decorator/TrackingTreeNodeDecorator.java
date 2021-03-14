@@ -1,20 +1,19 @@
-package hu.webarticum.treeprinter.printer.traditional;
+package hu.webarticum.treeprinter.decorator;
 
 import hu.webarticum.treeprinter.TreeNode;
-import hu.webarticum.treeprinter.decorator.AbstractTreeNodeDecorator;
 
-public class ReferenceTreeNode extends AbstractTreeNodeDecorator {
+public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
-    public final ReferenceTreeNode parent;
+    public final TrackingTreeNodeDecorator parent;
     
     public final int index;
     
 
-    public ReferenceTreeNode(TreeNode baseNode) {
+    public TrackingTreeNodeDecorator(TreeNode baseNode) {
         this(null, 0, baseNode);
     }
     
-    public ReferenceTreeNode(ReferenceTreeNode parent, int index, TreeNode baseNode) {
+    public TrackingTreeNodeDecorator(TrackingTreeNodeDecorator parent, int index, TreeNode baseNode) {
         super(baseNode);
         this.parent = parent;
         this.index = index;
@@ -27,7 +26,7 @@ public class ReferenceTreeNode extends AbstractTreeNodeDecorator {
 
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
-        return new ReferenceTreeNode(this, index, childNode);
+        return new TrackingTreeNodeDecorator(this, index, childNode);
     }
 
     @Override
@@ -43,12 +42,12 @@ public class ReferenceTreeNode extends AbstractTreeNodeDecorator {
     
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof ReferenceTreeNode)) {
+        if (!(other instanceof TrackingTreeNodeDecorator)) {
             return false;
         }
 
-        ReferenceTreeNode otherReferenceTreeNode = (ReferenceTreeNode)other;
-        ReferenceTreeNode otherParent = otherReferenceTreeNode.parent;
+        TrackingTreeNodeDecorator otherReferenceTreeNode = (TrackingTreeNodeDecorator)other;
+        TrackingTreeNodeDecorator otherParent = otherReferenceTreeNode.parent;
         
         if (parent == null) {
             if (otherParent != null) {
