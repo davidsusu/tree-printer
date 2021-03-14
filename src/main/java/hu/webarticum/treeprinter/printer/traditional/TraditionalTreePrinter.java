@@ -32,15 +32,17 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     
     @Override
     public void print(TreeNode rootNode, Appendable out) {
+        TreeNode wrappedRootNode = new ReferenceTreeNode(rootNode);
+        
         Map<TreeNode, Integer> widthMap = new HashMap<TreeNode, Integer>();
-        int rootWidth = aligner.collectWidths(widthMap, rootNode);
+        int rootWidth = aligner.collectWidths(widthMap, wrappedRootNode);
         
         Map<TreeNode, Position> positionMap = new HashMap<TreeNode, Position>();
         
-        String rootContent = rootNode.getContent();
+        String rootContent = wrappedRootNode.getContent();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
-        Align rootAlign = aligner.alignNode(rootNode, 0, rootWidth, rootContentDimension[0]);
-        positionMap.put(rootNode, new Position(0, 0, rootAlign.bottomConnection, rootAlign.left, rootContentDimension[1]));
+        Align rootAlign = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
+        positionMap.put(wrappedRootNode, new Position(0, 0, rootAlign.bottomConnection, rootAlign.left, rootContentDimension[1]));
         
         LineBuffer buffer = new LineBuffer(out);
         
