@@ -1,11 +1,11 @@
-package hu.webarticum.treeprinter.fs;
+package hu.webarticum.treeprinter.example.fs;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import hu.webarticum.treeprinter.ListingTreePrinter;
+import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 
 public class Main {
 

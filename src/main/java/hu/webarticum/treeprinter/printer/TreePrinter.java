@@ -1,4 +1,6 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.printer;
+
+import hu.webarticum.treeprinter.TreeNode;
 
 public interface TreePrinter {
     

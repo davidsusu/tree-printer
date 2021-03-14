@@ -1,4 +1,8 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.decorator;
+
+import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.printer.UnicodeMode;
+import hu.webarticum.treeprinter.util.Util;
 
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 

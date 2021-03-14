@@ -1,7 +1,10 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.decorator;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import hu.webarticum.treeprinter.AbstractTreeNode;
+import hu.webarticum.treeprinter.TreeNode;
 
 public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     

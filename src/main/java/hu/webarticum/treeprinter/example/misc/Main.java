@@ -1,4 +1,10 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.example.misc;
+
+import hu.webarticum.treeprinter.SimpleTreeNode;
+import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
+import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
+import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
+import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 
 public class Main {
     

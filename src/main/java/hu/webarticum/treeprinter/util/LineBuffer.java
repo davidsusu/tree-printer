@@ -1,4 +1,4 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.util;
 
 import java.io.IOException;
 import java.util.ArrayList;

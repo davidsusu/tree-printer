@@ -1,4 +1,7 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.decorator;
+
+import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.util.Util;
 
 public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 

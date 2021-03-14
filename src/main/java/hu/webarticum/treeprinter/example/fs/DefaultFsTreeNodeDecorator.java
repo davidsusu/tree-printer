@@ -1,10 +1,10 @@
-package hu.webarticum.treeprinter.fs;
+package hu.webarticum.treeprinter.example.fs;
 
 import java.io.File;
 import java.text.DecimalFormat;
 
-import hu.webarticum.treeprinter.AbstractTreeNodeDecorator;
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.decorator.AbstractTreeNodeDecorator;
 
 public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
 

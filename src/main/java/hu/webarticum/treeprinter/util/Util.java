@@ -1,7 +1,9 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import hu.webarticum.treeprinter.TreeNode;
 
 public final class Util {
 	

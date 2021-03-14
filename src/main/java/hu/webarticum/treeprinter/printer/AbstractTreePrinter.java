@@ -1,6 +1,8 @@
-package hu.webarticum.treeprinter;
+package hu.webarticum.treeprinter.printer;
 
 import java.io.IOException;
+
+import hu.webarticum.treeprinter.TreeNode;
 
 public abstract class AbstractTreePrinter implements TreePrinter {
 
