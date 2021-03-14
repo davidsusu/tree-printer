@@ -124,12 +124,6 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         public ReferenceTreeNode(ReferenceTreeNode parent, int index, TreeNode baseNode) {
             this.parent = parent;
             this.index = index;
-            
-            // XXX
-            if (baseNode == null) {
-                baseNode = new SimpleTreeNode("[NULL]");
-            }
-            
             this.baseNode = baseNode;
         }
 
