@@ -1,7 +1,7 @@
 package hu.webarticum.treeprinter;
 
 public class Main {
-    
+
     public static void main(String[] args) {
         TestNode rootNode = new TestNode("root");
         TestNode subNode1 = new TestNode("SUB asdf\nSSS fdsa\nxxx yyy");
