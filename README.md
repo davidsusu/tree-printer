@@ -2,6 +2,8 @@
 
 Simple Java library for visualizing tree structures in the command line.
 
+This legacy version is compatibile with old java versions (1.6+).
+
 ```
 natural foods
  ├─ fruits
