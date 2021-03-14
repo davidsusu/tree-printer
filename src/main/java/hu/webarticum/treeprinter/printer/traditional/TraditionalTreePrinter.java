@@ -1,7 +1,6 @@
 package hu.webarticum.treeprinter.printer.traditional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +57,6 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                 Position position = entry.getValue();
                 Map<TreeNode, Position> childrenPositionMap = new HashMap<TreeNode, Position>();
                 List<TreeNode> children = node.getChildren();
-                children.removeAll(Collections.singleton(null));
                 int[] childrenAlign = aligner.alignChildren(node, children, position.col, widthMap);
                 
                 if (!children.isEmpty()) {

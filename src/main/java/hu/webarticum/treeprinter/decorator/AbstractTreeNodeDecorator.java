@@ -58,9 +58,7 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     public List<TreeNode> getChildren() {
         List<TreeNode> decoratedChildren = new ArrayList<TreeNode>();
         for (TreeNode childNode: decoratedNode.getChildren()) {
-            if (childNode == null) {
-                decoratedChildren.add(null);
-            } else if (inherit && (forceInherit || childNode.isDecorable())) {
+            if (inherit && (forceInherit || childNode.isDecorable())) {
                 decoratedChildren.add(decorateChild(childNode));
             } else {
                 decoratedChildren.add(childNode);
