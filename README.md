@@ -33,6 +33,35 @@ natural foods
     └─ peanut
 ```
 
+## Using in projects
+
+This library is open source, and available under the Apache License V2.
+
+The library is compatible with java versions 1.8+.
+See the `1.x` branch for using the legacy version (compatible with 1.6+).
+
+Built packages are available from the Maven Central Repository.
+
+In gradle projects:
+
+```groovy
+
+dependencies {
+    implementation 'hu.webrticum:tree-printer:<...>'
+}
+
+```
+
+In maven projects:
+
+```xml
+<dependency>
+  <groupId>hu.webarticum</groupId>
+  <artifactId>tree-printer</artifactId>
+  <version>...</version>
+</dependency>
+```
+
 ## Constructing trees
 
 A *tree* is a hierarchical structure built from *nodes*. Any tree is given by its root node.
