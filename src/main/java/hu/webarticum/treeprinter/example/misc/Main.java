@@ -63,7 +63,11 @@ public class Main {
         System.out.println("=====================");
         System.out.println();
 
-        new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(rootNode));
+        new TraditionalTreePrinter().print(
+            new ShadowTreeNodeDecorator(
+                BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(rootNode)
+            )
+        );
     }
     
     private static class TestNode extends SimpleTreeNode {
