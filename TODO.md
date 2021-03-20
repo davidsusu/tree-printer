@@ -8,7 +8,7 @@ Especially: use enums instead of magic parameters and constants.
 
 This can be achieved with fork-join strategy and a concurrent line buffer.
 
-## Imporve ListingTreePrinter
+## Improve ListingTreePrinter
 ### (connected lines in aligned mode)
 
 Optionally?
