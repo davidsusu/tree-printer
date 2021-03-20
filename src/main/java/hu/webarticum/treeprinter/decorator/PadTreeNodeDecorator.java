@@ -97,7 +97,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     public static class Builder {
 
-        private Boolean decorable = null;
+        private boolean decorable = true;
         private boolean inherit = true;
         private boolean forceInherit = false;
 
@@ -108,11 +108,6 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
         public Builder decorable(boolean decorable) {
             this.decorable = decorable;
-            return this;
-        }
-
-        public Builder decorableAuto() {
-            this.decorable = null;
             return this;
         }
 

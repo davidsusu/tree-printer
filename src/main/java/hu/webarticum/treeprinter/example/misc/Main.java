@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter.example.misc;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
+import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 
@@ -50,19 +51,19 @@ public class Main {
         System.out.println("=====================");
         System.out.println();
 
-        (new ListingTreePrinter(false, true)).print(new PadTreeNodeDecorator(rootNode, true, true, true, 0, 0, 1, 0));
+        new ListingTreePrinter(false, true).print(new PadTreeNodeDecorator(rootNode, true, true, true, 0, 0, 1, 0));
 
         System.out.println();
         System.out.println("=====================");
         System.out.println();
         
-        (new ListingTreePrinter()).print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
+        new ListingTreePrinter().print(new BorderTreeNodeDecorator(new PadTreeNodeDecorator(rootNode, 1, 2, 1, 2)));
 
         System.out.println();
         System.out.println("=====================");
         System.out.println();
 
-        (new TraditionalTreePrinter()).print(new BorderTreeNodeDecorator(rootNode));
+        new TraditionalTreePrinter().print(new BorderTreeNodeDecorator(rootNode));
     }
     
     private static class TestNode extends SimpleTreeNode {

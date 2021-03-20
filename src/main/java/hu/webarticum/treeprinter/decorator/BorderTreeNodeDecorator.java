@@ -6,12 +6,18 @@ import hu.webarticum.treeprinter.util.Util;
 
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
+    // TODO: make these private
+    // TODO: use (immutable) objects instead
     public static final char[] BORDER_CHARS_ASCII = new char[] {
         '.', '-', '.', '|', '\'', '-', '`', '|'
     };
     
     public static final char[] BORDER_CHARS_UNICODE = new char[] {
-        '┌', '─', '┐', '│', '┘', '─', '└', '│'
+        '┌', '─', '┐', '│', '┘', '─', '└', '│',
+    };
+
+    public static final char[] BORDER_CHARS_WIDE_UNICODE = new char[] {
+        '\u259B', '\u2594', '\u259C', '\u2595', '\u259F', '\u2581', '\u2599', '\u258F'
     };
     
     private final char topLeft;
@@ -24,63 +30,21 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private final char left;
     
     public BorderTreeNodeDecorator(TreeNode decoratedNode) {
-        this(decoratedNode, UnicodeMode.isUnicodeDefault());
+        this(decoratedNode, createBuilder());
     }
 
-    public BorderTreeNodeDecorator(TreeNode decoratedNode, boolean useUnicode) {
-        this(
-            decoratedNode,
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[0],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[1],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[2],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[3],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[4],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[5],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[6],
-            (useUnicode ? BORDER_CHARS_UNICODE : BORDER_CHARS_ASCII)[7]
-        );
+    public BorderTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
+        super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
+        this.topLeft = builder.characters[0];
+        this.top = builder.characters[1];
+        this.topRight = builder.characters[2];
+        this.right = builder.characters[3];
+        this.bottomRight = builder.characters[4];
+        this.bottom = builder.characters[5];
+        this.bottomLeft = builder.characters[6];
+        this.left = builder.characters[7];
     }
 
-    public BorderTreeNodeDecorator(TreeNode decoratedNode, char character) {
-        this(
-            decoratedNode,
-            character, character, character, character,
-            character, character, character, character
-        );
-    }
-
-    public BorderTreeNodeDecorator(
-        TreeNode decoratedNode,
-        char topLeft, char top, char topRight, char right,
-        char bottomRight, char bottom, char bottomLeft, char left
-    ) {
-        super(decoratedNode);
-        this.topLeft = topLeft;
-        this.top = top;
-        this.topRight = topRight;
-        this.right = right;
-        this.bottomRight = bottomRight;
-        this.bottom = bottom;
-        this.bottomLeft = bottomLeft;
-        this.left = left;
-    }
-    
-    public BorderTreeNodeDecorator(
-        TreeNode decoratedNode,
-        boolean decorable, boolean inherit, boolean forceInherit,
-        char topLeft, char top, char topRight, char right,
-        char bottomRight, char bottom, char bottomLeft, char left
-    ) {
-        super(decoratedNode, decorable, inherit, forceInherit);
-        this.topLeft = topLeft;
-        this.top = top;
-        this.topRight = topRight;
-        this.right = right;
-        this.bottomRight = bottomRight;
-        this.bottom = bottom;
-        this.bottomLeft = bottomLeft;
-        this.left = left;
-    }
     
     @Override
     public String getContent() {
@@ -130,9 +94,18 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new BorderTreeNodeDecorator(
             childNode,
-            decorable, inherit, forceInherit,
-            topLeft, top, topRight, right,
-            bottomRight, bottom, bottomLeft, left
+            createBuilder()
+                .decorable(decorable)
+                .inherit(inherit)
+                .forceInherit(forceInherit)
+                .topLeft(topLeft)
+                .top(top)
+                .topRight(topRight)
+                .right(right)
+                .bottomRight(bottomRight)
+                .bottom(bottom)
+                .bottomLeft(bottomLeft)
+                .left(left)
         );
     }
 
@@ -142,7 +115,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     public static class Builder {
 
-        private Boolean decorable = null;
+        private boolean decorable = true;
         private boolean inherit = true;
         private boolean forceInherit = false;
 
@@ -154,11 +127,6 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         public Builder decorable(boolean decorable) {
             this.decorable = decorable;
-            return this;
-        }
-
-        public Builder decorableAuto() {
-            this.decorable = null;
             return this;
         }
 
@@ -185,6 +153,11 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         public Builder unicode() {
             this.characters = BORDER_CHARS_UNICODE.clone();
+            return this;
+        }
+
+        public Builder wideUnicode() {
+            this.characters = BORDER_CHARS_WIDE_UNICODE.clone();
             return this;
         }
         
@@ -239,12 +212,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         }
         
         public BorderTreeNodeDecorator buildFor(TreeNode node) {
-            return new BorderTreeNodeDecorator(
-                node,
-                decorable, inherit, forceInherit,
-                characters[0], characters[1], characters[2], characters[3],
-                characters[4], characters[5], characters[6], characters[7]
-            );
+            return new BorderTreeNodeDecorator(node, this);
         }
         
     }

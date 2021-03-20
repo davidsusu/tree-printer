@@ -30,6 +30,7 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         this.liner = liner;
     }
     
+    // TODO: calculate Position taking into account the insets
     @Override
     public void print(TreeNode rootNode, Appendable out) {
         TreeNode wrappedRootNode = new TrackingTreeNodeDecorator(rootNode);
