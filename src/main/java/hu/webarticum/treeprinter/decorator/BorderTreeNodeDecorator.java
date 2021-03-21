@@ -33,7 +33,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this(decoratedNode, createBuilder());
     }
 
-    public BorderTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
+    private BorderTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
         super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
         this.topLeft = builder.characters[0];
         this.top = builder.characters[1];

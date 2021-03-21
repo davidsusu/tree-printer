@@ -10,10 +10,10 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
 
     public TrackingTreeNodeDecorator(TreeNode baseNode) {
-        this(null, 0, baseNode);
+        this(baseNode, null, 0);
     }
     
-    public TrackingTreeNodeDecorator(TrackingTreeNodeDecorator parent, int index, TreeNode baseNode) {
+    public TrackingTreeNodeDecorator(TreeNode baseNode, TrackingTreeNodeDecorator parent, int index) {
         super(baseNode);
         this.parent = parent;
         this.index = index;
@@ -26,7 +26,7 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
-        return new TrackingTreeNodeDecorator(this, index, childNode);
+        return new TrackingTreeNodeDecorator(childNode, this, index);
     }
 
     @Override

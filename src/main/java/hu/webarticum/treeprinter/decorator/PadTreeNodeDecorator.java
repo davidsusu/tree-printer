@@ -15,26 +15,15 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     public PadTreeNodeDecorator(TreeNode decoratedNode, int pad) {
-        this(decoratedNode, pad, pad, pad, pad);
+        this(decoratedNode, createBuilder().pad(pad));
     }
 
-    public PadTreeNodeDecorator(TreeNode decoratedNode, int topPad, int rightPad, int bottomPad, int leftPad) {
-        super(decoratedNode);
-        this.topPad = topPad;
-        this.rightPad = rightPad;
-        this.bottomPad = bottomPad;
-        this.leftPad = leftPad;
-    }
-    
-    public PadTreeNodeDecorator(
-        TreeNode decoratedNode, boolean decorable, boolean inherit, boolean forceInherit,
-        int topPad, int rightPad, int bottomPad, int leftPad
-    ) {
-        super(decoratedNode, decorable, inherit, forceInherit);
-        this.topPad = topPad;
-        this.rightPad = rightPad;
-        this.bottomPad = bottomPad;
-        this.leftPad = leftPad;
+    private PadTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
+        super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
+        this.topPad = builder.topPad;
+        this.rightPad = builder.rightPad;
+        this.bottomPad = builder.bottomPad;
+        this.leftPad = builder.leftPad;
     }
     
     @Override
@@ -86,8 +75,15 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new PadTreeNodeDecorator(
-            childNode, decorable, inherit, forceInherit,
-            topPad, rightPad, bottomPad, leftPad
+            childNode,
+            createBuilder()
+                .decorable(decorable)
+                .inherit(inherit)
+                .forceInherit(forceInherit)
+                .topPad(topPad)
+                .rightPad(rightPad)
+                .bottomPad(bottomPad)
+                .leftPad(leftPad)
         );
     }
     
@@ -139,6 +135,18 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return this;
         }
 
+        public Builder verticalPad(int verticalPad) {
+            this.topPad = verticalPad;
+            this.bottomPad = verticalPad;
+            return this;
+        }
+
+        public Builder horizontalPad(int horizontalPad) {
+            this.leftPad = horizontalPad;
+            this.rightPad = horizontalPad;
+            return this;
+        }
+
         public Builder topPad(int topPad) {
             this.topPad = topPad;
             return this;
@@ -160,11 +168,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         }
         
         public PadTreeNodeDecorator buildFor(TreeNode node) {
-            return new PadTreeNodeDecorator(
-                node,
-                decorable, inherit, forceInherit,
-                topPad, rightPad, bottomPad, leftPad
-            );
+            return new PadTreeNodeDecorator(node, this);
         }
         
     }
