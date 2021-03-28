@@ -3,6 +3,13 @@
 ## Improve code quality
 
 Especially: use enums instead of magic parameters and constants.
+Remove 'get' from simple getters.
+
+##  Improve the TreeNode interface
+
+- Remove AbstractTreeNode, use interface default methods instead
+- Add getKey() (or just key()) method
+- Create SortChildrenByKeyTreeNodeDecorator (or similar)
 
 ##  Make TraditionalTreePrinter parallel
 
