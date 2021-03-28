@@ -9,7 +9,10 @@ Remove 'get' from simple getters.
 
 - Remove AbstractTreeNode, use interface default methods instead
 - Add getKey() (or just key()) method
-- Create SortChildrenByKeyTreeNodeDecorator (or similar)
+- - Create SortChildrenByKeyTreeNodeDecorator (or similar)
+- - - should all key be comparable to each other?
+- - - should we have a unified key format?
+- - Later, use key in binary (or any-ary) trees as a hint for position (left, right etc.)
 
 ##  Make TraditionalTreePrinter parallel
 
