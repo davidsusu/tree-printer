@@ -171,10 +171,10 @@ Decorators inherit by default, but you can change this behavior.
 
 ## ASCII vs Unicode mode
 
-Built-in objects that print lines or borders have a built-in set of charactersboth for ASCII and Unicode mode.
-Unicode mode is the default, by default.
-Affected classes have a constructor (and builder) parameter `useUnicode`.
-You can globally turn off (and on) the unicode mode with `UnicodeMode.setUnicodeAsDefault()`.
+Built-in objects that print lines or borders have a built-in set of characters, both for ASCII and Unicode mode.
+Affected classes have a constructor/builder parameter `useUnicode`.
+You can globally change the default mode with `UnicodeMode.setUnicodeAsDefault()`.
+(Initial global default is Unicode.)
 
 The first example with ASCII rendering:
 
