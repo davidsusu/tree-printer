@@ -1,5 +1,8 @@
 # Tree Printer
 
+> :warning: &nbsp; **`2.0.0` is coming soon.**
+> Ideas, issues, pull-requests are welcome.
+
 Simple Java library for visualizing tree structures in the command line.
 
 ```
@@ -218,8 +221,3 @@ new TraditionalTreePrinter(true).print(
           │RIGHT│   
           └─────┘   
 ```
-
-## 2.x release
-
-`2.0.0` is coming soon.
-Ideas, issues, pull-requests are welcome.
