@@ -22,7 +22,7 @@ public class SimpleTreeNode extends AbstractTreeNode {
 
     public void addChild(TreeNode childNode) {
         if (childNode == null) {
-            throw new IllegalArgumentException("Child node must not be null");
+            throw new IllegalArgumentException("Child node must not be null, use placeholder instead");
         }
         
         children.add(childNode);

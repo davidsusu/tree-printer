@@ -13,5 +13,7 @@ public interface TreeNode {
     public List<TreeNode> getChildren();
 
     public boolean isDecorable();
+
+    public boolean isPlaceholder();
     
 }

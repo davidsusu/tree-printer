@@ -190,6 +190,35 @@ I'm the root!
  '-I'm an other child...
  ```
 
+## Placeholders
+
+You can put placeholder nodes into the tree.
+These nodes are hidden by default in the general printers.
+Placeholders are useful in n-ary trees, where missing nodes matter.
+
+```java
+TestNode alignedTree = new TestNode("ROOT");
+alignedTree.addChild(new PlaceholderNode());
+alignedTree.addChild(new TestNode("RIGHT"));
+
+new TraditionalTreePrinter(true).print(
+    PadTreeNodeDecorator.createBuilder().forceInherit(true).horizontalPad(3).buildFor(
+        new BorderTreeNodeDecorator(alignedTree)
+    )
+);
+```
+
+```
+       ┌────┐   
+       │ROOT│   
+       └────┘   
+   ┌──────┴──┐
+   │         │
+          ┌─────┐   
+          │RIGHT│   
+          └─────┘   
+```
+
 ## 2.x release
 
 `2.0.0` is coming soon.

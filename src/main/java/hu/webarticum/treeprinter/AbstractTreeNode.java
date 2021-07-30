@@ -18,8 +18,13 @@ public abstract class AbstractTreeNode implements TreeNode {
     }
 
     @Override
+    public boolean isPlaceholder() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return getContent();
     }
-
+    
 }

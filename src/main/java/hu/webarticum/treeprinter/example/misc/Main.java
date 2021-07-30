@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter.example.misc;
 
+import hu.webarticum.treeprinter.PlaceholderNode;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
@@ -26,6 +27,7 @@ public class Main {
         TestNode subSubSubNode311 = new TestNode("(ggg)");
 
         rootNode.addChild(subNode1);
+        rootNode.addChild(new PlaceholderNode()); // this should not be displayed
         rootNode.addChild(subNode2);
         rootNode.addChild(subNode3);
         subNode1.addChild(subSubNode11);

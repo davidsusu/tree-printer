@@ -59,6 +59,11 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     }
 
     @Override
+    public boolean isPlaceholder() {
+        return decoratedNode.isPlaceholder();
+    }
+
+    @Override
     public List<TreeNode> getChildren() {
         List<TreeNode> decoratedChildren = new ArrayList<>();
         List<TreeNode> decoratedNodeChildren = decoratedNode.getChildren();

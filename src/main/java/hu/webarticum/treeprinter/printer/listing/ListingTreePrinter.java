@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter.printer.listing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hu.webarticum.treeprinter.TreeNode;
@@ -27,6 +28,7 @@ public class ListingTreePrinter extends AbstractTreePrinter {
     private final String liningLastNode;
     private final String liningInset;
     private final boolean displayRoot;
+    private final boolean displayPlaceholders;
     private final boolean align;
 
     public ListingTreePrinter() {
@@ -56,12 +58,20 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         String liningSpace, String liningGeneral, String liningNode, String liningLastNode, String liningInset,
         boolean displayRoot, boolean align
     ) {
+        this(liningSpace, liningGeneral, liningNode, liningLastNode, liningInset, displayRoot, false, align);
+    }
+
+    public ListingTreePrinter(
+        String liningSpace, String liningGeneral, String liningNode, String liningLastNode, String liningInset,
+        boolean displayRoot, boolean displayPlaceholders, boolean align
+    ) {
         this.liningSpace = liningSpace;
         this.liningGeneral = liningGeneral;
         this.liningNode = liningNode;
         this.liningLastNode = liningLastNode;
         this.liningInset = liningInset;
         this.displayRoot = displayRoot;
+        this.displayPlaceholders = displayPlaceholders;
         this.align = align;
     }
 
@@ -102,7 +112,10 @@ public class ListingTreePrinter extends AbstractTreePrinter {
             }
         }
         
-        List<TreeNode> childNodes = node.getChildren();
+        List<TreeNode> childNodes = new ArrayList<>(node.getChildren());
+        if (!displayPlaceholders) {
+            childNodes.removeIf(TreeNode::isPlaceholder);
+        }
         int childNodeCount = childNodes.size();
         for (int i = 0; i < childNodeCount; i++) {
             TreeNode childNode = childNodes.get(i);
@@ -121,6 +134,7 @@ public class ListingTreePrinter extends AbstractTreePrinter {
     public static class Builder {
 
         private boolean displayRoot = true;
+        private boolean displayPlaceholders = false;
         private boolean align = false;
         
         private String[] lines = (
@@ -131,6 +145,11 @@ public class ListingTreePrinter extends AbstractTreePrinter {
 
         public Builder displayRoot(boolean displayRoot) {
             this.displayRoot = displayRoot;
+            return this;
+        }
+
+        public Builder displayPlaceholders(boolean displayPlaceholders) {
+            this.displayPlaceholders = displayPlaceholders;
             return this;
         }
 
@@ -182,7 +201,7 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         public ListingTreePrinter build() {
             return new ListingTreePrinter(
                 lines[0], lines[1], lines[2], lines[3], lines[4],
-                displayRoot, align
+                displayRoot, displayPlaceholders, align
             );
         }
         

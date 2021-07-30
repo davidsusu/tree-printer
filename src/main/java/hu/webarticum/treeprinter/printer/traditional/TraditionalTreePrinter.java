@@ -21,13 +21,24 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
 
     private final Liner liner;
     
+    private final boolean displayPlaceholders;
+    
     public TraditionalTreePrinter() {
         this(DEFAULT_ALIGNER, DEFAULT_LINER);
     }
-    
+
     public TraditionalTreePrinter(Aligner aligner, Liner liner) {
+        this(aligner, liner, false);
+    }
+
+    public TraditionalTreePrinter(boolean displayPlaceholders) {
+        this(DEFAULT_ALIGNER, DEFAULT_LINER, displayPlaceholders);
+    }
+    
+    public TraditionalTreePrinter(Aligner aligner, Liner liner, boolean displayPlaceholders) {
         this.aligner = aligner;
         this.liner = liner;
+        this.displayPlaceholders = displayPlaceholders;
     }
     
     // TODO: calculate Position taking into account the insets
@@ -58,7 +69,11 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
                 TreeNode node = entry.getKey();
                 Position position = entry.getValue();
                 Map<TreeNode, Position> childrenPositionMap = new HashMap<>();
-                List<TreeNode> children = node.getChildren();
+                List<TreeNode> children = new ArrayList<>(node.getChildren());
+                if (!displayPlaceholders) {
+                    children.removeIf(TreeNode::isPlaceholder);
+                }
+                
                 int[] childrenAlign = aligner.alignChildren(node, children, position.col, widthMap);
                 
                 if (!children.isEmpty()) {
