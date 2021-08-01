@@ -6,14 +6,22 @@ public interface TreeNode {
     
     public String getContent();
     
-    public TreeNode getOriginalNode();
-
-    public int[] getInsets();
-    
     public List<TreeNode> getChildren();
-
-    public boolean isDecorable();
-
-    public boolean isPlaceholder();
     
+    public default TreeNode getOriginalNode() {
+        return this;
+    }
+
+    public default int[] getInsets() {
+        return new int[] {0, 0, 0, 0};
+    }
+
+    public default boolean isDecorable() {
+        return true;
+    }
+
+    public default boolean isPlaceholder() {
+        return false;
+    }
+
 }
