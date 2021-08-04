@@ -129,8 +129,8 @@ For example, if we want to align everything to left:
 
 ```java
 new TraditionalTreePrinter(
-    TraditionalTreePrinter.DefaultAligner.createBuilder()
-        .align(TraditionalTreePrinter.DefaultAligner.LEFT)
+    DefaultAligner.createBuilder()
+        .align(DefaultAligner.LEFT)
     .build(),
     TraditionalTreePrinter.DEFAULT_LINER
 ).print(rootNode);
