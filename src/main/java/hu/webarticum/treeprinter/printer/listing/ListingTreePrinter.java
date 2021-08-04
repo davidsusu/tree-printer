@@ -10,11 +10,11 @@ import hu.webarticum.treeprinter.util.Util;
 
 public class ListingTreePrinter extends AbstractTreePrinter {
 
-    public static final String[] LINE_STRINGS_ASCII = new String[] {
+    private static final String[] LINE_STRINGS_ASCII = new String[] {
         "   ", " | ", " |-", " '-", "---"
     };
     
-    public static final String[] LINE_STRINGS_UNICODE = new String[] {
+    private static final String[] LINE_STRINGS_UNICODE = new String[] {
         "   ", " │ ", " ├─", " └─", "───"
     };
     
@@ -86,30 +86,7 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         
         String[] lines = content.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            if (type == NODE_ROOT) {
-                if (displayRoot) {
-                    writeln(out, prefix + line);
-                }
-            } else {
-                String itemPrefix;
-                if (i < connectOffset) {
-                    itemPrefix = liningGeneral;
-                } else if (i == connectOffset) {
-                    itemPrefix = (type == NODE_LAST) ? liningLastNode : liningNode;
-                } else {
-                    itemPrefix = (type == NODE_LAST) ? liningSpace : liningGeneral;
-                }
-                if (inset > 0) {
-                    String insetString = (i == connectOffset) ? liningInset : liningSpace;
-                    StringBuilder insetBuilder = new StringBuilder();
-                    for (int j = 0; j < inset; j++) {
-                        insetBuilder.append(insetString);
-                    }
-                    itemPrefix += insetBuilder.toString();
-                }
-                writeln(out, prefix + itemPrefix + line);
-            }
+            printContentLine(out, prefix, type, inset, connectOffset, i, lines[i]);
         }
         
         List<TreeNode> childNodes = new ArrayList<>(node.getChildren());
@@ -125,6 +102,34 @@ public class ListingTreePrinter extends AbstractTreePrinter {
             int subInset = Math.max(0, inset - 1);
             printSub(childNode, out, subPrefix, childIsLast ? NODE_LAST : NODE_GENERAL, subInset);
         }
+    }
+    
+    private void printContentLine(Appendable out, String prefix, int type, int inset, int connectOffset, int i, String line) {
+        if (type == NODE_ROOT) {
+            if (displayRoot) {
+                writeln(out, prefix + line);
+            }
+            return;
+        }
+        
+        String itemPrefix;
+        if (i < connectOffset) {
+            itemPrefix = liningGeneral;
+        } else if (i == connectOffset) {
+            itemPrefix = (type == NODE_LAST) ? liningLastNode : liningNode;
+        } else {
+            itemPrefix = (type == NODE_LAST) ? liningSpace : liningGeneral;
+        }
+        if (inset > 0) {
+            String insetString = (i == connectOffset) ? liningInset : liningSpace;
+            StringBuilder insetBuilder = new StringBuilder();
+            for (int j = 0; j < inset; j++) {
+                insetBuilder.append(insetString);
+            }
+            itemPrefix += insetBuilder.toString();
+        }
+        
+        writeln(out, prefix + itemPrefix + line);
     }
     
     public static Builder createBuilder() {
