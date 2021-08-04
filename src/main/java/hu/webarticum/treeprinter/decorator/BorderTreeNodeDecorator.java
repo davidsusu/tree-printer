@@ -6,17 +6,15 @@ import hu.webarticum.treeprinter.util.Util;
 
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
-    // TODO: make these private
-    // TODO: use (immutable) objects instead
-    public static final char[] BORDER_CHARS_ASCII = new char[] {
+    private static final char[] BORDER_CHARS_ASCII = new char[] {
         '.', '-', '.', '|', '\'', '-', '`', '|'
     };
     
-    public static final char[] BORDER_CHARS_UNICODE = new char[] {
+    private static final char[] BORDER_CHARS_UNICODE = new char[] {
         '┌', '─', '┐', '│', '┘', '─', '└', '│',
     };
 
-    public static final char[] BORDER_CHARS_WIDE_UNICODE = new char[] {
+    private static final char[] BORDER_CHARS_WIDE_UNICODE = new char[] {
         '\u259B', '\u2594', '\u259C', '\u2595', '\u259F', '\u2581', '\u2599', '\u258F'
     };
     
