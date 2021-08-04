@@ -10,6 +10,12 @@ Remove large telescopic constructors, improve builders, rename createBuilder() t
 
 Use the 8-space standard, etc.
 
+## Improve examples and tests
+
+Move examples to its own place (separate source set? separate project?).
+
+Add some unit tests.
+
 ##  Make TraditionalTreePrinter parallel
 
 This can be achieved with fork-join strategy and a concurrent line buffer.
