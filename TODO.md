@@ -4,15 +4,11 @@
 
 Especially: use enums instead of magic parameters and constants.
 Remove 'get' from simple getters.
+Remove large telescopic constructors, improve builders, rename createBuilder() to builder().
 
-##  Improve the TreeNode interface
+## Change formatting
 
-- Remove AbstractTreeNode, use interface default methods instead
-- Add getKey() (or just key()) method
-- - Create SortChildrenByKeyTreeNodeDecorator (or similar)
-- - - should all key be comparable to each other?
-- - - should we have a unified key format?
-- - Later, use key in binary (or any-ary) trees as a hint for position (left, right etc.)
+Use the 8-space standard, etc.
 
 ##  Make TraditionalTreePrinter parallel
 
