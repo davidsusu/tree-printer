@@ -159,16 +159,6 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return this;
         }
         
-        public Builder characters(
-            char topLeft, char top, char topRight, char right,
-            char bottomRight, char bottom, char bottomLeft, char left
-        ) {
-            this.characters = new char[] {
-                topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left
-            };
-            return this;
-        }
-
         public Builder topLeft(char topLeft) {
             this.characters[0] = topLeft;
             return this;

@@ -151,8 +151,3 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
     }
     
 }
-
-
-
-
-

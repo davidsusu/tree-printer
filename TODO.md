@@ -5,6 +5,7 @@
 Especially: use enums instead of magic parameters and constants.
 Remove 'get' from simple getters.
 Remove large telescopic constructors, improve builders, rename createBuilder() to builder().
+Make Insets a class. Use it in PadTreeNodeDecorator. Insets::extendWith or something.
 
 ## Change formatting
 

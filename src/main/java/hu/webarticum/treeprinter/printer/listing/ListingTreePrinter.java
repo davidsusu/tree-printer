@@ -10,17 +10,15 @@ import hu.webarticum.treeprinter.util.Util;
 
 public class ListingTreePrinter extends AbstractTreePrinter {
 
-    private static final String[] LINE_STRINGS_ASCII = new String[] {
+    private enum NodeDisposition { ROOT, GENERAL, LAST }
+    
+    private static final String[] DEFAULT_ASCII_LINE_STRINGS = new String[] {
         "   ", " | ", " |-", " '-", "---"
     };
-    
-    private static final String[] LINE_STRINGS_UNICODE = new String[] {
+
+    private static final String[] DEFAULT_UNICODE_LINE_STRINGS = new String[] {
         "   ", " │ ", " ├─", " └─", "───"
     };
-    
-    private static final int NODE_ROOT = 0;
-    private static final int NODE_GENERAL = 1;
-    private static final int NODE_LAST = 2;
 
     private final String liningSpace;
     private final String liningGeneral;
@@ -32,61 +30,32 @@ public class ListingTreePrinter extends AbstractTreePrinter {
     private final boolean align;
 
     public ListingTreePrinter() {
-        this(true, false);
+        this(createBuilder());
     }
 
-    public ListingTreePrinter(boolean useUnicode) {
-        this(useUnicode, true, false);
-    }
-
-    public ListingTreePrinter(boolean displayRoot, boolean align) {
-        this(UnicodeMode.isUnicodeDefault(), displayRoot, align);
-    }
-
-    public ListingTreePrinter(boolean useUnicode, boolean displayRoot, boolean align) {
-        this(
-            (useUnicode ? LINE_STRINGS_UNICODE : LINE_STRINGS_ASCII)[0],
-            (useUnicode ? LINE_STRINGS_UNICODE : LINE_STRINGS_ASCII)[1],
-            (useUnicode ? LINE_STRINGS_UNICODE : LINE_STRINGS_ASCII)[2],
-            (useUnicode ? LINE_STRINGS_UNICODE : LINE_STRINGS_ASCII)[3],
-            (useUnicode ? LINE_STRINGS_UNICODE : LINE_STRINGS_ASCII)[4],
-            displayRoot, align
-        );
-    }
-    
-    public ListingTreePrinter(
-        String liningSpace, String liningGeneral, String liningNode, String liningLastNode, String liningInset,
-        boolean displayRoot, boolean align
-    ) {
-        this(liningSpace, liningGeneral, liningNode, liningLastNode, liningInset, displayRoot, false, align);
-    }
-
-    public ListingTreePrinter(
-        String liningSpace, String liningGeneral, String liningNode, String liningLastNode, String liningInset,
-        boolean displayRoot, boolean displayPlaceholders, boolean align
-    ) {
-        this.liningSpace = liningSpace;
-        this.liningGeneral = liningGeneral;
-        this.liningNode = liningNode;
-        this.liningLastNode = liningLastNode;
-        this.liningInset = liningInset;
-        this.displayRoot = displayRoot;
-        this.displayPlaceholders = displayPlaceholders;
-        this.align = align;
+    private ListingTreePrinter(Builder builder) {
+        this.liningSpace = builder.lines[0];
+        this.liningGeneral = builder.lines[1];
+        this.liningNode = builder.lines[2];
+        this.liningLastNode = builder.lines[3];
+        this.liningInset = builder.lines[4];
+        this.displayRoot = builder.displayRoot;
+        this.displayPlaceholders = builder.displayPlaceholders;
+        this.align = builder.align;
     }
 
     @Override
     public void print(TreeNode rootNode, Appendable out) {
-        printSub(rootNode, out, "", NODE_ROOT, align ? Util.getDepth(rootNode) : 0);
+        printSub(rootNode, out, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
     }
     
-    private void printSub(TreeNode node, Appendable out, String prefix, int type, int inset) {
+    private void printSub(TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
         String content = node.getContent();
         int connectOffset = node.getInsets()[0];
         
         String[] lines = content.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            printContentLine(out, prefix, type, inset, connectOffset, i, lines[i]);
+            printContentLine(out, prefix, disposition, inset, connectOffset, i, lines[i]);
         }
         
         List<TreeNode> childNodes = new ArrayList<>(node.getChildren());
@@ -97,39 +66,48 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         for (int i = 0; i < childNodeCount; i++) {
             TreeNode childNode = childNodes.get(i);
             boolean childIsLast = (i == childNodeCount - 1);
-            String lining = type == NODE_LAST ? liningSpace : liningGeneral;
-            String subPrefix = type == NODE_ROOT ? prefix : prefix + lining;
+            String lining = (disposition == NodeDisposition.LAST) ? liningSpace : liningGeneral;
+            String subPrefix = (disposition == NodeDisposition.ROOT) ? prefix : prefix + lining;
             int subInset = Math.max(0, inset - 1);
-            printSub(childNode, out, subPrefix, childIsLast ? NODE_LAST : NODE_GENERAL, subInset);
+            NodeDisposition subDisposition = childIsLast ? NodeDisposition.LAST : NodeDisposition.GENERAL;
+            printSub(childNode, out, subPrefix, subDisposition, subInset);
         }
     }
     
-    private void printContentLine(Appendable out, String prefix, int type, int inset, int connectOffset, int i, String line) {
-        if (type == NODE_ROOT) {
+    private void printContentLine(Appendable out, String prefix, NodeDisposition disposition, int inset, int connectOffset, int i, String line) {
+        if (disposition == NodeDisposition.ROOT) {
             if (displayRoot) {
                 writeln(out, prefix + line);
             }
             return;
         }
         
-        String itemPrefix;
+        String itemPrefix = buildItemPrefix(disposition, inset, connectOffset, i);
+        writeln(out, prefix + itemPrefix + line);
+    }
+    
+    private String buildItemPrefix(NodeDisposition disposition, int inset, int connectOffset, int i) {
+        StringBuilder resultBuilder = new StringBuilder();
+        
+        boolean isLast = disposition == NodeDisposition.LAST;
         if (i < connectOffset) {
-            itemPrefix = liningGeneral;
+            resultBuilder.append(liningGeneral);
         } else if (i == connectOffset) {
-            itemPrefix = (type == NODE_LAST) ? liningLastNode : liningNode;
+            resultBuilder.append(isLast ? liningLastNode : liningNode);
         } else {
-            itemPrefix = (type == NODE_LAST) ? liningSpace : liningGeneral;
+            resultBuilder.append(isLast ? liningSpace : liningGeneral);
         }
+        
         if (inset > 0) {
             String insetString = (i == connectOffset) ? liningInset : liningSpace;
             StringBuilder insetBuilder = new StringBuilder();
             for (int j = 0; j < inset; j++) {
                 insetBuilder.append(insetString);
             }
-            itemPrefix += insetBuilder.toString();
+            resultBuilder.append(insetBuilder.toString());
         }
         
-        writeln(out, prefix + itemPrefix + line);
+        return resultBuilder.toString();
     }
     
     public static Builder createBuilder() {
@@ -144,8 +122,8 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         
         private String[] lines = (
             UnicodeMode.isUnicodeDefault() ?
-            LINE_STRINGS_UNICODE :
-            LINE_STRINGS_ASCII
+            DEFAULT_UNICODE_LINE_STRINGS :
+            DEFAULT_ASCII_LINE_STRINGS
         ).clone();
 
         public Builder displayRoot(boolean displayRoot) {
@@ -164,12 +142,12 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         }
         
         public Builder ascii() {
-            this.lines = LINE_STRINGS_ASCII.clone();
+            this.lines = DEFAULT_ASCII_LINE_STRINGS.clone();
             return this;
         }
         
         public Builder unicode() {
-            this.lines = LINE_STRINGS_UNICODE.clone();
+            this.lines = DEFAULT_UNICODE_LINE_STRINGS.clone();
             return this;
         }
 
@@ -204,10 +182,7 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         }
 
         public ListingTreePrinter build() {
-            return new ListingTreePrinter(
-                lines[0], lines[1], lines[2], lines[3], lines[4],
-                displayRoot, displayPlaceholders, align
-            );
+            return new ListingTreePrinter(this);
         }
         
     }

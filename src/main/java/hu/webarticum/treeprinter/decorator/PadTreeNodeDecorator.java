@@ -31,34 +31,48 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         String content = decoratedNode.getContent();
 
         String[] contentLines = content.split("\n");
+        int contentWidth = calculateWidth(contentLines);
+
+        StringBuilder resultBuilder = new StringBuilder();
+        appendTopPadding(resultBuilder, contentWidth);
+        appendPaddedContentLines(resultBuilder, contentLines, contentWidth);
+        appendBottomPadding(resultBuilder, contentWidth);
+        return resultBuilder.toString();
+    }
+    
+    private int calculateWidth(String[] lines) {
         int longestLineLength = 0;
-        for (String line: contentLines) {
+        for (String line: lines) {
             int lineLength = line.length();
             if (lineLength > longestLineLength) {
                 longestLineLength = lineLength;
             }
         }
+        return longestLineLength;
+    }
+    
+    private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
+        for (int i = 0; i < n; i++) {
+            Util.repeat(stringBuilder, ' ', width);
+            stringBuilder.append('\n');
+        }
+    }
 
-        StringBuilder resultBuilder = new StringBuilder();
-        
-        for (int i = 0; i < topPad; i++) {
-            Util.repeat(resultBuilder, ' ', leftPad + longestLineLength + rightPad);
-            resultBuilder.append('\n');
-        }
+    private void appendTopPadding(StringBuilder stringBuilder, int width) {
+        appendEmptyLines(stringBuilder, topPad, leftPad + width + rightPad);
+    }
 
-        for (String line: contentLines) {
-            Util.repeat(resultBuilder, ' ', leftPad);
-            resultBuilder.append(line);
-            Util.repeat(resultBuilder, ' ', longestLineLength - line.length() + rightPad);
-            resultBuilder.append('\n');
+    private void appendBottomPadding(StringBuilder stringBuilder, int width) {
+        appendEmptyLines(stringBuilder, bottomPad, leftPad + width + rightPad);
+    }
+    
+    private void appendPaddedContentLines(StringBuilder stringBuilder, String[] lines, int width) {
+        for (String line: lines) {
+            Util.repeat(stringBuilder, ' ', leftPad);
+            stringBuilder.append(line);
+            Util.repeat(stringBuilder, ' ', width - line.length() + rightPad);
+            stringBuilder.append('\n');
         }
-        
-        for (int i = 0; i < bottomPad; i++) {
-            Util.repeat(resultBuilder, ' ', leftPad + longestLineLength + rightPad);
-            resultBuilder.append('\n');
-        }
-        
-        return resultBuilder.toString();
     }
 
     @Override

@@ -53,7 +53,7 @@ public class Main {
         System.out.println("=====================");
         System.out.println();
 
-        new ListingTreePrinter(false, true).print(
+        ListingTreePrinter.createBuilder().displayRoot(false).align(true).build().print(
             PadTreeNodeDecorator.createBuilder()
                 .forceInherit(true)
                 .bottomPad(1)

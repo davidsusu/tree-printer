@@ -36,26 +36,20 @@ public class DefaultAligner implements Aligner {
     }
     
     public DefaultAligner(int align, int gap) {
-        this(align, 0, CONNECT_TO_CONTENT, align, 0, CONNECT_TO_CONTENT, align, 0, align, gap);
+        this(createBuilder().align(align).gap(gap));
     }
     
-    public DefaultAligner(
-        int contentAlign, int contentOffset,
-        int topConnectionConnect, int topConnectionAlign, int topConnectionOffset,
-        int bottomConnectionConnect, int bottomConnectionAlign, int bottomConnectionOffset,
-        int childrenAlign,
-        int gap
-    ) {
-        this.contentAlign = contentAlign;
-        this.contentOffset = contentOffset;
-        this.topConnectionConnect = topConnectionConnect;
-        this.topConnectionAlign = topConnectionAlign;
-        this.topConnectionOffset = topConnectionOffset;
-        this.bottomConnectionConnect = bottomConnectionConnect;
-        this.bottomConnectionAlign = bottomConnectionAlign;
-        this.bottomConnectionOffset = bottomConnectionOffset;
-        this.childrenAlign = childrenAlign;
-        this.gap = gap;
+    private DefaultAligner(Builder builder) {
+        this.contentAlign = builder.contentAlign;
+        this.contentOffset = builder.contentOffset;
+        this.topConnectionConnect = builder.topConnectionConnect;
+        this.topConnectionAlign = builder.topConnectionAlign;
+        this.topConnectionOffset = builder.topConnectionOffset;
+        this.bottomConnectionConnect = builder.bottomConnectionConnect;
+        this.bottomConnectionAlign = builder.bottomConnectionAlign;
+        this.bottomConnectionOffset = builder.bottomConnectionOffset;
+        this.childrenAlign = builder.childrenAlign;
+        this.gap = builder.gap;
     }
 
     @Override
@@ -250,13 +244,7 @@ public class DefaultAligner implements Aligner {
         }
 
         public DefaultAligner build() {
-            return new DefaultAligner(
-                contentAlign, contentOffset,
-                topConnectionConnect, topConnectionAlign, topConnectionOffset,
-                bottomConnectionConnect, bottomConnectionAlign, bottomConnectionOffset,
-                childrenAlign,
-                gap
-            );
+            return new DefaultAligner(this);
         }
         
     }
