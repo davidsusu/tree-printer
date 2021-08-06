@@ -2,9 +2,8 @@
 
 ## Improve code quality
 
-Especially: use enums instead of magic parameters and constants.
 Remove 'get' from simple getters.
-Remove large telescopic constructors, improve builders, rename createBuilder() to builder().
+Improve builders, rename createBuilder() to builder().
 Make Insets a class. Use it in PadTreeNodeDecorator. Insets::extendWith or something.
 
 ## Change formatting
@@ -17,9 +16,12 @@ Move examples to its own place (separate source set? separate project?).
 
 Add some unit tests.
 
-##  Make TraditionalTreePrinter parallel
+##  Improve TraditionalTreePrinter
 
+Make it parallel.
 This can be achieved with fork-join strategy and a concurrent line buffer.
+
+Calculate Position taking into account the insets.
 
 ## Improve ListingTreePrinter
 ### (connected lines in aligned mode)

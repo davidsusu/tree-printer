@@ -41,7 +41,6 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         this.displayPlaceholders = displayPlaceholders;
     }
     
-    // TODO: calculate Position taking into account the insets
     @Override
     public void print(TreeNode rootNode, Appendable out) {
         TreeNode wrappedRootNode = new TrackingTreeNodeDecorator(rootNode);
@@ -62,70 +61,86 @@ public class TraditionalTreePrinter extends AbstractTreePrinter {
         
         buffer.flush();
         
-        while (true) {
-            Map<TreeNode, Position> newPositionMap = new HashMap<>();
-            List<Integer> childBottoms = new ArrayList<>();
-            for (Map.Entry<TreeNode, Position> entry: positionMap.entrySet()) {
-                TreeNode node = entry.getKey();
-                Position position = entry.getValue();
-                Map<TreeNode, Position> childrenPositionMap = new HashMap<>();
-                List<TreeNode> children = new ArrayList<>(node.getChildren());
-                if (!displayPlaceholders) {
-                    children.removeIf(TreeNode::isPlaceholder);
-                }
-                
-                int[] childrenAlign = aligner.alignChildren(node, children, position.col, widthMap);
-                
-                if (!children.isEmpty()) {
-                    int childCount = children.size();
-                    List<Integer> childConnections = new ArrayList<>(childCount);
-                    for (int i = 0; i < childCount; i++) {
-                        int childCol = childrenAlign[i];
-                        TreeNode childNode = children.get(i);
-                        int childWidth = widthMap.get(childNode);
-                        String childContent = childNode.getContent();
-                        int[] childContentDimension = Util.getContentDimension(childContent);
-                        Align childAlign = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
-                        Position childPositioning = new Position(
-                            position.row + position.height, childCol,
-                            childAlign.bottomConnection, childAlign.left, childContentDimension[1]
-                        );
-                        childrenPositionMap.put(childNode, childPositioning);
-                        childConnections.add(childAlign.topConnection);
-                    }
-                    
-                    int connectionRows = liner.printConnections(
-                        buffer, position.row + position.height, position.connection, childConnections
-                    );
-                    
-                    for (Map.Entry<TreeNode, Position> childEntry: childrenPositionMap.entrySet()) {
-                        TreeNode childNode = childEntry.getKey();
-                        Position childPositionItem = childEntry.getValue();
-                        childPositionItem.row += connectionRows;
-                        buffer.write(childPositionItem.row, childPositionItem.left, childNode.getContent());
-                        childBottoms.add(childPositionItem.row + childPositionItem.height);
-                    }
-                    
-                    newPositionMap.putAll(childrenPositionMap);
-                }
-            }
-
-            if (newPositionMap.isEmpty()) {
-                break;
-            } else {
-                int minimumChildBottom = Integer.MAX_VALUE;
-                for (int bottomValue: childBottoms) {
-                    if (bottomValue < minimumChildBottom) {
-                        minimumChildBottom = bottomValue;
-                    }
-                }
-                buffer.flush(minimumChildBottom);
-                
-                positionMap = newPositionMap;
-            }
+        while (!positionMap.isEmpty()) {
+            positionMap = printNextGeneration(buffer, positionMap, widthMap);
         }
         
         buffer.flush();
+    }
+    
+    private Map<TreeNode, Position> printNextGeneration(
+        LineBuffer buffer, Map<TreeNode, Position> positionMap, Map<TreeNode, Integer> widthMap
+    ) {
+        Map<TreeNode, Position> newPositionMap = new HashMap<>();
+        List<Integer> childBottoms = new ArrayList<>();
+        for (Map.Entry<TreeNode, Position> entry: positionMap.entrySet()) {
+            TreeNode node = entry.getKey();
+            Position position = entry.getValue();
+            handleNodeChildren(buffer, node, position, newPositionMap, widthMap, childBottoms);
+        }
+
+        if (!newPositionMap.isEmpty()) {
+            int minimumChildBottom = Integer.MAX_VALUE;
+            for (int bottomValue: childBottoms) {
+                if (bottomValue < minimumChildBottom) {
+                    minimumChildBottom = bottomValue;
+                }
+            }
+            buffer.flush(minimumChildBottom);
+        }
+        
+        return newPositionMap;
+    }
+    
+    private void handleNodeChildren(
+        LineBuffer buffer,
+        TreeNode node,
+        Position position,
+        Map<TreeNode, Position> newPositionMap,
+        Map<TreeNode, Integer> widthMap,
+        List<Integer> childBottoms
+    ) {
+        Map<TreeNode, Position> childrenPositionMap = new HashMap<>();
+        List<TreeNode> children = new ArrayList<>(node.getChildren());
+        if (!displayPlaceholders) {
+            children.removeIf(TreeNode::isPlaceholder);
+        }
+        if (children.isEmpty()) {
+            return;
+        }
+        
+        int[] childrenAlign = aligner.alignChildren(node, children, position.col, widthMap);
+        
+        int childCount = children.size();
+        List<Integer> childConnections = new ArrayList<>(childCount);
+        for (int i = 0; i < childCount; i++) {
+            int childCol = childrenAlign[i];
+            TreeNode childNode = children.get(i);
+            int childWidth = widthMap.get(childNode);
+            String childContent = childNode.getContent();
+            int[] childContentDimension = Util.getContentDimension(childContent);
+            Align childAlign = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
+            Position childPositioning = new Position(
+                position.row + position.height, childCol,
+                childAlign.bottomConnection, childAlign.left, childContentDimension[1]
+            );
+            childrenPositionMap.put(childNode, childPositioning);
+            childConnections.add(childAlign.topConnection);
+        }
+        
+        int connectionRows = liner.printConnections(
+            buffer, position.row + position.height, position.connection, childConnections
+        );
+        
+        for (Map.Entry<TreeNode, Position> childEntry: childrenPositionMap.entrySet()) {
+            TreeNode childNode = childEntry.getKey();
+            Position childPositionItem = childEntry.getValue();
+            childPositionItem.row += connectionRows;
+            buffer.write(childPositionItem.row, childPositionItem.left, childNode.getContent());
+            childBottoms.add(childPositionItem.row + childPositionItem.height);
+        }
+        
+        newPositionMap.putAll(childrenPositionMap);
     }
     
     private class Position {

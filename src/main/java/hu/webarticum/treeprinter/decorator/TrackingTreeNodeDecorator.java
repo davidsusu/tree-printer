@@ -49,7 +49,9 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
         TrackingTreeNodeDecorator otherReferenceTreeNode = (TrackingTreeNodeDecorator)other;
         TrackingTreeNodeDecorator otherParent = otherReferenceTreeNode.parent;
         
-        if (parent == null) {
+        if (this == otherReferenceTreeNode) {
+            return true;
+        } else if (parent == null) {
             if (otherParent != null) {
                 return false;
             }
