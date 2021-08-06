@@ -9,33 +9,30 @@ import hu.webarticum.treeprinter.util.Util;
 
 public class DefaultAligner implements Aligner {
 
-    public static final int LEFT = 0;
-    public static final int CENTER = 1;
-    public static final int RIGHT = 2;
+    public enum Alignment { LEFT, CENTER, RIGHT }
 
-    public static final int CONNECT_TO_CONTENT = 0;
-    public static final int CONNECT_TO_CONTEXT = 1;
+    public enum ConnectMode { CONTENT, CONTEXT }
     
-    private final int contentAlign;
+    private final Alignment contentAlign;
     private final int contentOffset;
-    private final int topConnectionConnect;
-    private final int topConnectionAlign;
+    private final ConnectMode topConnectionConnect;
+    private final Alignment topConnectionAlign;
     private final int topConnectionOffset;
-    private final int bottomConnectionConnect;
-    private final int bottomConnectionAlign;
+    private final ConnectMode bottomConnectionConnect;
+    private final Alignment bottomConnectionAlign;
     private final int bottomConnectionOffset;
-    private final int childrenAlign;
+    private final Alignment childrenAlign;
     private final int gap;
 
     public DefaultAligner() {
-        this(CENTER);
+        this(Alignment.CENTER);
     }
 
-    public DefaultAligner(int align) {
+    public DefaultAligner(Alignment align) {
         this(align, 1);
     }
     
-    public DefaultAligner(int align, int gap) {
+    public DefaultAligner(Alignment align, int gap) {
         this(createBuilder().align(align).gap(gap));
     }
     
@@ -56,66 +53,75 @@ public class DefaultAligner implements Aligner {
     public Align alignNode(TreeNode node, int position, int width, int contentWidth) {
         int contentMaxLeft = position + width - contentWidth;
         int connectionMaxLeft = position + width - 1;
-        
-        int left;
-        if (contentAlign == LEFT) {
-            left = position;
-        } else if (contentAlign == RIGHT) {
-            left = contentMaxLeft;
+        int left = calculateLeft(position, width, contentWidth, contentMaxLeft);
+        int topConnection = calculateTopConnection(left, position, width, contentWidth, connectionMaxLeft);
+        int bottomConnection = calculateBottomConnection(left, position, width, contentWidth, connectionMaxLeft);
+        return new Align(left, topConnection, bottomConnection);
+    }
+    
+    private int calculateLeft(int position, int width, int contentWidth, int contentMaxLeft) {
+        int relativeLeft;
+        if (contentAlign == Alignment.LEFT) {
+            relativeLeft = position;
+        } else if (contentAlign == Alignment.RIGHT) {
+            relativeLeft = contentMaxLeft;
         } else {
-            left = position + (width - contentWidth) / 2;
+            relativeLeft = position + (width - contentWidth) / 2;
         }
         
-        left = Math.max(0, Math.min(contentMaxLeft, left + contentOffset));
-        
-        
-        int topConnection;
-        if (topConnectionConnect == CONNECT_TO_CONTENT) {
-            if (topConnectionAlign == LEFT) {
-                topConnection = left;
-            } else if (topConnectionAlign == RIGHT) {
-                topConnection = left + contentWidth - 1;
+        return restrictInt(relativeLeft + contentOffset, 0, contentMaxLeft);
+    }
+    
+    private int calculateTopConnection(int left, int position, int width, int contentWidth, int connectionMaxLeft) {
+        int relativeTopConnection;
+        if (topConnectionConnect == ConnectMode.CONTENT) {
+            if (topConnectionAlign == Alignment.LEFT) {
+                relativeTopConnection = left;
+            } else if (topConnectionAlign == Alignment.RIGHT) {
+                relativeTopConnection = left + contentWidth - 1;
             } else {
-                topConnection = left + (contentWidth / 2);
+                relativeTopConnection = left + (contentWidth / 2);
             }
         } else {
-            if (topConnectionAlign == LEFT) {
-                topConnection = position;
-            } else if (topConnectionAlign == RIGHT) {
-                topConnection = connectionMaxLeft;
+            if (topConnectionAlign == Alignment.LEFT) {
+                relativeTopConnection = position;
+            } else if (topConnectionAlign == Alignment.RIGHT) {
+                relativeTopConnection = connectionMaxLeft;
             } else {
-                topConnection = position + ((width - contentWidth) / 2);
+                relativeTopConnection = position + ((width - contentWidth) / 2);
             }
         }
 
-        topConnection = Math.max(0, Math.min(connectionMaxLeft, topConnection + topConnectionOffset));
-        
-        
+        return restrictInt(relativeTopConnection + topConnectionOffset, 0, connectionMaxLeft);
+    }
+    
+    private int calculateBottomConnection(int left, int position, int width, int contentWidth, int connectionMaxLeft) {
         int bottomConnection;
-        if (bottomConnectionConnect == CONNECT_TO_CONTENT) {
-            if (bottomConnectionAlign == LEFT) {
+        if (bottomConnectionConnect == ConnectMode.CONTENT) {
+            if (bottomConnectionAlign == Alignment.LEFT) {
                 bottomConnection = left;
-            } else if (bottomConnectionAlign == RIGHT) {
+            } else if (bottomConnectionAlign == Alignment.RIGHT) {
                 bottomConnection = left + contentWidth - 1;
             } else {
                 bottomConnection = left + (contentWidth / 2);
             }
         } else {
-            if (bottomConnectionAlign == LEFT) {
+            if (bottomConnectionAlign == Alignment.LEFT) {
                 bottomConnection = position;
-            } else if (bottomConnectionAlign == RIGHT) {
+            } else if (bottomConnectionAlign == Alignment.RIGHT) {
                 bottomConnection = connectionMaxLeft;
             } else {
                 bottomConnection = position + ((width - contentWidth) / 2);
             }
         }
 
-        bottomConnection = Math.max(0, Math.min(connectionMaxLeft, bottomConnection + bottomConnectionOffset));
-        
-        
-        return new Align(left, topConnection, bottomConnection);
+        return restrictInt(bottomConnection + bottomConnectionOffset, 0, connectionMaxLeft);
     }
 
+    private int restrictInt(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+    
     @Override
     public int[] alignChildren(TreeNode parentNode, List<TreeNode> children, int position, Map<TreeNode, Integer> widthMap) {
         int[] result = new int[children.size()];
@@ -135,9 +141,9 @@ public class DefaultAligner implements Aligner {
         }
         int parentWidth = widthMap.get(parentNode);
         int offset = 0;
-        if (childrenAlign == RIGHT) {
+        if (childrenAlign == Alignment.RIGHT) {
             offset = parentWidth - childrenWidth;
-        } else if (childrenAlign == CENTER) {
+        } else if (childrenAlign == Alignment.CENTER) {
             offset = (parentWidth - childrenWidth) / 2;
         }
         if (offset > 0) {
@@ -174,18 +180,18 @@ public class DefaultAligner implements Aligner {
     
     public static class Builder {
 
-        private int contentAlign = CENTER;
+        private Alignment contentAlign = Alignment.CENTER;
         private int contentOffset = 0;
-        private int topConnectionConnect = CONNECT_TO_CONTENT;
-        private int topConnectionAlign = CENTER;
+        private ConnectMode topConnectionConnect = ConnectMode.CONTENT;
+        private Alignment topConnectionAlign = Alignment.CENTER;
         private int topConnectionOffset = 0;
-        private int bottomConnectionConnect = CONNECT_TO_CONTENT;
-        private int bottomConnectionAlign = CENTER;
+        private ConnectMode bottomConnectionConnect = ConnectMode.CONTENT;
+        private Alignment bottomConnectionAlign = Alignment.CENTER;
         private int bottomConnectionOffset = 0;
-        private int childrenAlign = CENTER;
+        private Alignment childrenAlign = Alignment.CENTER;
         private int gap = 1;
 
-        public DefaultAligner.Builder align(int align) {
+        public DefaultAligner.Builder align(Alignment align) {
             this.contentAlign = align;
             this.topConnectionAlign = align;
             this.bottomConnectionAlign = align;
@@ -193,7 +199,7 @@ public class DefaultAligner implements Aligner {
             return this;
         }
 
-        public DefaultAligner.Builder contentAlign(int contentAlign) {
+        public DefaultAligner.Builder contentAlign(Alignment contentAlign) {
             this.contentAlign = contentAlign;
             return this;
         }
@@ -203,12 +209,12 @@ public class DefaultAligner implements Aligner {
             return this;
         }
 
-        public DefaultAligner.Builder topConnectionConnect(int topConnectionConnect) {
+        public DefaultAligner.Builder topConnectionConnect(ConnectMode topConnectionConnect) {
             this.topConnectionConnect = topConnectionConnect;
             return this;
         }
 
-        public DefaultAligner.Builder topConnectionAlign(int topConnectionAlign) {
+        public DefaultAligner.Builder topConnectionAlign(Alignment topConnectionAlign) {
             this.topConnectionAlign = topConnectionAlign;
             return this;
         }
@@ -218,12 +224,12 @@ public class DefaultAligner implements Aligner {
             return this;
         }
 
-        public DefaultAligner.Builder bottomConnectionConnect(int bottomConnectionConnect) {
+        public DefaultAligner.Builder bottomConnectionConnect(ConnectMode bottomConnectionConnect) {
             this.bottomConnectionConnect = bottomConnectionConnect;
             return this;
         }
 
-        public DefaultAligner.Builder bottomConnectionAlign(int bottomConnectionAlign) {
+        public DefaultAligner.Builder bottomConnectionAlign(Alignment bottomConnectionAlign) {
             this.bottomConnectionAlign = bottomConnectionAlign;
             return this;
         }
@@ -233,7 +239,7 @@ public class DefaultAligner implements Aligner {
             return this;
         }
 
-        public DefaultAligner.Builder childrenAlign(int childrenAlign) {
+        public DefaultAligner.Builder childrenAlign(Alignment childrenAlign) {
             this.childrenAlign = childrenAlign;
             return this;
         }

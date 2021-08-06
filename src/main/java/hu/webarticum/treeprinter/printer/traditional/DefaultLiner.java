@@ -99,32 +99,34 @@ public class DefaultLiner implements Liner {
         if (start == end) {
             return bracketOnlyChar;
         } else if (i == topConnection) {
-            if (bottomConnections.contains(i)) {
-                if (i == start) {
-                    return bracketTopAndBottomLeftChar;
-                } else if (i == end) {
-                    return bracketTopAndBottomRightChar;
-                } else {
-                    return bracketTopAndBottomChar;
-                }
-            } else {
-                if (i == start) {
-                    return bracketTopLeftChar;
-                } else if (i == end) {
-                    return bracketTopRightChar;
-                } else {
-                    return bracketTopChar;
-                }
-            }
+            return getBracketLineCharAtTopConnection(topConnection, start, end, bottomConnections);
         } else if (i == start) {
             return bracketLeftChar;
         } else if (i == end) {
             return bracketRightChar;
+        } else if (bottomConnections.contains(i)) {
+            return bracketBottomChar;
         } else {
-            if (bottomConnections.contains(i)) {
-                return bracketBottomChar;
+            return bracketChar;
+        }
+    }
+    
+    private char getBracketLineCharAtTopConnection(int i, int start, int end, List<Integer> bottomConnections) {
+        if (bottomConnections.contains(i)) {
+            if (i == start) {
+                return bracketTopAndBottomLeftChar;
+            } else if (i == end) {
+                return bracketTopAndBottomRightChar;
             } else {
-                return bracketChar;
+                return bracketTopAndBottomChar;
+            }
+        } else {
+            if (i == start) {
+                return bracketTopLeftChar;
+            } else if (i == end) {
+                return bracketTopRightChar;
+            } else {
+                return bracketTopChar;
             }
         }
     }
