@@ -12,8 +12,8 @@ public interface TreeNode {
         return this;
     }
 
-    public default int[] getInsets() {
-        return new int[] {0, 0, 0, 0};
+    public default Insets getInsets() {
+        return new Insets(0);
     }
 
     public default boolean isDecorable() {

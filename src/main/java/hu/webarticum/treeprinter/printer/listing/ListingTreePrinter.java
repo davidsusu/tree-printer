@@ -51,7 +51,7 @@ public class ListingTreePrinter implements TreePrinter {
     
     private void printSub(TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
         String content = node.getContent();
-        int connectOffset = node.getInsets()[0];
+        int connectOffset = node.getInsets().top();
         
         String[] lines = Util.splitToLines(content);
         for (int i = 0; i < lines.length; i++) {

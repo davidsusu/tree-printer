@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter.decorator;
 
+import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.printer.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
@@ -78,14 +79,8 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     @Override
-    public int[] getInsets() {
-        int[] innerInsets = decoratedNode.getInsets();
-        return new int[] {
-            innerInsets[0] + 1,
-            innerInsets[1] + 1,
-            innerInsets[2] + 1,
-            innerInsets[3] + 1,
-        };
+    public Insets getInsets() {
+        return decoratedNode.getInsets().extendedWith(1);
     }
     
     @Override

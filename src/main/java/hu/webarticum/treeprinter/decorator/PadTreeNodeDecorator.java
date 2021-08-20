@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter.decorator;
 
+import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.util.Util;
 
@@ -76,14 +77,9 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     @Override
-    public int[] getInsets() {
-        int[] innerInsets = decoratedNode.getInsets();
-        return new int[] {
-            innerInsets[0] + topPad,
-            innerInsets[1] + rightPad,
-            innerInsets[2] + bottomPad,
-            innerInsets[3] + leftPad,
-        };
+    public Insets getInsets() {
+        Insets padInsets = new Insets(topPad, rightPad, bottomPad, bottomPad);
+        return decoratedNode.getInsets().extendedWith(padInsets);
     }
     
     @Override

@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter.decorator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.printer.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
@@ -128,13 +129,14 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    public int[] getInsets() {
-        int[] insets = decoratedNode.getInsets();
-        insets[0] += Math.max(0, -verticalOffset);
-        insets[1] += Math.max(0, horizontalOffset);
-        insets[1] += Math.max(0, verticalOffset);
-        insets[1] += Math.max(0, -horizontalOffset);
-        return insets;
+    public Insets getInsets() {
+        Insets shadowInsets = new Insets(
+            Math.max(0, -verticalOffset),
+            Math.max(0, horizontalOffset),
+            Math.max(0, verticalOffset),
+            Math.max(0, -horizontalOffset)
+        );
+        return decoratedNode.getInsets().extendedWith(shadowInsets);
     }
     
     @Override

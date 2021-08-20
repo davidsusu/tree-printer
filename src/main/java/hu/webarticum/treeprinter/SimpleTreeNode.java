@@ -7,17 +7,17 @@ public class SimpleTreeNode extends AbstractTreeNode {
 
     protected final String content;
     
-    protected final int[] insets;
+    protected final Insets insets;
     
     protected List<TreeNode> children = new ArrayList<>();
 
     public SimpleTreeNode(String content) {
-        this(content, 0, 0, 0, 0);
+        this(content, Insets.EMPTY);
     }
 
-    public SimpleTreeNode(String content, int... insets) {
+    public SimpleTreeNode(String content, Insets insets) {
         this.content = content;
-        this.insets = insets.clone();
+        this.insets = insets;
     }
 
     public void addChild(TreeNode childNode) {
@@ -34,8 +34,8 @@ public class SimpleTreeNode extends AbstractTreeNode {
     }
 
     @Override
-    public int[] getInsets() {
-        return new int[] {insets[0], insets[1], insets[2], insets[3]};
+    public Insets getInsets() {
+        return insets;
     }
 
     @Override
