@@ -30,7 +30,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     public String getContent() {
         String content = decoratedNode.getContent();
 
-        String[] contentLines = content.split("\n");
+        String[] contentLines = Util.splitToLines(content);
         int contentWidth = calculateWidth(contentLines);
 
         StringBuilder resultBuilder = new StringBuilder();

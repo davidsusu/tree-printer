@@ -48,7 +48,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     public String getContent() {
         String content = decoratedNode.getContent();
         
-        String[] contentLines = content.split("\n");
+        String[] contentLines = Util.splitToLines(content);
         int longestLineLength = 0;
         for (String line: contentLines) {
             int lineLength = line.length();

@@ -17,7 +17,7 @@ public class LineBuffer {
     }
     
     public void write(int row, int col, String text) {
-        String[] textLines = text.split("\n");
+        String[] textLines = Util.splitToLines(text);
         int lineCount = textLines.length;
         for (int i = 0; i < lineCount; i++) {
             writeLine(row + i, col, textLines[i]);

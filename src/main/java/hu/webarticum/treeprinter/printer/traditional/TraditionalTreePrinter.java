@@ -7,11 +7,11 @@ import java.util.Map;
 
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.decorator.TrackingTreeNodeDecorator;
-import hu.webarticum.treeprinter.printer.AbstractTreePrinter;
+import hu.webarticum.treeprinter.printer.TreePrinter;
 import hu.webarticum.treeprinter.util.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
 
-public class TraditionalTreePrinter extends AbstractTreePrinter {
+public class TraditionalTreePrinter implements TreePrinter {
 
     public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
 

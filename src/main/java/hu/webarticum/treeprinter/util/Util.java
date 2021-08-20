@@ -1,19 +1,26 @@
 package hu.webarticum.treeprinter.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import hu.webarticum.treeprinter.TreeNode;
 
 public final class Util {
     
+    // FIXME: use Bee?
+    private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\\R");
+    
+    
     private Util() {
         // utility class
     }
     
+    // TODO: create a general Dimension class
     public static int[] getContentDimension(String content) {
         int longsetLineLength = 0;
-        String[] lines = content.split("\n");
+        String[] lines = splitToLines(content);
         for (String line: lines) {
             int lineLength = line.length();
             if (lineLength > longsetLineLength) {
@@ -21,6 +28,10 @@ public final class Util {
             }
         }
         return new int[] {longsetLineLength, lines.length};
+    }
+
+    public static String[] splitToLines(String content) {
+        return LINE_SEPARATOR_PATTERN.split(content);
     }
     
     public static int getDepth(TreeNode treeNode) {
@@ -57,4 +68,16 @@ public final class Util {
         }
     }
 
+    public static void write(Appendable out, String content) {
+        try {
+            out.append(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeln(Appendable out, String content) {
+        write(out, content + "\n");
+    }
+    
 }

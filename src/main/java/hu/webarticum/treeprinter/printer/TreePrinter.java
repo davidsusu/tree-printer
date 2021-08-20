@@ -3,11 +3,17 @@ package hu.webarticum.treeprinter.printer;
 import hu.webarticum.treeprinter.TreeNode;
 
 public interface TreePrinter {
-    
-    public void print(TreeNode rootNode);
-    
+
     public void print(TreeNode rootNode, Appendable out);
     
-    public String getAsString(TreeNode rootNode);
+    public default void print(TreeNode rootNode) {
+        print(rootNode, System.out);
+    }
+    
+    public default String getAsString(TreeNode rootNode) {
+        StringBuilder builder = new StringBuilder();
+        print(rootNode, builder);
+        return builder.toString();
+    }
     
 }

@@ -13,7 +13,7 @@ public class DefaultLiner implements Liner {
     };
     
     private static final char[] LINE_CHARS_UNICODE = new char[] {
-        '│', '┌', '─', '┴',  '└', '┘', '┬', '┼', '├', '┤', '┐', '│', '│'
+        '│', '┌', '─', '┴', '└', '┘', '┬', '┼', '├', '┤', '┐', '│', '│'
     };
     
     private final char topConnectionChar;

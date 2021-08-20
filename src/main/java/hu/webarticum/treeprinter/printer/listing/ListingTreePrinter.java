@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.webarticum.treeprinter.TreeNode;
-import hu.webarticum.treeprinter.printer.AbstractTreePrinter;
+import hu.webarticum.treeprinter.printer.TreePrinter;
 import hu.webarticum.treeprinter.printer.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
 
-public class ListingTreePrinter extends AbstractTreePrinter {
+public class ListingTreePrinter implements TreePrinter {
 
     private enum NodeDisposition { ROOT, GENERAL, LAST }
     
@@ -53,7 +53,7 @@ public class ListingTreePrinter extends AbstractTreePrinter {
         String content = node.getContent();
         int connectOffset = node.getInsets()[0];
         
-        String[] lines = content.split("\n");
+        String[] lines = Util.splitToLines(content);
         for (int i = 0; i < lines.length; i++) {
             printContentLine(out, prefix, disposition, inset, connectOffset, i, lines[i]);
         }
@@ -77,13 +77,13 @@ public class ListingTreePrinter extends AbstractTreePrinter {
     private void printContentLine(Appendable out, String prefix, NodeDisposition disposition, int inset, int connectOffset, int i, String line) {
         if (disposition == NodeDisposition.ROOT) {
             if (displayRoot) {
-                writeln(out, prefix + line);
+                Util.writeln(out, prefix + line);
             }
             return;
         }
         
         String itemPrefix = buildItemPrefix(disposition, inset, connectOffset, i);
-        writeln(out, prefix + itemPrefix + line);
+        Util.writeln(out, prefix + itemPrefix + line);
     }
     
     private String buildItemPrefix(NodeDisposition disposition, int inset, int connectOffset, int i) {
