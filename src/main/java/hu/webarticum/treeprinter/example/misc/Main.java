@@ -5,6 +5,7 @@ import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
+import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 
@@ -41,7 +42,7 @@ public class Main {
         subSubNode23.addChild(subSubSubNode232);
         subSubNode31.addChild(subSubSubNode311);
 
-        (new ListingTreePrinter()).print(rootNode);
+        new ListingTreePrinter().print(rootNode);
 
         System.out.println();
         System.out.println("=====================");
@@ -82,6 +83,13 @@ public class Main {
                 BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(rootNode)
             )
         );
+
+        System.out.println();
+        System.out.println("=====================");
+        System.out.println();
+
+        new BoxingTreePrinter().print(rootNode);
+
     }
     
     private static class TestNode extends SimpleTreeNode {

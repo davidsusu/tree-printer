@@ -19,15 +19,20 @@ public final class Util {
     
     // TODO: create a general Dimension class
     public static int[] getContentDimension(String content) {
-        int longsetLineLength = 0;
         String[] lines = splitToLines(content);
+        int longestLineLength = getMaxLength(lines);
+        return new int[] { longestLineLength, lines.length };
+    }
+    
+    public static int getMaxLength(String[] lines) {
+        int maxLength = 0;
         for (String line: lines) {
             int lineLength = line.length();
-            if (lineLength > longsetLineLength) {
-                longsetLineLength = lineLength;
+            if (lineLength > maxLength) {
+                maxLength = lineLength;
             }
         }
-        return new int[] {longsetLineLength, lines.length};
+        return maxLength;
     }
 
     public static String[] splitToLines(String content) {
