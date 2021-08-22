@@ -216,14 +216,14 @@ new TraditionalTreePrinter(displayPlaceholders).print(
 ```
 
 ```
-       ┌────┐   
-       │ROOT│   
-       └────┘   
+       ┌────┐
+       │ROOT│
+       └────┘
    ┌──────┴──┐
    │         │
-          ┌─────┐   
-          │RIGHT│   
-          └─────┘   
+          ┌─────┐
+          │RIGHT│
+          └─────┘
 ```
 
 Any node whose `isPlaceholder()` method returns `true` is considered a placeholder.
