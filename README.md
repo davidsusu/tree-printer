@@ -225,3 +225,7 @@ new TraditionalTreePrinter(displayPlaceholders).print(
           │RIGHT│   
           └─────┘   
 ```
+
+Any node whose `isPlaceholder()` method returns `true` is considered a placeholder.
+`hu.webarticum.treeprinter.PlaceholderNode` is a built-in placeholder,
+it's empty and undecorable too.
