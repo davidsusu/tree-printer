@@ -106,7 +106,7 @@ I'm the root!
  └─I'm an other child...
 ```
 
-Or use a `TraditinalTreePrinter`:
+Or use a `TraditionalTreePrinter`:
 
 ```java
 new TraditionalTreePrinter().print(rootNode);
@@ -120,6 +120,8 @@ Which results:
        │                 │
 I'm a child... I'm an other child...
 ```
+
+For more available printers see the `hu.webarticum.treeprinter.printer.*` packages.
 
 Of course, `TreePrinter` implementations have many options for controlling the output.
 You can change the lining characters, the aligning, and so on.
