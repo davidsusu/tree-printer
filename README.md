@@ -202,11 +202,13 @@ These nodes are hidden by default in the general printers.
 Placeholders are useful in n-ary trees, where missing nodes matter.
 
 ```java
+boolean displayPlaceholders = true;
+
 TestNode alignedTree = new TestNode("ROOT");
 alignedTree.addChild(new PlaceholderNode());
 alignedTree.addChild(new TestNode("RIGHT"));
 
-new TraditionalTreePrinter(true).print(
+new TraditionalTreePrinter(displayPlaceholders).print(
     PadTreeNodeDecorator.createBuilder().forceInherit(true).horizontalPad(3).buildFor(
         new BorderTreeNodeDecorator(alignedTree)
     )
