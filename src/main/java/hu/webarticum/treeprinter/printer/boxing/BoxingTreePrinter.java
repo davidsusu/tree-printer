@@ -6,14 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
 import hu.webarticum.treeprinter.printer.UnicodeMode;
 import hu.webarticum.treeprinter.util.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
 
-// TODO: pad/margin
-// TODO: alignment (start, end, justify)
 public class BoxingTreePrinter implements TreePrinter {
 
     private static final char[] BOX_CHARS_ASCII = new char[] {
@@ -39,6 +38,14 @@ public class BoxingTreePrinter implements TreePrinter {
     private final char rightConnection;
     
     private final Set<Integer> horizontalLevels;
+
+    private final boolean boxLeafs;
+
+    private final Insets insets;
+
+    private final int verticalGap;
+
+    private final int horizontalGap;
     
 
     public BoxingTreePrinter() {
@@ -58,6 +65,10 @@ public class BoxingTreePrinter implements TreePrinter {
         this.leftConnection = builder.characters[8];
         this.rightConnection = builder.characters[9];
         this.horizontalLevels = new HashSet<>(builder.horizontalLevels);
+        this.boxLeafs = builder.boxLeafs;
+        this.insets = builder.insets;
+        this.verticalGap = builder.verticalGap;
+        this.horizontalGap = builder.horizontalGap;
     }
     
     
@@ -78,27 +89,29 @@ public class BoxingTreePrinter implements TreePrinter {
         }
         String content = rootNode.getContent();
         if (children.isEmpty()) {
-            return boxContent(content);
+            return boxIfEnabled(content);
         }
         
         StringBuilder resultBuilder = new StringBuilder();
         int[] dimensions = Util.getContentDimension(content);
         LineBuffer lineBuffer = new LineBuffer(resultBuilder);
-        int leftOffset = 1;
-        int topOffset = dimensions[1] + 2;
+        int leftOffset = 1 + insets.left();
+        int topHeight = dimensions[1] + 2;
+        int topOffset = topHeight + insets.top();
         int[] subDimensions;
         if (horizontalLevels.contains(level)) {
             subDimensions = writeItemsHorizontally(lineBuffer, leftOffset, topOffset, children, level);
         } else {
             subDimensions = writeItemsVertically(lineBuffer, leftOffset, topOffset, children, level);
         }
-        int innerWidth = Math.max(dimensions[0] + 4, subDimensions[0]);
+        int innerWidth = Math.max(dimensions[0] + 4, subDimensions[0] + insets.left() + insets.right());
         int topDiff = writeTop(lineBuffer, content, dimensions, innerWidth);
-        int verticalLineTop = topOffset - topDiff;
-        int verticalLineHeight = subDimensions[1] + topDiff;
-        writeBottom(lineBuffer, topOffset + subDimensions[1], innerWidth);
+        int verticalLineTop = topHeight - topDiff;
+        int verticalLineHeight = subDimensions[1] + topDiff + insets.top() + insets.bottom();
+        int bottomOffset = topOffset + subDimensions[1] + insets.bottom();
+        writeBottom(lineBuffer, bottomOffset, innerWidth);
         writeLeft(lineBuffer, verticalLineTop, verticalLineHeight);
-        writeRight(lineBuffer, leftOffset + innerWidth, verticalLineTop, verticalLineHeight);
+        writeRight(lineBuffer, innerWidth + 1, verticalLineTop, verticalLineHeight);
         lineBuffer.flush();
         return resultBuilder.toString();
     }
@@ -108,7 +121,13 @@ public class BoxingTreePrinter implements TreePrinter {
     ) {
         int width = 0;
         int height = 0;
+        boolean first = true;
         for (TreeNode node : nodes) {
+            if (first) {
+                first = false;
+            } else {
+                height += verticalGap;
+            }
             String itemContent = getLevelAsString(node, level + 1);
             int[] childDimensions = Util.getContentDimension(itemContent);
             lineBuffer.write(topOffset + height, leftOffset, itemContent);
@@ -125,7 +144,13 @@ public class BoxingTreePrinter implements TreePrinter {
     ) {
         int width = 0;
         int height = 0;
+        boolean first = true;
         for (TreeNode node : nodes) {
+            if (first) {
+                first = false;
+            } else {
+                width += horizontalGap;
+            }
             String itemContent = getLevelAsString(node, level + 1);
             int[] childDimensions = Util.getContentDimension(itemContent);
             lineBuffer.write(topOffset, leftOffset + width, itemContent);
@@ -193,6 +218,10 @@ public class BoxingTreePrinter implements TreePrinter {
             lineBuffer.write(i, leftOffset, right + "");
         }
     }
+    
+    private String boxIfEnabled(String content) {
+        return boxLeafs ? boxContent(content) : content;
+    }
 
     private String boxContent(String content) {
         String[] lines = Util.splitToLines(content);
@@ -236,7 +265,15 @@ public class BoxingTreePrinter implements TreePrinter {
         ).clone();
         
         private Set<Integer> horizontalLevels = new HashSet<>(Arrays.asList(0));
+        
+        private boolean boxLeafs = true;
 
+        private Insets insets = new Insets(0, 1);
+
+        private int verticalGap = 0;
+
+        private int horizontalGap = 1;
+        
         public Builder displayPlaceholders(boolean displayPlaceholders) {
             this.displayPlaceholders = displayPlaceholders;
             return this;
@@ -312,6 +349,26 @@ public class BoxingTreePrinter implements TreePrinter {
             return this;
         }
 
+        public Builder boxLeafs(boolean boxLeafs) {
+            this.boxLeafs = boxLeafs;
+            return this;
+        }
+
+        public Builder insets(Insets insets) {
+            this.insets = insets;
+            return this;
+        }
+
+        public Builder verticalGap(int verticalGap) {
+            this.verticalGap = verticalGap;
+            return this;
+        }
+
+        public Builder horizontalGap(int horizontalGap) {
+            this.horizontalGap = horizontalGap;
+            return this;
+        }
+        
         public BoxingTreePrinter build() {
             return new BoxingTreePrinter(this);
         }
