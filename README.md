@@ -172,6 +172,33 @@ Result:
 └──────────────┘ └─────────────────────┘
 ```
 
+Of course, you can compose as many decorators as you want:
+
+```java
+new TraditionalTreePrinter().print(
+    new ShadowTreeNodeDecorator(
+        BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(
+            new PadTreeNodeDecorator(rootNode, new Insets(0, 2))
+        )
+    )
+);
+```
+
+Result:
+
+```
+               ▛▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▜
+               ▏  I'm the root!  ▕▒
+               ▙▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▟▒
+                ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+          ┌──────────────┴──────────┐
+          │                         │
+▛▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▜  ▛▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▜
+▏  I'm a child...  ▕▒ ▏  I'm an other child...  ▕▒
+▙▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▟▒ ▙▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▟▒
+ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+```
+
 Decorators inherit by default, but you can change this behavior.
 
 ## ASCII vs Unicode mode

@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter.example.misc;
 
+import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.PlaceholderNode;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
@@ -41,7 +42,7 @@ public class Main {
         subSubNode23.addChild(subSubSubNode231);
         subSubNode23.addChild(subSubSubNode232);
         subSubNode31.addChild(subSubSubNode311);
-
+        
         new ListingTreePrinter().print(rootNode);
 
         System.out.println();
@@ -80,7 +81,9 @@ public class Main {
 
         new TraditionalTreePrinter().print(
             new ShadowTreeNodeDecorator(
-                BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(rootNode)
+                BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(
+                    new PadTreeNodeDecorator(rootNode, new Insets(0, 1))
+                )
             )
         );
 
