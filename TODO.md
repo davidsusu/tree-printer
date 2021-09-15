@@ -23,6 +23,19 @@ This can be achieved with fork-join strategy and a concurrent line buffer.
 
 Calculate Position taking into account the insets.
 
+## Add DecoratorTreePrinter[?]
+
+Example:
+
+```java
+new DecoratorTreePrinter(
+    baseTreePrinter,
+    t -> new BorderTreeNodeDecorator(
+        new PadTreeNodeDecorator(t, new Insets(1, 2))
+    )
+);
+```
+
 ## Improve ListingTreePrinter
 ### (connected lines in aligned mode)
 
