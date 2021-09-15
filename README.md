@@ -51,7 +51,7 @@ In gradle projects:
 ```groovy
 
 dependencies {
-    implementation 'hu.webrticum:tree-printer:<...>'
+    implementation 'hu.webarticum:tree-printer:<...>'
 }
 
 ```
