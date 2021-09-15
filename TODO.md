@@ -4,7 +4,6 @@
 
 Remove 'get' from simple getters.
 Improve builders, rename createBuilder() to builder().
-Make Insets a class. Use it in PadTreeNodeDecorator. Insets::extendWith or something.
 
 ## Change formatting
 
