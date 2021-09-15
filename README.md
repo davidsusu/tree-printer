@@ -89,8 +89,8 @@ for printing tree structures via the `print()` method.
 This method accepts a `TreeNode` (the root node of the printed hierarchy),
 and, optionally, an `Appendable` object, to where the output will be flushed.
 
-Alternatively, you can get the visualization as `String` via `getAsString()`,
-but in some cases this is inefficient (especially when you print large data with `ListingTreePrinter`).
+Alternatively, you can get the visualization as `String` via `getAsString()`.
+In some cases this is inefficient (especially when you print large data with `ListingTreePrinter`).
 
 It is very easy to visualize the above structure:
 
@@ -126,7 +126,7 @@ For more available printers see the `hu.webarticum.treeprinter.printer.*` packag
 Of course, `TreePrinter` implementations have many options for controlling the output.
 You can change the lining characters, the aligning, and so on.
 
-Most classes have multiple constructors and `Builder` subclasses for easy change of settings.
+Most classes have builders and some basic constructors for easy change of settings.
 For example, if we want to align everything to left:
 
 ```java
@@ -150,7 +150,8 @@ I'm a child... I'm an other child...
 ## Using decorators
 
 You can easily write node decorators by extending `AbstractTreeNodeDecorator`.
-There are built-in implementations for creating paddings and borders.
+There are built-in implementations for adding
+padding, border, shadow and other basic decorations.
 
 In the previous example the child nodes are confused, because only a single space separates them.
 It will be much cleaner if we added a border:
