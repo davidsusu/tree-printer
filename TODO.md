@@ -1,5 +1,11 @@
 # TODO list
 
+## 2.x migration
+
+- Changed package
+- Changed conventions (removed get- and create- prefix)
+- etc.
+
 ## Change formatting
 
 Use the 8-space standard, etc.
