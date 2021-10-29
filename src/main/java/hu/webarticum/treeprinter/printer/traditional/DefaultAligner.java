@@ -33,7 +33,7 @@ public class DefaultAligner implements Aligner {
     }
     
     public DefaultAligner(Alignment align, int gap) {
-        this(createBuilder().align(align).gap(gap));
+        this(builder().align(align).gap(gap));
     }
     
     private DefaultAligner(Builder builder) {
@@ -156,10 +156,10 @@ public class DefaultAligner implements Aligner {
     
     @Override
     public int collectWidths(Map<TreeNode, Integer> widthMap, TreeNode node) {
-        int contentWidth = Util.getContentDimension(node.getContent())[0];
+        int contentWidth = Util.getContentDimension(node.content())[0];
         int childrenWidth = 0;
         boolean first = true;
-        List<TreeNode> children = node.getChildren();
+        List<TreeNode> children = node.children();
         children.removeAll(Collections.singleton(null));
         for (TreeNode childNode: children) {
             if (first) {
@@ -174,7 +174,7 @@ public class DefaultAligner implements Aligner {
         return nodeWidth;
     }
     
-    public static DefaultAligner.Builder createBuilder() {
+    public static DefaultAligner.Builder builder() {
         return new Builder();
     }
     

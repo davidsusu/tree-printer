@@ -6,12 +6,12 @@ import java.util.List;
 public class PlaceholderNode extends AbstractTreeNode {
 
     @Override
-    public String getContent() {
+    public String content() {
         return "";
     }
 
     @Override
-    public List<TreeNode> getChildren() {
+    public List<TreeNode> children() {
         return new ArrayList<>(0);
     }
 

@@ -29,17 +29,17 @@ public class SimpleTreeNode extends AbstractTreeNode {
     }
 
     @Override
-    public String getContent() {
+    public String content() {
         return content;
     }
 
     @Override
-    public Insets getInsets() {
+    public Insets insets() {
         return insets;
     }
 
     @Override
-    public List<TreeNode> getChildren() {
+    public List<TreeNode> children() {
         return new ArrayList<>(children);
     }
 

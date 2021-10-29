@@ -13,11 +13,11 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     public PadTreeNodeDecorator(TreeNode decoratedNode, int pad) {
-        this(decoratedNode, createBuilder().pad(pad));
+        this(decoratedNode, builder().pad(pad));
     }
 
     public PadTreeNodeDecorator(TreeNode decoratedNode, Insets insets) {
-        this(decoratedNode, createBuilder().insets(insets));
+        this(decoratedNode, builder().insets(insets));
     }
 
     private PadTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
@@ -26,8 +26,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    public String getContent() {
-        String content = decoratedNode.getContent();
+    public String content() {
+        String content = decoratedNode.content();
 
         String[] contentLines = Util.splitToLines(content);
         int contentWidth = calculateWidth(contentLines);
@@ -75,15 +75,15 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     @Override
-    public Insets getInsets() {
-        return decoratedNode.getInsets().extendedWith(insets);
+    public Insets insets() {
+        return decoratedNode.insets().extendedWith(insets);
     }
     
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new PadTreeNodeDecorator(
             childNode,
-            createBuilder()
+            builder()
                 .decorable(decorable)
                 .inherit(inherit)
                 .forceInherit(forceInherit)
@@ -91,7 +91,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         );
     }
     
-    public static Builder createBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
     

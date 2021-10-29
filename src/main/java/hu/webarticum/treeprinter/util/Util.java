@@ -46,7 +46,7 @@ public final class Util {
         while (true) {
             List<TreeNode> newLevelNodes = new ArrayList<>();
             for (TreeNode levelNode: levelNodes) {
-                for (TreeNode childNode: levelNode.getChildren()) {
+                for (TreeNode childNode: levelNode.children()) {
                     if (childNode != null) {
                         newLevelNodes.add(childNode);
                     }

@@ -57,12 +57,12 @@ public class FsTreeNode extends AbstractTreeNode {
     }
     
     @Override
-    public String getContent() {
+    public String content() {
         return file.getName();
     }
 
     @Override
-    public List<TreeNode> getChildren() {
+    public List<TreeNode> children() {
         List<TreeNode> childNodes = new ArrayList<>();
         File[] subFileArray = file.listFiles(filter);
         if (subFileArray != null && subFileArray.length > 0) {

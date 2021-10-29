@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface TreeNode {
     
-    public String getContent();
+    public String content();
     
-    public List<TreeNode> getChildren();
+    public List<TreeNode> children();
     
-    public default TreeNode getOriginalNode() {
+    public default TreeNode originalNode() {
         return this;
     }
 
-    public default Insets getInsets() {
+    public default Insets insets() {
         return new Insets(0);
     }
 

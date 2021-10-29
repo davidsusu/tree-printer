@@ -29,7 +29,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private final char left;
     
     public BorderTreeNodeDecorator(TreeNode decoratedNode) {
-        this(decoratedNode, createBuilder());
+        this(decoratedNode, builder());
     }
 
     private BorderTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
@@ -46,8 +46,8 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     
     @Override
-    public String getContent() {
-        String content = decoratedNode.getContent();
+    public String content() {
+        String content = decoratedNode.content();
         
         String[] contentLines = Util.splitToLines(content);
         int longestLineLength = 0;
@@ -79,15 +79,15 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     @Override
-    public Insets getInsets() {
-        return decoratedNode.getInsets().extendedWith(1);
+    public Insets insets() {
+        return decoratedNode.insets().extendedWith(1);
     }
     
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new BorderTreeNodeDecorator(
             childNode,
-            createBuilder()
+            builder()
                 .decorable(decorable)
                 .inherit(inherit)
                 .forceInherit(forceInherit)
@@ -102,7 +102,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         );
     }
 
-    public static Builder createBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
     

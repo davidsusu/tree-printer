@@ -49,14 +49,14 @@ public class Main {
         System.out.println("=====================");
         System.out.println();
 
-        ListingTreePrinter.createBuilder().ascii().liningSpace("...").build().print(rootNode);
+        ListingTreePrinter.builder().ascii().liningSpace("...").build().print(rootNode);
 
         System.out.println();
         System.out.println("=====================");
         System.out.println();
 
-        ListingTreePrinter.createBuilder().displayRoot(false).align(true).build().print(
-            PadTreeNodeDecorator.createBuilder()
+        ListingTreePrinter.builder().displayRoot(false).align(true).build().print(
+            PadTreeNodeDecorator.builder()
                 .forceInherit(true)
                 .bottomPad(1)
                 .buildFor(rootNode)
@@ -68,7 +68,7 @@ public class Main {
         
         new ListingTreePrinter().print(
             new BorderTreeNodeDecorator(
-                PadTreeNodeDecorator.createBuilder()
+                PadTreeNodeDecorator.builder()
                     .verticalPad(1)
                     .horizontalPad(2)
                     .buildFor(rootNode)
@@ -81,7 +81,7 @@ public class Main {
 
         new TraditionalTreePrinter().print(
             new ShadowTreeNodeDecorator(
-                BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(
+                BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
                     new PadTreeNodeDecorator(rootNode, new Insets(0, 1))
                 )
             )

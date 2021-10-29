@@ -10,7 +10,7 @@ public interface TreePrinter {
         print(rootNode, System.out);
     }
     
-    public default String getAsString(TreeNode rootNode) {
+    public default String stringify(TreeNode rootNode) {
         StringBuilder builder = new StringBuilder();
         print(rootNode, builder);
         return builder.toString();

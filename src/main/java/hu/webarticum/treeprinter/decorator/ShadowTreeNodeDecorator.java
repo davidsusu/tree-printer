@@ -34,13 +34,13 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this.horizontalOffset = builder.horizontalOffset;
     }
 
-    public static Builder createBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
 
     @Override
-    public String getContent() {
-        List<String> lines = decoratedNode.getContent().lines().collect(Collectors.toList());
+    public String content() {
+        List<String> lines = decoratedNode.content().lines().collect(Collectors.toList());
         
         int height = lines.size();
         int width = lines.stream().mapToInt(String::length).max().orElse(0);
@@ -129,19 +129,19 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    public Insets getInsets() {
+    public Insets insets() {
         Insets shadowInsets = new Insets(
             Math.max(0, -verticalOffset),
             Math.max(0, horizontalOffset),
             Math.max(0, verticalOffset),
             Math.max(0, -horizontalOffset)
         );
-        return decoratedNode.getInsets().extendedWith(shadowInsets);
+        return decoratedNode.insets().extendedWith(shadowInsets);
     }
     
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
-        return ShadowTreeNodeDecorator.createBuilder()
+        return ShadowTreeNodeDecorator.builder()
             .decorable(decorable)
             .inherit(inherit)
             .forceInherit(forceInherit)

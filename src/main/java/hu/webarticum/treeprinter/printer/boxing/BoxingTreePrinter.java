@@ -49,7 +49,7 @@ public class BoxingTreePrinter implements TreePrinter {
     
 
     public BoxingTreePrinter() {
-        this(createBuilder());
+        this(builder());
     }
 
     private BoxingTreePrinter(Builder builder) {
@@ -74,20 +74,20 @@ public class BoxingTreePrinter implements TreePrinter {
     
     @Override
     public void print(TreeNode rootNode, Appendable out) {
-        Util.writeln(out, getAsString(rootNode));
+        Util.writeln(out, stringify(rootNode));
     }
     
     @Override
-    public String getAsString(TreeNode rootNode) {
+    public String stringify(TreeNode rootNode) {
         return getLevelAsString(rootNode, 0);
     }
     
     private String getLevelAsString(TreeNode rootNode, int level) {
-        List<TreeNode> children = rootNode.getChildren();
+        List<TreeNode> children = rootNode.children();
         if (!displayPlaceholders) {
             children.removeIf(TreeNode::isPlaceholder);
         }
-        String content = rootNode.getContent();
+        String content = rootNode.content();
         if (children.isEmpty()) {
             return boxIfEnabled(content);
         }
@@ -250,7 +250,7 @@ public class BoxingTreePrinter implements TreePrinter {
         return resultBuilder.toString();
     }
 
-    public static Builder createBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
     

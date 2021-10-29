@@ -69,7 +69,7 @@ public class Insets {
         );
     }
     
-    public static Builder createBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
     

@@ -25,7 +25,7 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    public String getContent() {
+    public String content() {
         if (decoratedNode instanceof FsTreeNode) {
             FsTreeNode fsNode = (FsTreeNode)decoratedNode;
             File file = fsNode.getFile();
@@ -35,7 +35,7 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 return file.getName() + " (" + formatFileSize(file.length()) + ")";
             }
         } else {
-            return decoratedNode.getContent();
+            return decoratedNode.content();
         }
     }
     

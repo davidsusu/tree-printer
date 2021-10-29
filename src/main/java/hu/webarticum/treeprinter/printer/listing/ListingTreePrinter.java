@@ -30,7 +30,7 @@ public class ListingTreePrinter implements TreePrinter {
     private final boolean align;
 
     public ListingTreePrinter() {
-        this(createBuilder());
+        this(builder());
     }
 
     private ListingTreePrinter(Builder builder) {
@@ -50,15 +50,15 @@ public class ListingTreePrinter implements TreePrinter {
     }
     
     private void printSub(TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
-        String content = node.getContent();
-        int connectOffset = node.getInsets().top();
+        String content = node.content();
+        int connectOffset = node.insets().top();
         
         String[] lines = Util.splitToLines(content);
         for (int i = 0; i < lines.length; i++) {
             printContentLine(out, prefix, disposition, inset, connectOffset, i, lines[i]);
         }
         
-        List<TreeNode> childNodes = new ArrayList<>(node.getChildren());
+        List<TreeNode> childNodes = new ArrayList<>(node.children());
         if (!displayPlaceholders) {
             childNodes.removeIf(TreeNode::isPlaceholder);
         }
@@ -110,7 +110,7 @@ public class ListingTreePrinter implements TreePrinter {
         return resultBuilder.toString();
     }
     
-    public static Builder createBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
     

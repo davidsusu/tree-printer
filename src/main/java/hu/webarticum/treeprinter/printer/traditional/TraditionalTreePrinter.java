@@ -50,7 +50,7 @@ public class TraditionalTreePrinter implements TreePrinter {
         
         Map<TreeNode, Position> positionMap = new HashMap<>();
         
-        String rootContent = wrappedRootNode.getContent();
+        String rootContent = wrappedRootNode.content();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
         Align rootAlign = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
         positionMap.put(wrappedRootNode, new Position(0, 0, rootAlign.bottomConnection, rootAlign.left, rootContentDimension[1]));
@@ -101,7 +101,7 @@ public class TraditionalTreePrinter implements TreePrinter {
         List<Integer> childBottoms
     ) {
         Map<TreeNode, Position> childrenPositionMap = new HashMap<>();
-        List<TreeNode> children = new ArrayList<>(node.getChildren());
+        List<TreeNode> children = new ArrayList<>(node.children());
         if (!displayPlaceholders) {
             children.removeIf(TreeNode::isPlaceholder);
         }
@@ -117,7 +117,7 @@ public class TraditionalTreePrinter implements TreePrinter {
             int childCol = childrenAlign[i];
             TreeNode childNode = children.get(i);
             int childWidth = widthMap.get(childNode);
-            String childContent = childNode.getContent();
+            String childContent = childNode.content();
             int[] childContentDimension = Util.getContentDimension(childContent);
             Align childAlign = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
             Position childPositioning = new Position(
@@ -136,7 +136,7 @@ public class TraditionalTreePrinter implements TreePrinter {
             TreeNode childNode = childEntry.getKey();
             Position childPositionItem = childEntry.getValue();
             childPositionItem.row += connectionRows;
-            buffer.write(childPositionItem.row, childPositionItem.left, childNode.getContent());
+            buffer.write(childPositionItem.row, childPositionItem.left, childNode.content());
             childBottoms.add(childPositionItem.row + childPositionItem.height);
         }
         

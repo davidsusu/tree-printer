@@ -45,13 +45,13 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     }
 
     @Override
-    public TreeNode getOriginalNode() {
-        return decoratedNode.getOriginalNode();
+    public TreeNode originalNode() {
+        return decoratedNode.originalNode();
     }
     
     @Override
-    public Insets getInsets() {
-        return decoratedNode.getInsets();
+    public Insets insets() {
+        return decoratedNode.insets();
     }
     
     @Override
@@ -65,9 +65,9 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     }
 
     @Override
-    public List<TreeNode> getChildren() {
+    public List<TreeNode> children() {
         List<TreeNode> decoratedChildren = new ArrayList<>();
-        List<TreeNode> decoratedNodeChildren = decoratedNode.getChildren();
+        List<TreeNode> decoratedNodeChildren = decoratedNode.children();
         int childCount = decoratedNodeChildren.size();
         for (int i = 0; i < childCount; i++) {
             TreeNode childNode = decoratedNodeChildren.get(i);

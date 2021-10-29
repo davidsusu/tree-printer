@@ -20,8 +20,8 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     @Override
-    public String getContent() {
-        return decoratedNode.getContent();
+    public String content() {
+        return decoratedNode.content();
     }
 
     @Override

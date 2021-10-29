@@ -90,7 +90,7 @@ for printing tree structures via the `print()` method.
 This method accepts a `TreeNode` (the root node of the printed hierarchy),
 and, optionally, an `Appendable` object, to where the output will be flushed.
 
-Alternatively, you can get the visualization as `String` via `getAsString()`.
+Alternatively, you can get the visualization as `String` via `stringify()`.
 In some cases this is inefficient (especially when you print large data with `ListingTreePrinter`).
 
 It is very easy to visualize the above structure:
@@ -132,7 +132,7 @@ For example, if we want to align everything to left:
 
 ```java
 new TraditionalTreePrinter(
-    DefaultAligner.createBuilder()
+    DefaultAligner.builder()
         .align(DefaultAligner.Alignment.LEFT)
     .build(),
     TraditionalTreePrinter.DEFAULT_LINER
@@ -179,7 +179,7 @@ Of course, you can compose as many decorators as you want:
 ```java
 new TraditionalTreePrinter().print(
     new ShadowTreeNodeDecorator(
-        BorderTreeNodeDecorator.createBuilder().wideUnicode().buildFor(
+        BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
             new PadTreeNodeDecorator(rootNode, new Insets(0, 2))
         )
     )
@@ -213,7 +213,7 @@ You can globally change the default mode with `UnicodeMode.setUnicodeAsDefault()
 The first example with ASCII rendering:
 
 ```java
-ListingTreePrinter.createBuilder().ascii().build().print(rootNode);
+ListingTreePrinter.builder().ascii().build().print(rootNode);
 ```
 
 Result:
@@ -233,12 +233,12 @@ Placeholders are useful in n-ary trees, where missing nodes matter.
 ```java
 boolean displayPlaceholders = true;
 
-TestNode alignedTree = new TestNode("ROOT");
+SimpleTreeNode alignedTree = new SimpleTreeNode("ROOT");
 alignedTree.addChild(new PlaceholderNode());
-alignedTree.addChild(new TestNode("RIGHT"));
+alignedTree.addChild(new SimpleTreeNode("RIGHT"));
 
 new TraditionalTreePrinter(displayPlaceholders).print(
-    PadTreeNodeDecorator.createBuilder().forceInherit(true).horizontalPad(3).buildFor(
+    PadTreeNodeDecorator.builder().forceInherit(true).horizontalPad(3).buildFor(
         new BorderTreeNodeDecorator(alignedTree)
     )
 );

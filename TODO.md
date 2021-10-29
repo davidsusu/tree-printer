@@ -1,10 +1,5 @@
 # TODO list
 
-## Improve code quality
-
-Remove 'get' from simple getters.
-Improve builders, rename createBuilder() to builder().
-
 ## Change formatting
 
 Use the 8-space standard, etc.

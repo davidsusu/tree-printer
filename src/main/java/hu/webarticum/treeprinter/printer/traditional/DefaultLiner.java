@@ -36,11 +36,11 @@ public class DefaultLiner implements Liner {
     private final boolean displayBracket;
 
     public DefaultLiner() {
-        this(createBuilder());
+        this(builder());
     }
 
     public DefaultLiner(boolean useUnicode) {
-        this(createBuilder().unicode(useUnicode));
+        this(builder().unicode(useUnicode));
     }
     
     private DefaultLiner(Builder builder) {
@@ -147,7 +147,7 @@ public class DefaultLiner implements Liner {
         }
     }
     
-    public static DefaultLiner.Builder createBuilder() {
+    public static DefaultLiner.Builder builder() {
         return new Builder();
     }
     
