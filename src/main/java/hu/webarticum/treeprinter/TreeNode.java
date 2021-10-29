@@ -13,7 +13,7 @@ public interface TreeNode {
     }
 
     public default Insets insets() {
-        return new Insets(0);
+        return Insets.EMPTY;
     }
 
     public default boolean isDecorable() {
