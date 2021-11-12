@@ -30,9 +30,9 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
             FsTreeNode fsNode = (FsTreeNode)decoratedNode;
             File file = fsNode.getFile();
             if (file.isDirectory()) {
-                return "(D) " + file.getName();
+                return " " + file.getName() + "/";
             } else {
-                return file.getName() + " (" + formatFileSize(file.length()) + ")";
+                return " " + file.getName() + " (" + formatFileSize(file.length()) + ")";
             }
         } else {
             return decoratedNode.content();
@@ -45,7 +45,7 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     protected String formatFileSize(long fileSize) {
-        String[] suffixes = new String[]{" KB", " MB", " GB"};
+        String[] suffixes = new String[]{" KB", " MB", " GB", " TB"};
         double floatingSize = fileSize;
         String suffix = " b";
         for (String _suffix: suffixes) {
