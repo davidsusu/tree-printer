@@ -12,9 +12,6 @@ Use the 8-space standard, etc.
 
 ##  Improve TraditionalTreePrinter
 
-Make it parallel.
-This can be achieved with fork-join strategy and a concurrent line buffer.
-
 Calculate Position taking into account the insets.
 
 ## Add DecoratorTreePrinter[?]
