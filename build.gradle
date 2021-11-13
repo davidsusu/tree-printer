@@ -19,6 +19,18 @@ repositories {
     jcenter()
 }
 
+configurations {
+    demo
+}
+
+sourceSets {
+    demo {
+        java {
+            srcDirs = ['src/demo/java']
+        }
+    }
+}
+
 dependencies {
     testCompile 'junit:junit:4.12'
 }
@@ -40,6 +52,12 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 artifacts {
     archives javadocJar, sourcesJar
+}
+
+eclipse {
+    classpath {
+        plusConfigurations.add configurations.demo
+    }
 }
 
 if (project.ext.properties.containsKey('mavenRepositoryUrl')) {

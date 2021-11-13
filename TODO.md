@@ -10,12 +10,6 @@
 
 Use the 8-space standard, etc.
 
-## Improve examples and tests
-
-Move examples to its own place (separate source set? separate project?).
-
-Add some unit tests.
-
 ##  Improve TraditionalTreePrinter
 
 Make it parallel.

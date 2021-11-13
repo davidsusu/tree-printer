@@ -1,4 +1,4 @@
-package hu.webarticum.treeprinter.example.misc;
+package hu.webarticum.treeprinter.demo;
 
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.PlaceholderNode;
@@ -10,7 +10,7 @@ import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 
-public class Main {
+public class ExamplesMain {
     
     public static void main(String[] args) {
         TestNode rootNode = new TestNode("root");
