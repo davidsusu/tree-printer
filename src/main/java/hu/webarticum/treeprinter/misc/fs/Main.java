@@ -1,4 +1,4 @@
-package hu.webarticum.treeprinter.example.fs;
+package hu.webarticum.treeprinter.misc.fs;
 
 import java.io.BufferedReader;
 import java.io.File;
