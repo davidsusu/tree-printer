@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter.demo;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.PlaceholderNode;
 import hu.webarticum.treeprinter.SimpleTreeNode;
+import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
@@ -13,6 +14,51 @@ import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 public class ExamplesMain {
     
     public static void main(String[] args) {
+        TreeNode rootNode = buildTree();
+        
+        new ListingTreePrinter().print(rootNode);
+
+        printSeparator();
+
+        ListingTreePrinter.builder().ascii().liningSpace("...").build().print(rootNode);
+
+        printSeparator();
+
+        ListingTreePrinter.builder().displayRoot(false).align(true).build().print(
+            PadTreeNodeDecorator.builder()
+                .forceInherit(true)
+                .bottomPad(1)
+                .buildFor(rootNode)
+        );
+
+        printSeparator();
+
+        new ListingTreePrinter().print(
+            new BorderTreeNodeDecorator(
+                PadTreeNodeDecorator.builder()
+                    .verticalPad(1)
+                    .horizontalPad(2)
+                    .buildFor(rootNode)
+            )
+        );
+
+        printSeparator();
+
+        new TraditionalTreePrinter().print(
+            new ShadowTreeNodeDecorator(
+                BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
+                    new PadTreeNodeDecorator(rootNode, new Insets(0, 1))
+                )
+            )
+        );
+
+        printSeparator();
+
+        new BoxingTreePrinter().print(rootNode);
+
+    }
+    
+    private static TreeNode buildTree() {
         TestNode rootNode = new TestNode("root");
         TestNode subNode1 = new TestNode("SUB asdf\nSSS fdsa\nxxx yyy");
         TestNode subNode2 = new TestNode("lorem ipsum");
@@ -43,56 +89,16 @@ public class ExamplesMain {
         subSubNode23.addChild(subSubSubNode232);
         subSubNode31.addChild(subSubSubNode311);
         
-        new ListingTreePrinter().print(rootNode);
-
+        return rootNode;
+    }
+    
+    private static void printSeparator() {
         System.out.println();
-        System.out.println("=====================");
+        for (int i = 0; i < 75; i++) {
+            System.out.print('=');
+        }
         System.out.println();
-
-        ListingTreePrinter.builder().ascii().liningSpace("...").build().print(rootNode);
-
         System.out.println();
-        System.out.println("=====================");
-        System.out.println();
-
-        ListingTreePrinter.builder().displayRoot(false).align(true).build().print(
-            PadTreeNodeDecorator.builder()
-                .forceInherit(true)
-                .bottomPad(1)
-                .buildFor(rootNode)
-        );
-
-        System.out.println();
-        System.out.println("=====================");
-        System.out.println();
-        
-        new ListingTreePrinter().print(
-            new BorderTreeNodeDecorator(
-                PadTreeNodeDecorator.builder()
-                    .verticalPad(1)
-                    .horizontalPad(2)
-                    .buildFor(rootNode)
-            )
-        );
-
-        System.out.println();
-        System.out.println("=====================");
-        System.out.println();
-
-        new TraditionalTreePrinter().print(
-            new ShadowTreeNodeDecorator(
-                BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
-                    new PadTreeNodeDecorator(rootNode, new Insets(0, 1))
-                )
-            )
-        );
-
-        System.out.println();
-        System.out.println("=====================");
-        System.out.println();
-
-        new BoxingTreePrinter().print(rootNode);
-
     }
     
     private static class TestNode extends SimpleTreeNode {
