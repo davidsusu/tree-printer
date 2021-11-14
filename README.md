@@ -14,15 +14,15 @@ natural foods
  │  ├─ mango
  │  ├─ lorem and
  │  │  ipsum
- │  │ ┌──────────────────┐
- │  │ │        ?         │
- │  ├─│    ┌───┴───┐     │
- │  │ │ orange mandarine │
- │  │ └──────────────────┘
+ │  │ ┌──────────────────────────────────┐
+ │  │ │            citroideae            │
+ │  ├─│    ┌─────┬─────┴─┬─────────┐     │
+ │  │ │ orange lemon grapefruit mandarin │
+ │  │ └──────────────────────────────────┘
  │  │ ┌────────────────────────────────┐
- │  │ │        berry-like              │
+ │  │ │         berries                │
  │  │ │     ┌──────┴───────┐           │
- │  └─│   grape          berry         │
+ │  └─│   grape          other         │
  │    │  ┌──┴─┐       ┌────┴─────┐     │
  │    │ red white strawberry raspberry │
  │    └────────────────────────────────┘
@@ -31,7 +31,7 @@ natural foods
  │  ├─ carrot
  │  │ A──────────B
  │  └─│ broccoli │
- │    C──────────D
+ │    D──────────C
  └─ seeds
     ├─ walnut
     └─ peanut
