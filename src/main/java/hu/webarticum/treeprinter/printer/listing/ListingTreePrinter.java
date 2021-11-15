@@ -12,23 +12,31 @@ public class ListingTreePrinter implements TreePrinter {
 
     private enum NodeDisposition { ROOT, GENERAL, LAST }
     
+    
     private static final String[] DEFAULT_ASCII_LINE_STRINGS = new String[] {
-        "   ", " | ", " |-", " '-", "---"
-    };
+            "   ", " | ", " |-", " '-", "---" };
 
     private static final String[] DEFAULT_UNICODE_LINE_STRINGS = new String[] {
-        "   ", " │ ", " ├─", " └─", "───"
-    };
+            "   ", " │ ", " ├─", " └─", "───" };
+    
 
     private final String liningSpace;
+    
     private final String liningGeneral;
+    
     private final String liningNode;
+    
     private final String liningLastNode;
+    
     private final String liningInset;
+    
     private final boolean displayRoot;
+    
     private final boolean displayPlaceholders;
+    
     private final boolean align;
 
+    
     public ListingTreePrinter() {
         this(builder());
     }
@@ -44,12 +52,18 @@ public class ListingTreePrinter implements TreePrinter {
         this.align = builder.align;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+    
+
     @Override
     public void print(TreeNode rootNode, Appendable out) {
         printSub(rootNode, out, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
     }
     
-    private void printSub(TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
+    private void printSub(
+            TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
         String content = node.content();
         int connectOffset = node.insets().top();
         
@@ -74,7 +88,8 @@ public class ListingTreePrinter implements TreePrinter {
         }
     }
     
-    private void printContentLine(Appendable out, String prefix, NodeDisposition disposition, int inset, int connectOffset, int i, String line) {
+    private void printContentLine(
+            Appendable out, String prefix, NodeDisposition disposition, int inset, int connectOffset, int i, String line) {
         if (disposition == NodeDisposition.ROOT) {
             if (displayRoot) {
                 Util.writeln(out, prefix + line);
@@ -110,22 +125,21 @@ public class ListingTreePrinter implements TreePrinter {
         return resultBuilder.toString();
     }
     
-    public static Builder builder() {
-        return new Builder();
-    }
     
     public static class Builder {
 
         private boolean displayRoot = true;
+        
         private boolean displayPlaceholders = false;
+        
         private boolean align = false;
         
-        private String[] lines = (
-            UnicodeMode.isUnicodeDefault() ?
-            DEFAULT_UNICODE_LINE_STRINGS :
-            DEFAULT_ASCII_LINE_STRINGS
-        ).clone();
+        private String[] lines =
+                UnicodeMode.isUnicodeDefault() ?
+                DEFAULT_UNICODE_LINE_STRINGS.clone() :
+                DEFAULT_ASCII_LINE_STRINGS.clone();
 
+                
         public Builder displayRoot(boolean displayRoot) {
             this.displayRoot = displayRoot;
             return this;

@@ -19,6 +19,7 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this.index = index;
     }
 
+    
     @Override
     public String content() {
         return decoratedNode.content();
@@ -46,7 +47,7 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return false;
         }
 
-        TrackingTreeNodeDecorator otherReferenceTreeNode = (TrackingTreeNodeDecorator)other;
+        TrackingTreeNodeDecorator otherReferenceTreeNode = (TrackingTreeNodeDecorator) other;
         TrackingTreeNodeDecorator otherParent = otherReferenceTreeNode.parent;
         
         if (this == otherReferenceTreeNode) {

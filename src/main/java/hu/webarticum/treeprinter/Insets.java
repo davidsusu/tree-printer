@@ -4,10 +4,15 @@ public class Insets {
     
     public static final Insets EMPTY = new Insets(0);
     
+    
     private final int top;
+    
     private final int right;
+    
     private final int bottom;
+    
     private final int left;
+    
     
     public Insets(int inset) {
         this(inset, inset, inset, inset);
@@ -33,6 +38,10 @@ public class Insets {
         this.bottom = builder.bottom;
         this.left = builder.left;
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
     
 
     public int top() {
@@ -53,32 +62,31 @@ public class Insets {
 
     public Insets extendedWith(int inset) {
         return new Insets(
-            this.top + inset,
-            this.right + inset,
-            this.bottom + inset,
-            this.left + inset
-        );
+                this.top + inset,
+                this.right + inset,
+                this.bottom + inset,
+                this.left + inset);
     }
     
     public Insets extendedWith(Insets other) {
         return new Insets(
-            this.top + other.top,
-            this.right + other.right,
-            this.bottom + other.bottom,
-            this.left + other.left
-        );
+                this.top + other.top,
+                this.right + other.right,
+                this.bottom + other.bottom,
+                this.left + other.left);
     }
     
-    public static Builder builder() {
-        return new Builder();
-    }
     
     public static class Builder {
 
         private int top = 0;
+        
         private int right = 0;
+        
         private int bottom = 0;
+        
         private int left = 0;
+        
 
         public void top(int top) {
             this.top = top;

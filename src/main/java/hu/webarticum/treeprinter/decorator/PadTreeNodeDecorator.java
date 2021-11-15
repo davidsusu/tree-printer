@@ -8,6 +8,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private final Insets insets;
     
+    
     public PadTreeNodeDecorator(TreeNode decoratedNode) {
         this(decoratedNode, 1);
     }
@@ -24,6 +25,11 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
         this.insets = new Insets(builder.topPad, builder.rightPad, builder.bottomPad, builder.leftPad);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+    
     
     @Override
     public String content() {
@@ -82,29 +88,32 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new PadTreeNodeDecorator(
-            childNode,
-            builder()
-                .decorable(decorable)
-                .inherit(inherit)
-                .forceInherit(forceInherit)
-                .insets(insets)
-        );
+                childNode,
+                builder()
+                        .decorable(decorable)
+                        .inherit(inherit)
+                        .forceInherit(forceInherit)
+                        .insets(insets)
+                );
     }
     
-    public static Builder builder() {
-        return new Builder();
-    }
     
     public static class Builder {
 
         private boolean decorable = true;
+        
         private boolean inherit = true;
+        
         private boolean forceInherit = false;
 
         private int topPad = 0;
+        
         private int rightPad = 0;
+        
         private int bottomPad = 0;
+        
         private int leftPad = 0;
+        
 
         public Builder decorable(boolean decorable) {
             this.decorable = decorable;

@@ -12,9 +12,11 @@ public class LineBuffer {
     
     private List<String> lines = new ArrayList<>();
     
+    
     public LineBuffer(Appendable out) {
         this.out = out;
     }
+    
     
     public void write(int row, int col, String text) {
         String[] textLines = Util.splitToLines(text);

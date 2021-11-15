@@ -24,10 +24,11 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
         super(decoratedNode, decorable, inherit, forceInherit);
     }
     
+    
     @Override
     public String content() {
         if (decoratedNode instanceof FsTreeNode) {
-            FsTreeNode fsNode = (FsTreeNode)decoratedNode;
+            FsTreeNode fsNode = (FsTreeNode) decoratedNode;
             File file = fsNode.getFile();
             if (file.isDirectory()) {
                 return " " + file.getName() + "/";

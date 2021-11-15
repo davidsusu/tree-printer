@@ -6,10 +6,6 @@
 - Changed conventions (removed get- and create- prefix)
 - etc.
 
-## Change formatting
-
-Use the 8-space standard, etc.
-
 ##  Improve TraditionalTreePrinter
 
 Calculate Position taking into account the insets.

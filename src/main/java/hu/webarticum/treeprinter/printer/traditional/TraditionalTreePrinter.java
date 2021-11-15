@@ -16,12 +16,14 @@ public class TraditionalTreePrinter implements TreePrinter {
     public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();
 
     public static final Liner DEFAULT_LINER = new DefaultLiner();
+    
 
     private final Aligner aligner;
 
     private final Liner liner;
     
     private final boolean displayPlaceholders;
+    
     
     public TraditionalTreePrinter() {
         this(DEFAULT_ALIGNER, DEFAULT_LINER);
@@ -41,6 +43,7 @@ public class TraditionalTreePrinter implements TreePrinter {
         this.displayPlaceholders = displayPlaceholders;
     }
     
+    
     @Override
     public void print(TreeNode rootNode, Appendable out) {
         TreeNode wrappedRootNode = new TrackingTreeNodeDecorator(rootNode);
@@ -53,7 +56,8 @@ public class TraditionalTreePrinter implements TreePrinter {
         String rootContent = wrappedRootNode.content();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
         Align rootAlign = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
-        positionMap.put(wrappedRootNode, new Position(0, 0, rootAlign.bottomConnection, rootAlign.left, rootContentDimension[1]));
+        Position rootPosition = new Position(0, 0, rootAlign.bottomConnection, rootAlign.left, rootContentDimension[1]);
+        positionMap.put(wrappedRootNode, rootPosition);
         
         LineBuffer buffer = new LineBuffer(out);
         
@@ -69,8 +73,7 @@ public class TraditionalTreePrinter implements TreePrinter {
     }
     
     private Map<TreeNode, Position> printNextGeneration(
-        LineBuffer buffer, Map<TreeNode, Position> positionMap, Map<TreeNode, Integer> widthMap
-    ) {
+            LineBuffer buffer, Map<TreeNode, Position> positionMap, Map<TreeNode, Integer> widthMap) {
         Map<TreeNode, Position> newPositionMap = new HashMap<>();
         List<Integer> childBottoms = new ArrayList<>();
         for (Map.Entry<TreeNode, Position> entry: positionMap.entrySet()) {
@@ -93,13 +96,12 @@ public class TraditionalTreePrinter implements TreePrinter {
     }
     
     private void handleNodeChildren(
-        LineBuffer buffer,
-        TreeNode node,
-        Position position,
-        Map<TreeNode, Position> newPositionMap,
-        Map<TreeNode, Integer> widthMap,
-        List<Integer> childBottoms
-    ) {
+            LineBuffer buffer,
+            TreeNode node,
+            Position position,
+            Map<TreeNode, Position> newPositionMap,
+            Map<TreeNode, Integer> widthMap,
+            List<Integer> childBottoms) {
         Map<TreeNode, Position> childrenPositionMap = new HashMap<>();
         List<TreeNode> children = new ArrayList<>(node.children());
         if (!displayPlaceholders) {
@@ -121,16 +123,17 @@ public class TraditionalTreePrinter implements TreePrinter {
             int[] childContentDimension = Util.getContentDimension(childContent);
             Align childAlign = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
             Position childPositioning = new Position(
-                position.row + position.height, childCol,
-                childAlign.bottomConnection, childAlign.left, childContentDimension[1]
-            );
+                    position.row + position.height,
+                    childCol,
+                    childAlign.bottomConnection,
+                    childAlign.left,
+                    childContentDimension[1]);
             childrenPositionMap.put(childNode, childPositioning);
             childConnections.add(childAlign.topConnection);
         }
         
         int connectionRows = liner.printConnections(
-            buffer, position.row + position.height, position.connection, childConnections
-        );
+                buffer, position.row + position.height, position.connection, childConnections);
         
         for (Map.Entry<TreeNode, Position> childEntry: childrenPositionMap.entrySet()) {
             TreeNode childNode = childEntry.getKey();
@@ -143,6 +146,7 @@ public class TraditionalTreePrinter implements TreePrinter {
         newPositionMap.putAll(childrenPositionMap);
     }
     
+    
     private class Position {
         
         int row;
@@ -154,6 +158,7 @@ public class TraditionalTreePrinter implements TreePrinter {
         int left;
         
         int height;
+        
 
         Position(int row, int col, int connection, int left, int height) {
             this.row = row;

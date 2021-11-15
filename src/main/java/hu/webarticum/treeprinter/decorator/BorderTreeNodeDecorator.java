@@ -8,25 +8,31 @@ import hu.webarticum.treeprinter.util.Util;
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private static final char[] BORDER_CHARS_ASCII = new char[] {
-        '.', '-', '.', '|', '\'', '-', '`', '|'
-    };
+            '.', '-', '.', '|', '\'', '-', '`', '|' };
     
     private static final char[] BORDER_CHARS_UNICODE = new char[] {
-        '┌', '─', '┐', '│', '┘', '─', '└', '│',
-    };
+            '┌', '─', '┐', '│', '┘', '─', '└', '│' };
 
     private static final char[] BORDER_CHARS_WIDE_UNICODE = new char[] {
-        '\u259B', '\u2594', '\u259C', '\u2595', '\u259F', '\u2581', '\u2599', '\u258F'
-    };
+            '\u259B', '\u2594', '\u259C', '\u2595', '\u259F', '\u2581', '\u2599', '\u258F' };
+    
     
     private final char topLeft;
+    
     private final char top;
+    
     private final char topRight;
+    
     private final char right;
+    
     private final char bottomRight;
+    
     private final char bottom;
+    
     private final char bottomLeft;
+    
     private final char left;
+    
     
     public BorderTreeNodeDecorator(TreeNode decoratedNode) {
         this(decoratedNode, builder());
@@ -44,6 +50,10 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this.left = builder.characters[7];
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+    
     
     @Override
     public String content() {
@@ -86,37 +96,36 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return new BorderTreeNodeDecorator(
-            childNode,
-            builder()
-                .decorable(decorable)
-                .inherit(inherit)
-                .forceInherit(forceInherit)
-                .topLeft(topLeft)
-                .top(top)
-                .topRight(topRight)
-                .right(right)
-                .bottomRight(bottomRight)
-                .bottom(bottom)
-                .bottomLeft(bottomLeft)
-                .left(left)
-        );
+                childNode,
+                builder()
+                        .decorable(decorable)
+                        .inherit(inherit)
+                        .forceInherit(forceInherit)
+                        .topLeft(topLeft)
+                        .top(top)
+                        .topRight(topRight)
+                        .right(right)
+                        .bottomRight(bottomRight)
+                        .bottom(bottom)
+                        .bottomLeft(bottomLeft)
+                        .left(left)
+                );
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
     
     public static class Builder {
 
         private boolean decorable = true;
+        
         private boolean inherit = true;
+        
         private boolean forceInherit = false;
 
-        private char[] characters = (
-            UnicodeMode.isUnicodeDefault() ?
-            BORDER_CHARS_UNICODE :
-            BORDER_CHARS_ASCII
-        ).clone();
+        private char[] characters =
+                UnicodeMode.isUnicodeDefault() ?
+                BORDER_CHARS_UNICODE.clone() :
+                BORDER_CHARS_ASCII.clone();
+        
         
         public Builder decorable(boolean decorable) {
             this.decorable = decorable;

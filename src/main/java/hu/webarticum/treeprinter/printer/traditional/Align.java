@@ -8,6 +8,7 @@ public class Align {
 
     public final int bottomConnection;
 
+    
     public Align(int left, int topConnection, int bottomConnection) {
         this.left = left;
         this.topConnection = topConnection;

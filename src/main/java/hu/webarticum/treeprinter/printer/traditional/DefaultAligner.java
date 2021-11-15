@@ -13,17 +13,28 @@ public class DefaultAligner implements Aligner {
 
     public enum ConnectMode { CONTENT, CONTEXT }
     
+    
     private final Alignment contentAlign;
+    
     private final int contentOffset;
+    
     private final ConnectMode topConnectionConnect;
+    
     private final Alignment topConnectionAlign;
+    
     private final int topConnectionOffset;
+    
     private final ConnectMode bottomConnectionConnect;
+    
     private final Alignment bottomConnectionAlign;
+    
     private final int bottomConnectionOffset;
+    
     private final Alignment childrenAlign;
+    
     private final int gap;
 
+    
     public DefaultAligner() {
         this(Alignment.CENTER);
     }
@@ -49,6 +60,11 @@ public class DefaultAligner implements Aligner {
         this.gap = builder.gap;
     }
 
+    public static DefaultAligner.Builder builder() {
+        return new Builder();
+    }
+    
+    
     @Override
     public Align alignNode(TreeNode node, int position, int width, int contentWidth) {
         int contentMaxLeft = position + width - contentWidth;
@@ -72,7 +88,8 @@ public class DefaultAligner implements Aligner {
         return restrictInt(relativeLeft + contentOffset, 0, contentMaxLeft);
     }
     
-    private int calculateTopConnection(int left, int position, int width, int contentWidth, int connectionMaxLeft) {
+    private int calculateTopConnection(
+            int left, int position, int width, int contentWidth, int connectionMaxLeft) {
         int relativeTopConnection;
         if (topConnectionConnect == ConnectMode.CONTENT) {
             if (topConnectionAlign == Alignment.LEFT) {
@@ -95,7 +112,8 @@ public class DefaultAligner implements Aligner {
         return restrictInt(relativeTopConnection + topConnectionOffset, 0, connectionMaxLeft);
     }
     
-    private int calculateBottomConnection(int left, int position, int width, int contentWidth, int connectionMaxLeft) {
+    private int calculateBottomConnection(
+            int left, int position, int width, int contentWidth, int connectionMaxLeft) {
         int bottomConnection;
         if (bottomConnectionConnect == ConnectMode.CONTENT) {
             if (bottomConnectionAlign == Alignment.LEFT) {
@@ -123,7 +141,8 @@ public class DefaultAligner implements Aligner {
     }
     
     @Override
-    public int[] alignChildren(TreeNode parentNode, List<TreeNode> children, int position, Map<TreeNode, Integer> widthMap) {
+    public int[] alignChildren(
+            TreeNode parentNode, List<TreeNode> children, int position, Map<TreeNode, Integer> widthMap) {
         int[] result = new int[children.size()];
         int childrenCount = children.size();
         int childrenWidth = 0;
@@ -174,23 +193,30 @@ public class DefaultAligner implements Aligner {
         return nodeWidth;
     }
     
-    public static DefaultAligner.Builder builder() {
-        return new Builder();
-    }
     
     public static class Builder {
 
         private Alignment contentAlign = Alignment.CENTER;
+        
         private int contentOffset = 0;
+        
         private ConnectMode topConnectionConnect = ConnectMode.CONTENT;
+        
         private Alignment topConnectionAlign = Alignment.CENTER;
+        
         private int topConnectionOffset = 0;
+        
         private ConnectMode bottomConnectionConnect = ConnectMode.CONTENT;
+        
         private Alignment bottomConnectionAlign = Alignment.CENTER;
+        
         private int bottomConnectionOffset = 0;
+        
         private Alignment childrenAlign = Alignment.CENTER;
+        
         private int gap = 1;
 
+        
         public DefaultAligner.Builder align(Alignment align) {
             this.contentAlign = align;
             this.topConnectionAlign = align;

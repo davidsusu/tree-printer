@@ -10,6 +10,7 @@ public class SimpleTreeNode extends AbstractTreeNode {
     protected final Insets insets;
     
     protected List<TreeNode> children = new ArrayList<>();
+    
 
     public SimpleTreeNode(String content) {
         this(content, Insets.EMPTY);
@@ -20,6 +21,7 @@ public class SimpleTreeNode extends AbstractTreeNode {
         this.insets = insets;
     }
 
+    
     public void addChild(TreeNode childNode) {
         if (childNode == null) {
             throw new IllegalArgumentException("Child node must not be null, use placeholder instead");

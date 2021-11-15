@@ -9,32 +9,45 @@ import hu.webarticum.treeprinter.util.Util;
 public class DefaultLiner implements Liner {
 
     private static final char[] LINE_CHARS_ASCII = new char[] {
-        '|', ' ', '_', '|', '|', '|', '_', '|', '|', '|', ' ',  '|', '|'
-    };
+            '|', ' ', '_', '|', '|', '|', '_', '|', '|', '|', ' ',  '|', '|' };
     
     private static final char[] LINE_CHARS_UNICODE = new char[] {
-        '│', '┌', '─', '┴', '└', '┘', '┬', '┼', '├', '┤', '┐', '│', '│'
-    };
+            '│', '┌', '─', '┴', '└', '┘', '┬', '┼', '├', '┤', '┐', '│', '│' };
+    
     
     private final char topConnectionChar;
+    
     private final char bracketLeftChar;
+    
     private final char bracketChar;
+    
     private final char bracketTopChar;
+    
     private final char bracketTopLeftChar;
+    
     private final char bracketTopRightChar;
+    
     private final char bracketBottomChar;
+    
     private final char bracketTopAndBottomChar;
+    
     private final char bracketTopAndBottomLeftChar;
+    
     private final char bracketTopAndBottomRightChar;
+    
     private final char bracketRightChar;
+    
     private final char bracketOnlyChar;
+    
     private final char bottomConnectionChar;
 
     private final int topHeight;
+    
     private final int bottomHeight;
 
     private final boolean displayBracket;
 
+    
     public DefaultLiner() {
         this(builder());
     }
@@ -61,6 +74,11 @@ public class DefaultLiner implements Liner {
         this.bottomHeight = builder.bottomHeight;
         this.displayBracket = builder.displayBracket;
     }
+
+    public static DefaultLiner.Builder builder() {
+        return new Builder();
+    }
+    
     
     @Override
     public int printConnections(LineBuffer buffer, int row, int topConnection, List<Integer> bottomConnections) {
@@ -147,22 +165,21 @@ public class DefaultLiner implements Liner {
         }
     }
     
-    public static DefaultLiner.Builder builder() {
-        return new Builder();
-    }
     
     public static class Builder {
 
         private int topHeight = 0;
+        
         private int bottomHeight = 1;
+        
         private boolean displayBracket = true;
         
-        private char[] characters = (
-            UnicodeMode.isUnicodeDefault() ?
-            LINE_CHARS_UNICODE :
-            LINE_CHARS_ASCII
-        ).clone();
+        private char[] characters =
+                UnicodeMode.isUnicodeDefault() ?
+                LINE_CHARS_UNICODE.clone() :
+                LINE_CHARS_ASCII.clone();
 
+                
         public DefaultLiner.Builder topHeight(int topHeight) {
             this.topHeight = topHeight;
             return this;

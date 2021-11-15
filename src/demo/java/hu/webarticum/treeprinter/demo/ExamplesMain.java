@@ -25,32 +25,29 @@ public class ExamplesMain {
         printSeparator();
 
         ListingTreePrinter.builder().displayRoot(false).align(true).build().print(
-            PadTreeNodeDecorator.builder()
-                .forceInherit(true)
-                .bottomPad(1)
-                .buildFor(rootNode)
-        );
+                PadTreeNodeDecorator.builder()
+                        .forceInherit(true)
+                        .bottomPad(1)
+                        .buildFor(rootNode)
+                );
 
         printSeparator();
 
         new ListingTreePrinter().print(
-            new BorderTreeNodeDecorator(
-                PadTreeNodeDecorator.builder()
-                    .verticalPad(1)
-                    .horizontalPad(2)
-                    .buildFor(rootNode)
-            )
-        );
+                new BorderTreeNodeDecorator(
+                        PadTreeNodeDecorator.builder()
+                                .verticalPad(1)
+                                .horizontalPad(2)
+                                .buildFor(rootNode)
+                        ));
 
         printSeparator();
 
         new TraditionalTreePrinter().print(
-            new ShadowTreeNodeDecorator(
-                BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
-                    new PadTreeNodeDecorator(rootNode, new Insets(0, 1))
-                )
-            )
-        );
+                new ShadowTreeNodeDecorator(
+                        BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
+                                new PadTreeNodeDecorator(rootNode, new Insets(0, 1))
+                                )));
 
         printSeparator();
 

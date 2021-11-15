@@ -178,13 +178,14 @@ Result:
 Of course, you can compose as many decorators as you want:
 
 ```java
-new TraditionalTreePrinter().print(
-    new ShadowTreeNodeDecorator(
-        BorderTreeNodeDecorator.builder().wideUnicode().buildFor(
-            new PadTreeNodeDecorator(rootNode, new Insets(0, 2))
-        )
-    )
-);
+TreeNode decoratedTreeNode = new ShadowTreeNodeDecorator(
+        BorderTreeNodeDecorator.builder()
+                .wideUnicode()
+                .buildFor(
+                        new PadTreeNodeDecorator(rootNode, new Insets(0, 2)))
+        );
+
+new TraditionalTreePrinter().print(decoratedTreeNode);
 ```
 
 Result:
@@ -239,10 +240,11 @@ alignedTree.addChild(new PlaceholderNode());
 alignedTree.addChild(new SimpleTreeNode("RIGHT"));
 
 new TraditionalTreePrinter(displayPlaceholders).print(
-    PadTreeNodeDecorator.builder().forceInherit(true).horizontalPad(3).buildFor(
-        new BorderTreeNodeDecorator(alignedTree)
-    )
-);
+        PadTreeNodeDecorator.builder()
+                .forceInherit(true)
+                .horizontalPad(3)
+                .buildFor(new BorderTreeNodeDecorator(alignedTree))
+        );
 ```
 
 ```

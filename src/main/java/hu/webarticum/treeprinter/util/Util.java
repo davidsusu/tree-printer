@@ -9,7 +9,6 @@ import hu.webarticum.treeprinter.TreeNode;
 
 public final class Util {
     
-    // FIXME: use Bee?
     private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\\R");
     
     
@@ -17,7 +16,6 @@ public final class Util {
         // utility class
     }
     
-    // TODO: create a general Dimension class
     public static int[] getContentDimension(String content) {
         String[] lines = splitToLines(content);
         int longestLineLength = getMaxLength(lines);

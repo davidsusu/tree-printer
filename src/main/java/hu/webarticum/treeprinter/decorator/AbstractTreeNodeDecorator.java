@@ -16,6 +16,7 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
     protected final boolean inherit;
     
     protected final boolean forceInherit;
+    
 
     public AbstractTreeNodeDecorator(TreeNode decoratedNode) {
         this(decoratedNode, decoratedNode.isDecorable(), true, false);
@@ -39,6 +40,7 @@ public abstract class AbstractTreeNodeDecorator extends AbstractTreeNode {
         this.inherit = inherit;
         this.forceInherit = forceInherit;
     }
+    
     
     public TreeNode getDecoratedNode() {
         return decoratedNode;

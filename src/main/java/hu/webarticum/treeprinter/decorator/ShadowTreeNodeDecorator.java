@@ -22,6 +22,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private final int verticalOffset;
     
     private final int horizontalOffset;
+    
 
     public ShadowTreeNodeDecorator(TreeNode decoratedNode) {
         this(decoratedNode, new Builder());
@@ -37,6 +38,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     public static Builder builder() {
         return new Builder();
     }
+    
 
     @Override
     public String content() {
@@ -131,25 +133,24 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     public Insets insets() {
         Insets shadowInsets = new Insets(
-            Math.max(0, -verticalOffset),
-            Math.max(0, horizontalOffset),
-            Math.max(0, verticalOffset),
-            Math.max(0, -horizontalOffset)
-        );
+                Math.max(0, -verticalOffset),
+                Math.max(0, horizontalOffset),
+                Math.max(0, verticalOffset),
+                Math.max(0, -horizontalOffset));
         return decoratedNode.insets().extendedWith(shadowInsets);
     }
     
     @Override
     protected TreeNode decorateChild(TreeNode childNode, int index) {
         return ShadowTreeNodeDecorator.builder()
-            .decorable(decorable)
-            .inherit(inherit)
-            .forceInherit(forceInherit)
-            .shadowChar(shadowChar)
-            .verticalOffset(verticalOffset)
-            .horizontalOffset(horizontalOffset)
-            .buildFor(childNode)
-        ;
+                .decorable(decorable)
+                .inherit(inherit)
+                .forceInherit(forceInherit)
+                .shadowChar(shadowChar)
+                .verticalOffset(verticalOffset)
+                .horizontalOffset(horizontalOffset)
+                .buildFor(childNode)
+                ;
     }
     
     public static class Builder {
@@ -161,15 +162,15 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         private boolean forceInherit = false;
 
         private char shadowChar =
-            UnicodeMode.isUnicodeDefault() ?
-            UNICODE_SHADOW_CHAR :
-            ASCII_SHADOW_CHAR
-        ;
+                UnicodeMode.isUnicodeDefault() ?
+                UNICODE_SHADOW_CHAR :
+                ASCII_SHADOW_CHAR;
         
         private int verticalOffset = 1;
         
         private int horizontalOffset = 1;
 
+        
         public Builder decorable(boolean decorable) {
             this.decorable = decorable;
             return this;
@@ -206,5 +207,4 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
     }
     
-
 }

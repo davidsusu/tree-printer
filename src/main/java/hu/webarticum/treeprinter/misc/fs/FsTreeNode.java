@@ -12,6 +12,11 @@ import hu.webarticum.treeprinter.AbstractTreeNode;
 import hu.webarticum.treeprinter.TreeNode;
 
 public class FsTreeNode extends AbstractTreeNode {
+
+    public static final FileFilter DEFAULT_FILE_FILTER = fileItem -> !fileItem.isHidden();
+    
+    public static final Comparator<File> DEFAULT_COMPARATOR = FsTreeNode::compareFiles;
+    
     
     private final File file;
     
@@ -20,10 +25,7 @@ public class FsTreeNode extends AbstractTreeNode {
     private final Comparator<File> comparator;
     
     private final boolean decorable;
-
-    public static final FileFilter DEFAULT_FILE_FILTER = fileItem -> !fileItem.isHidden();
     
-    public static final Comparator<File> DEFAULT_COMPARATOR = FsTreeNode::compareFiles;
     
     public FsTreeNode() {
         this(new File("."));
@@ -39,6 +41,7 @@ public class FsTreeNode extends AbstractTreeNode {
         this.comparator = comparator;
         this.decorable = decorable;
     }
+    
     
     private static int compareFiles(File file1, File file2) {
         if (file1.isDirectory()) {
