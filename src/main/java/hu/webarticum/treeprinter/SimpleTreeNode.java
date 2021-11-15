@@ -5,11 +5,11 @@ import java.util.List;
 
 public class SimpleTreeNode extends AbstractTreeNode {
 
-    protected final String content;
+    private final String content;
     
-    protected final Insets insets;
+    private final Insets insets;
     
-    protected List<TreeNode> children = new ArrayList<>();
+    private List<TreeNode> children = new ArrayList<>();
     
 
     public SimpleTreeNode(String content) {
