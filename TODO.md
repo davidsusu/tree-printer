@@ -10,6 +10,8 @@
 
 Calculate Position taking into account the insets.
 
+Optionally (default?), use middle of the connection line instead of full contents.
+
 ## Add DecoratorTreePrinter[?]
 
 Example:
