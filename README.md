@@ -71,7 +71,8 @@ In maven projects:
 A *tree* is a hierarchical structure built from *nodes*.
 Any tree is given by its root node.
 
-Nodes implement the `TreeNode` interface, and there is an `AbstractTreeNode` as a bootstrap for a custom implementation.
+Nodes implement the `TreeNode` interface,
+and there is an `AbstractTreeNode` as a bootstrap for a custom implementation.
 
 You can use `SimpleTreeNode` out-of-the-box as a default string-based implementation:
 
@@ -81,7 +82,7 @@ rootNode.addChild(new SimpleTreeNode("I'm a child..."));
 rootNode.addChild(new SimpleTreeNode("I'm an other child..."));
 ```
 
-However, you are free to implement your custom nodes, see the `fs` package for an example.
+However, you are free to implement your custom nodes.
 
 ## Printing a tree
 
