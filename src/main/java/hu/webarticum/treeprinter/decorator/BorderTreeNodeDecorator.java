@@ -60,13 +60,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         String content = decoratedNode.content();
         
         String[] contentLines = Util.splitToLines(content);
-        int longestLineLength = 0;
-        for (String line: contentLines) {
-            int lineLength = line.length();
-            if (lineLength > longestLineLength) {
-                longestLineLength = lineLength;
-            }
-        }
+        int longestLineLength = Util.getMaxLength(contentLines);
         
         StringBuilder resultBuilder = new StringBuilder();
         

@@ -36,24 +36,13 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         String content = decoratedNode.content();
 
         String[] contentLines = Util.splitToLines(content);
-        int contentWidth = calculateWidth(contentLines);
+        int contentWidth = Util.getMaxLength(contentLines);
 
         StringBuilder resultBuilder = new StringBuilder();
         appendTopPadding(resultBuilder, contentWidth);
         appendPaddedContentLines(resultBuilder, contentLines, contentWidth);
         appendBottomPadding(resultBuilder, contentWidth);
         return resultBuilder.toString();
-    }
-    
-    private int calculateWidth(String[] lines) {
-        int longestLineLength = 0;
-        for (String line: lines) {
-            int lineLength = line.length();
-            if (lineLength > longestLineLength) {
-                longestLineLength = lineLength;
-            }
-        }
-        return longestLineLength;
     }
     
     private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
