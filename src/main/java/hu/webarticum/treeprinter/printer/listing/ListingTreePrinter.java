@@ -14,10 +14,10 @@ public class ListingTreePrinter implements TreePrinter {
     
     
     private static final String[] DEFAULT_ASCII_LINE_STRINGS = new String[] {
-            "   ", " | ", " |-", " '-", "---" };
+            "   ", " | ", " |-", " '-", "---", "-+-" };
 
     private static final String[] DEFAULT_UNICODE_LINE_STRINGS = new String[] {
-            "   ", " │ ", " ├─", " └─", "───" };
+            "   ", " │ ", " ├─", " └─", "───", "─┬─" };
     
 
     private final String liningSpace;
@@ -30,11 +30,15 @@ public class ListingTreePrinter implements TreePrinter {
     
     private final String liningInset;
     
+    private final String liningSub;
+    
     private final boolean displayRoot;
     
     private final boolean displayPlaceholders;
     
     private final boolean align;
+    
+    private final boolean connectAlignedChildren;
 
     
     public ListingTreePrinter() {
@@ -47,9 +51,11 @@ public class ListingTreePrinter implements TreePrinter {
         this.liningNode = builder.lines[2];
         this.liningLastNode = builder.lines[3];
         this.liningInset = builder.lines[4];
+        this.liningSub = builder.lines[5];
         this.displayRoot = builder.displayRoot;
         this.displayPlaceholders = builder.displayPlaceholders;
         this.align = builder.align;
+        this.connectAlignedChildren = builder.connectAlignedChildren;
     }
 
     public static Builder builder() {
@@ -66,16 +72,17 @@ public class ListingTreePrinter implements TreePrinter {
             TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
         String content = node.content();
         int connectOffset = node.insets().top();
-        
-        String[] lines = Util.splitToLines(content);
-        for (int i = 0; i < lines.length; i++) {
-            printContentLine(out, prefix, disposition, inset, connectOffset, i, lines[i]);
-        }
-        
+
         List<TreeNode> childNodes = new ArrayList<>(node.children());
         if (!displayPlaceholders) {
             childNodes.removeIf(TreeNode::isPlaceholder);
         }
+        
+        String[] lines = Util.splitToLines(content);
+        for (int i = 0; i < lines.length; i++) {
+            printContentLine(out, prefix, disposition, !childNodes.isEmpty(), inset, connectOffset, i, lines[i]);
+        }
+        
         int childNodeCount = childNodes.size();
         for (int i = 0; i < childNodeCount; i++) {
             TreeNode childNode = childNodes.get(i);
@@ -89,7 +96,14 @@ public class ListingTreePrinter implements TreePrinter {
     }
     
     private void printContentLine(
-            Appendable out, String prefix, NodeDisposition disposition, int inset, int connectOffset, int i, String line) {
+            Appendable out,
+            String prefix,
+            NodeDisposition disposition,
+            boolean hasChildren,
+            int inset,
+            int connectOffset,
+            int i,
+            String line) {
         if (disposition == NodeDisposition.ROOT) {
             if (displayRoot) {
                 Util.writeln(out, prefix + line);
@@ -97,11 +111,12 @@ public class ListingTreePrinter implements TreePrinter {
             return;
         }
         
-        String itemPrefix = buildItemPrefix(disposition, inset, connectOffset, i);
+        String itemPrefix = buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
         Util.writeln(out, prefix + itemPrefix + line);
     }
     
-    private String buildItemPrefix(NodeDisposition disposition, int inset, int connectOffset, int i) {
+    private String buildItemPrefix(
+            NodeDisposition disposition, boolean hasChildren, int inset, int connectOffset, int i) {
         StringBuilder resultBuilder = new StringBuilder();
         
         boolean isLast = disposition == NodeDisposition.LAST;
@@ -115,13 +130,22 @@ public class ListingTreePrinter implements TreePrinter {
         
         if (inset > 0) {
             String insetString = (i == connectOffset) ? liningInset : liningSpace;
+            String firstInsetString = insetString;
+            if (align && connectAlignedChildren && hasChildren) {
+                if (i == connectOffset) {
+                    firstInsetString = liningSub;
+                } else if (i > connectOffset) {
+                    firstInsetString = liningGeneral;
+                }
+            }
             StringBuilder insetBuilder = new StringBuilder();
-            for (int j = 0; j < inset; j++) {
+            insetBuilder.append(firstInsetString);
+            for (int j = 1; j < inset; j++) {
                 insetBuilder.append(insetString);
             }
             resultBuilder.append(insetBuilder.toString());
         }
-        
+
         return resultBuilder.toString();
     }
     
@@ -133,6 +157,8 @@ public class ListingTreePrinter implements TreePrinter {
         private boolean displayPlaceholders = false;
         
         private boolean align = false;
+        
+        private boolean connectAlignedChildren = true;
         
         private String[] lines =
                 UnicodeMode.isUnicodeDefault() ?
@@ -152,6 +178,11 @@ public class ListingTreePrinter implements TreePrinter {
 
         public Builder align(boolean align) {
             this.align = align;
+            return this;
+        }
+        
+        public Builder connectAlignedChildren(boolean connectAlignedChildren) {
+            this.connectAlignedChildren = connectAlignedChildren;
             return this;
         }
         

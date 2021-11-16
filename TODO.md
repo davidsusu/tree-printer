@@ -25,25 +25,6 @@ new DecoratorTreePrinter(
 );
 ```
 
-## Improve ListingTreePrinter
-### (connected lines in aligned mode)
-
-Optionally?
-
-    root
-     |--+----sub1-line1
-     |  |    sub1-line2
-     |  |    sub1-line2
-     |  |
-     |  '--+-sub1.1
-     |     |
-     |     |-sub1.1.1
-     |     |
-     |     '-sub1.1.2
-     |
-     '-------sub2
-
-
 ## Add CompactBinaryTreePrinter
 
 Can be buffered
