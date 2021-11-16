@@ -27,20 +27,16 @@ new DecoratorTreePrinter(
 
 ## Add CompactBinaryTreePrinter
 
-Can be buffered
-
         A
        / \
       B   C
      / \   \
     D   E   F
      \     / \
-      G   /   \
+      G   /   I
+         /   / \
+        H   L   M
+       / \   \
+      J   K   O
          /     \
-        H       I
-       / \     / \
-      J   K   L   M
-         /     \
-        N       O
-                 \
-                  P
+        N       P
