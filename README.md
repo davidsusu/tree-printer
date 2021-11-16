@@ -133,10 +133,10 @@ For example, if we want to align everything to left:
 
 ```java
 new TraditionalTreePrinter(
-    DefaultAligner.builder()
-        .align(DefaultAligner.Alignment.LEFT)
-    .build(),
-    TraditionalTreePrinter.DEFAULT_LINER
+        DefaultAligner.builder()
+                .align(DefaultAligner.Alignment.LEFT)
+        .build(),
+        TraditionalTreePrinter.DEFAULT_LINER
 ).print(rootNode);
 ```
 
