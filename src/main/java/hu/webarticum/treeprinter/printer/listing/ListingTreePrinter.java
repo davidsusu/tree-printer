@@ -128,25 +128,33 @@ public class ListingTreePrinter implements TreePrinter {
             resultBuilder.append(isLast ? liningSpace : liningGeneral);
         }
         
-        if (inset > 0) {
-            String insetString = (i == connectOffset) ? liningInset : liningSpace;
-            String firstInsetString = insetString;
-            if (align && connectAlignedChildren && hasChildren) {
-                if (i == connectOffset) {
-                    firstInsetString = liningSub;
-                } else if (i > connectOffset) {
-                    firstInsetString = liningGeneral;
-                }
-            }
-            StringBuilder insetBuilder = new StringBuilder();
-            insetBuilder.append(firstInsetString);
-            for (int j = 1; j < inset; j++) {
-                insetBuilder.append(insetString);
-            }
-            resultBuilder.append(insetBuilder.toString());
-        }
+        String insetString = buildInsets(hasChildren, inset, connectOffset, i);
+        resultBuilder.append(insetString);
 
         return resultBuilder.toString();
+    }
+    
+    private String buildInsets(boolean hasChildren, int inset, int connectOffset, int i) {
+        if (inset == 0) {
+            return "";
+        }
+
+        String insetString = (i == connectOffset) ? liningInset : liningSpace;
+        String firstInsetString = insetString;
+        if (align && connectAlignedChildren && hasChildren) {
+            if (i == connectOffset) {
+                firstInsetString = liningSub;
+            } else if (i > connectOffset) {
+                firstInsetString = liningGeneral;
+            }
+        }
+        StringBuilder insetBuilder = new StringBuilder();
+        insetBuilder.append(firstInsetString);
+        for (int j = 1; j < inset; j++) {
+            insetBuilder.append(insetString);
+        }
+        
+        return insetBuilder.toString();
     }
     
     
