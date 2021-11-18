@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
-import hu.webarticum.treeprinter.printer.UnicodeMode;
+import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
 
 public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {

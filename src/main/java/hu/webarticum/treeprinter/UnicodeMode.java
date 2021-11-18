@@ -1,4 +1,4 @@
-package hu.webarticum.treeprinter.printer;
+package hu.webarticum.treeprinter;
 
 public final class UnicodeMode {
     

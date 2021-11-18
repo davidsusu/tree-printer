@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
-import hu.webarticum.treeprinter.printer.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
 
 public class ListingTreePrinter implements TreePrinter {
