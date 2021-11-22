@@ -6,6 +6,10 @@
 - Changed conventions (removed get- and create- prefix)
 - etc.
 
+## Add minimal documentation to code
+
+Add useful doc comments to classes
+
 ##  Improve TraditionalTreePrinter
 
 Calculate Position taking into account the insets.
