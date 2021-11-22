@@ -1,33 +1,45 @@
 # TODO list
 
-## 2.x migration
+## For v2.0.0
+
+### Add 2.x migration guide list to TODO.md
 
 - Changed package
 - Changed conventions (removed get- and create- prefix)
 - etc.
 
-## Add minimal documentation to code
+### Add minimal documentation to code
 
 Add useful doc comments to classes
 
-##  Improve TraditionalTreePrinter
+## For v2.1.0
 
-Calculate Position taking into account the insets.
+### Add CompactBinaryTreePrinter
 
-Optionally (default?), use middle of the connection line instead of full contents.
+Something like this (H?!):
 
-## Add CompactBinaryTreePrinter
+```
+    A
+   / \
+  B   C
+ / \   \
+D   E   F
+ \     / \
+  G   /   I
+     /   / \
+    H   L   M
+   / \   \
+  J   K   O
+     /     \
+    N       P
+```
 
-        A
-       / \
-      B   C
-     / \   \
-    D   E   F
-     \     / \
-      G   /   I
-         /   / \
-        H   L   M
-       / \   \
-      J   K   O
-         /     \
-        N       P
+## For v3.0.0
+
+### Create an enhanced version of TraditionalTreePrinter
+
+- Inherit major features of the previous TraditionalTreePrinte
+- Make it recursively composed
+- fit the right side of the left and left side of the right subtree
+- Calculate Position taking into account the insets.
+- Use middle of the connection line instead of full contents.
