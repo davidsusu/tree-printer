@@ -159,10 +159,12 @@ public class DefaultAligner implements Aligner {
             childrenWidth += childWidth;
         }
         int parentWidth = widthMap.get(parentNode);
-        int offset = 0;
-        if (childrenAlign == Alignment.RIGHT) {
+        int offset;
+        if (childrenAlign == Alignment.LEFT) {
+            offset = 0;
+        } else if (childrenAlign == Alignment.RIGHT) {
             offset = parentWidth - childrenWidth;
-        } else if (childrenAlign == Alignment.CENTER) {
+        } else {
             offset = (parentWidth - childrenWidth) / 2;
         }
         if (offset > 0) {
