@@ -56,12 +56,13 @@ public class TraditionalTreePrinter implements TreePrinter {
         String rootContent = wrappedRootNode.content();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
         Align rootAlign = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
-        Position rootPosition = new Position(0, 0, rootAlign.bottomConnection, rootAlign.left, rootContentDimension[1]);
+        Position rootPosition = new Position(
+                0, 0, rootAlign.bottomConnection(), rootAlign.left(), rootContentDimension[1]);
         positionMap.put(wrappedRootNode, rootPosition);
         
         LineBuffer buffer = new LineBuffer(out);
         
-        buffer.write(0, rootAlign.left, rootContent);
+        buffer.write(0, rootAlign.left(), rootContent);
         
         buffer.flush();
         
@@ -125,11 +126,11 @@ public class TraditionalTreePrinter implements TreePrinter {
             Position childPositioning = new Position(
                     position.row + position.height,
                     childCol,
-                    childAlign.bottomConnection,
-                    childAlign.left,
+                    childAlign.bottomConnection(),
+                    childAlign.left(),
                     childContentDimension[1]);
             childrenPositionMap.put(childNode, childPositioning);
-            childConnections.add(childAlign.topConnection);
+            childConnections.add(childAlign.topConnection());
         }
         
         int connectionRows = liner.printConnections(
