@@ -2,12 +2,6 @@
 
 ## For v2.0.0
 
-### Add 2.x migration guide list to TODO.md
-
-- Changed package
-- Changed conventions (removed get- and create- prefix)
-- etc.
-
 ### Add minimal documentation to code
 
 Add useful doc comments to classes

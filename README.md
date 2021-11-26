@@ -37,6 +37,16 @@ natural foods
     └─ peanut
 ```
 
+## Migration from 1.x to 2.x
+
+The following breaking changes was made:
+
+- Package/class structure was reorganized
+- Method naming convention was changed (e. g. `getChildren()` &rarr; `children()`)
+- Most of the telescoping constructors was removed (use builders instead)
+
+Also, the new major version contains many little changes, extensions and fixes.
+
 ## Using in projects
 
 This library is open source, and available under the Apache License V2.
