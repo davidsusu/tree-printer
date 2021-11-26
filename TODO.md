@@ -32,8 +32,8 @@ D   E   F
 
 ### Create an enhanced version of TraditionalTreePrinter
 
-- Inherit major features of the previous TraditionalTreePrinte
+- Inherit major features of the previous TraditionalTreePrinter
 - Make it recursively composed
-- fit the right side of the left and left side of the right subtree
+- Fit the right side of the left and left side of the right subtree
 - Calculate Position taking into account the insets.
 - Use middle of the connection line instead of full contents.

@@ -9,9 +9,9 @@ import hu.webarticum.treeprinter.printer.TreePrinter;
  * Main interface for trees and tree nodes
  * 
  * Any tree is given by its root node.
- * Nodes provide a content as a string (via {@link #content()}),
+ * Nodes provide their content as a string (via {@link #content()}),
  * and list their children (via {@link #children()}).
- * The other methods provide metadata, they have default implementations.
+ * The other methods provide metadata, each has a default implementation.
  */
 public interface TreeNode {
     

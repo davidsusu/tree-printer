@@ -1,6 +1,6 @@
 # Tree Printer
 
-> :warning: &nbsp; **`2.0.0` is coming soon.**
+> :warning: &nbsp; **`v2.0.0` is coming soon.**
 > Ideas, issues, pull-requests are welcome.
 > [TODOs](TODO.md)
 
