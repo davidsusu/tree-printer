@@ -8,10 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import hu.webarticum.treeprinter.AbstractTreeNode;
 import hu.webarticum.treeprinter.TreeNode;
 
-public class FsTreeNode extends AbstractTreeNode {
+public class FsTreeNode implements TreeNode {
 
     public static final FileFilter DEFAULT_FILE_FILTER = fileItem -> !fileItem.isHidden();
     

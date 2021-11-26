@@ -3,7 +3,7 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaceholderNode extends AbstractTreeNode {
+public class PlaceholderNode implements TreeNode {
 
     @Override
     public String content() {

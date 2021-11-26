@@ -71,8 +71,9 @@ In maven projects:
 A *tree* is a hierarchical structure built from *nodes*.
 Any tree is given by its root node.
 
-Nodes implement the `TreeNode` interface,
-and there is an `AbstractTreeNode` as a bootstrap for a custom implementation.
+Nodes implement the `TreeNode` interface.
+It contains default implementations for the majority of its methods,
+you must implement only the `content()` and `children()` methods.
 
 You can use `SimpleTreeNode` out-of-the-box as a default string-based implementation:
 

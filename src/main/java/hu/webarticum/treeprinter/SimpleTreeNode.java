@@ -3,7 +3,7 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleTreeNode extends AbstractTreeNode {
+public class SimpleTreeNode implements TreeNode {
 
     private final String content;
     
