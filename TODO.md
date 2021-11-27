@@ -20,6 +20,8 @@ Line 2~~~~~
 Line 3 x~~~
 ```
 
+Right align option?
+
 ### FsTreeNode
 
 Add option for hidden files/directories
