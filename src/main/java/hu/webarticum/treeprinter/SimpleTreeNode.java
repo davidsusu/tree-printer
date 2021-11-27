@@ -3,6 +3,12 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple default implementation for {@link TreeNode}.
+ * 
+ * You can specify content and custom insets in the constructor.
+ * Child nodes can be added after construction (so this class is partially mutable).
+ */
 public class SimpleTreeNode implements TreeNode {
 
     private final String content;

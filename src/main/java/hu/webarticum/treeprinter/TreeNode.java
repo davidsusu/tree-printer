@@ -2,11 +2,10 @@ package hu.webarticum.treeprinter;
 
 import java.util.List;
 
-import hu.webarticum.treeprinter.decorator.AbstractTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.TreePrinter;
 
 /**
- * Main interface for trees and tree nodes
+ * Main interface for trees and tree nodes.
  * 
  * Any tree is given by its root node.
  * Nodes provide their content as a string (via {@link #content()}),
@@ -51,7 +50,6 @@ public interface TreeNode {
      * Checks if this node can be decorated.
      * 
      * By default, decorators should keep non-decorable nodes untouched.
-     * Most decorator support forcing decoration (see {@link AbstractTreeNodeDecorator}).
      */
     public default boolean isDecorable() {
         return true;

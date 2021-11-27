@@ -3,6 +3,9 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Very simple {@link TreeNode} implementation which is placeholder and non-decorable
+ */
 public class PlaceholderNode implements TreeNode {
 
     @Override

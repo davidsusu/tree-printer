@@ -11,6 +11,21 @@ import hu.webarticum.treeprinter.printer.TreePrinter;
 import hu.webarticum.treeprinter.util.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * {@link TreePrinter} implementation that prints the tree structure in a traditional fashion.
+ * 
+ * <p>Example output with the default settings:</p>
+ * 
+ * <pre>
+ *                    Root
+ *    ┌──────────────┬──┴──────────────┐
+ *    │              │                 │
+ * Child1         Child2            Child3
+ *             ┌─────┴─────┐           │
+ *             │           │           │
+ *        Grandchild1 Grandchild2 Grandchild3
+ * </pre>
+ */
 public class TraditionalTreePrinter implements TreePrinter {
 
     public static final Aligner DEFAULT_ALIGNER = new DefaultAligner();

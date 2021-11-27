@@ -4,6 +4,27 @@ import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * {@link TreeNode} implementation that draws some padding around the node.
+ * 
+ * <p>Given the following content:</p>
+ * 
+ * <pre>
+ * Hello, Node!
+ * Line 2
+ * </pre>
+ * 
+ * <p>With with <code>new Insets(1, 2, 3, 4)</code> and <code>~</code> as pad character</p>
+ * 
+ * <pre>
+ * ~~~~~~~~~~~~~~~~~~
+ * ~~~~Hello, Node!~~
+ * ~~~~Line 2      ~~
+ * ~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~
+ * </pre>
+ */
 public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private final Insets insets;

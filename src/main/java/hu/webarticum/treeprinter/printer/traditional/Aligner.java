@@ -5,6 +5,9 @@ import java.util.Map;
 
 import hu.webarticum.treeprinter.TreeNode;
 
+/**
+ * Node aligner strategy interface for {@link TraditionalTreePrinter}
+ */
 public interface Aligner {
     
     public Align alignNode(TreeNode node, int position, int width, int contentWidth);

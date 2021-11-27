@@ -8,6 +8,21 @@ import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * {@link TreePrinter} implementation that draws nested lists with lines.
+ * 
+ * <p>Example output with the default settings:</p>
+ * 
+ * <pre>
+ * Root
+ *  ├─Child1
+ *  ├─Child2
+ *  │  ├─Grandchild1
+ *  │  └─Grandchild2
+ *  └─Child3
+ *     └─Grandchild3
+ * </pre>
+ */
 public class ListingTreePrinter implements TreePrinter {
 
     private enum NodeDisposition { ROOT, GENERAL, LAST }

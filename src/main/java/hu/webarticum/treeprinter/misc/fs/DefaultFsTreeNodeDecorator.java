@@ -6,6 +6,9 @@ import java.text.DecimalFormat;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.decorator.AbstractTreeNodeDecorator;
 
+/**
+ * Decorator for {@link FsTreeNode} that displays more information
+ */
 public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     public DefaultFsTreeNodeDecorator(TreeNode decoratedNode) {

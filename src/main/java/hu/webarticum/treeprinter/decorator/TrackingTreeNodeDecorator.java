@@ -2,6 +2,9 @@ package hu.webarticum.treeprinter.decorator;
 
 import hu.webarticum.treeprinter.TreeNode;
 
+/**
+ * Helper implementation of {@link TreeNode} that tracks its position in the tree
+ */
 public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     public final TrackingTreeNodeDecorator parent;

@@ -7,6 +7,11 @@ import java.util.Map;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * Default implementation of {@link Aligner}.
+ * 
+ * Supports left, center and right alignment for nodes and connection.
+ */
 public class DefaultAligner implements Aligner {
 
     public enum Alignment { LEFT, CENTER, RIGHT }

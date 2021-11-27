@@ -4,6 +4,9 @@ import java.util.function.UnaryOperator;
 
 import hu.webarticum.treeprinter.TreeNode;
 
+/**
+ * Helper implementation of {@link TreePrinter} that automatically applies a mapping
+ */
 public class MappingTreePrinter implements TreePrinter {
     
     private final TreePrinter baseTreePrinter;

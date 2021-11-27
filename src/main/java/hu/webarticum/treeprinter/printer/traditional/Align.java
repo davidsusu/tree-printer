@@ -1,5 +1,8 @@
 package hu.webarticum.treeprinter.printer.traditional;
 
+/**
+ * Value class for storing node align settings for {@link TraditionalTreePrinter}
+ */
 public class Align {
 
     private final int left;

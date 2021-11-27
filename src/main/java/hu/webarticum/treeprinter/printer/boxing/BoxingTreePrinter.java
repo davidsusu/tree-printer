@@ -13,6 +13,28 @@ import hu.webarticum.treeprinter.printer.TreePrinter;
 import hu.webarticum.treeprinter.util.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * {@link TreePrinter} implementation that draws nested boxes.
+ * 
+ * <p>Example output with the default settings:</p>
+ * 
+ * <pre>
+ *   ┌────┐
+ * ┌─┤Root├───────────────────────────────────────┐
+ * │ └────┘                                       │
+ * │ ┌──────┐   ┌──────┐          ┌──────┐        │
+ * │ │Child1│ ┌─┤Child2├──────┐ ┌─┤Child3├──────┐ │
+ * │ └──────┘ │ └──────┘      │ │ └──────┘      │ │
+ * │          │ ┌───────────┐ │ │ ┌───────────┐ │ │
+ * │          │ │Grandchild1│ │ │ │Grandchild3│ │ │
+ * │          │ └───────────┘ │ │ └───────────┘ │ │
+ * │          │ ┌───────────┐ │ └───────────────┘ │
+ * │          │ │Grandchild2│ │                   │
+ * │          │ └───────────┘ │                   │
+ * │          └───────────────┘                   │
+ * └──────────────────────────────────────────────┘
+ * </pre>
+ */
 public class BoxingTreePrinter implements TreePrinter {
 
     private static final char[] BOX_CHARS_ASCII = new char[] {

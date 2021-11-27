@@ -5,6 +5,23 @@ import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * {@link TreeNode} implementation that draws a border around the node.
+ * 
+ * <p>For example, with the default options this content:</p>
+ * 
+ * <pre>
+ * Hello, Node!
+ * </pre>
+ * 
+ * <p>will be transformed to this:</p>
+ * 
+ * <pre>
+ * ┌────────────┐
+ * │Hello, Node!│
+ * └────────────┘
+ * </pre>
+ */
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private static final char[] BORDER_CHARS_ASCII = new char[] {

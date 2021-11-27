@@ -1,5 +1,8 @@
 package hu.webarticum.treeprinter;
 
+/**
+ * Value class for storing inset values at top, right, bottom and left
+ */
 public class Insets {
     
     public static final Insets EMPTY = new Insets(0);

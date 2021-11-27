@@ -6,6 +6,15 @@ import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.util.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
 
+/**
+ * Default implementation of {@link Liner}.
+ * 
+ * <p>Example lining output with default settings:</p>
+ * 
+ * <pre>
+ * ┌─────┬─┴───────┐
+ * </pre>
+ */
 public class DefaultLiner implements Liner {
 
     private static final char[] LINE_CHARS_ASCII = new char[] {

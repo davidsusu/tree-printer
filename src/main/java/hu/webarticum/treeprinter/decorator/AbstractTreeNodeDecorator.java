@@ -6,6 +6,13 @@ import java.util.List;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 
+/**
+ * Base class for {@link TreeNode} decorators.
+ * 
+ * Decorators should only effect if the wrapped node is decorable.
+ * Decorators should inherit by default (wrap their children with a similar decorator),
+ * and should not inherit when the <code>inherit</code> option is set to <code>false</code>.
+ */
 public abstract class AbstractTreeNodeDecorator implements TreeNode {
     
     protected final TreeNode decoratedNode;

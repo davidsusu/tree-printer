@@ -1,7 +1,17 @@
 package hu.webarticum.treeprinter.printer;
 
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 
+/**
+ * Main interface for tree printers. 
+ * 
+ * A tree printer visualize a {@link TreeNode} and its entire subtree structure.
+ * Any implementation can have its own way to do this.
+ * Some implementations (e. g. {@link ListingTreePrinter}) can print
+ * large data in a memory efficient way via
+ * <code>print(TreeNode)<code> or <code>print(TreeNode, Appendable)<code>.
+ */
 @FunctionalInterface
 public interface TreePrinter {
 

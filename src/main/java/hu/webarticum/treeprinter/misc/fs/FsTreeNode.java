@@ -10,6 +10,11 @@ import java.util.List;
 
 import hu.webarticum.treeprinter.TreeNode;
 
+/**
+ * {@link TreeNode} implementation that represents a file system tree.
+ * 
+ * It is recommended to use with the {@link DefaultFsTreeNodeDecorator}.
+ */
 public class FsTreeNode implements TreeNode {
 
     public static final FileFilter DEFAULT_FILE_FILTER = fileItem -> !fileItem.isHidden();
