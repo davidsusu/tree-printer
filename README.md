@@ -46,7 +46,7 @@ The following breaking changes was made:
 - Most of the telescoping constructors was removed (use builders instead)
 - Decorator inheritance was simplified, `forceInherit` option was removed
 
-Also, the new major version contains many little changes, extensions and fixes.
+Furthermore, many little changes, extensions and fixes was added.
 
 ## Using in projects
 
