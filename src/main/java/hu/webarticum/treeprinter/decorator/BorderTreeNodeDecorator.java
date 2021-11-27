@@ -84,13 +84,13 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         resultBuilder.append(topLeft);
         Util.repeat(resultBuilder, top, longestLineLength);
         resultBuilder.append(topRight);
-        resultBuilder.append("\n");
+        resultBuilder.append('\n');
         for (String contentLine: contentLines) {
             resultBuilder.append(left);
             resultBuilder.append(contentLine);
             Util.repeat(resultBuilder, ' ', longestLineLength - contentLine.length());
             resultBuilder.append(right);
-            resultBuilder.append("\n");
+            resultBuilder.append('\n');
         }
         resultBuilder.append(bottomLeft);
         Util.repeat(resultBuilder, bottom, longestLineLength);
