@@ -15,21 +15,17 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
         super(decoratedNode);
     }
 
-    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean decorable) {
-        super(decoratedNode, decorable);
+    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean inherit) {
+        super(decoratedNode, inherit);
     }
 
-    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean decorable, boolean inherit) {
-        super(decoratedNode, decorable, inherit);
-    }
-    
-    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean decorable, boolean inherit, boolean forceInherit) {
-        super(decoratedNode, decorable, inherit, forceInherit);
+    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean inherit, boolean decorable) {
+        super(decoratedNode, inherit, decorable);
     }
     
     
     @Override
-    public String content() {
+    public String decoratedContent() {
         if (decoratedNode instanceof FsTreeNode) {
             FsTreeNode fsNode = (FsTreeNode) decoratedNode;
             File file = fsNode.getFile();
@@ -44,8 +40,8 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode, int index) {
-        return new DefaultFsTreeNodeDecorator(childNode, decorable, inherit, forceInherit);
+    protected TreeNode wrapChild(TreeNode childNode, int index) {
+        return new DefaultFsTreeNodeDecorator(childNode, decorable, inherit);
     }
     
     protected String formatFileSize(long fileSize) {

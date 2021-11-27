@@ -56,7 +56,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     private BorderTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
-        super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
+        super(decoratedNode, builder.inherit, builder.decorable);
         this.topLeft = builder.characters[0];
         this.top = builder.characters[1];
         this.topRight = builder.characters[2];
@@ -73,7 +73,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     
     @Override
-    public String content() {
+    public String decoratedContent() {
         String content = decoratedNode.content();
         
         String[] contentLines = Util.splitToLines(content);
@@ -105,13 +105,12 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode, int index) {
+    protected TreeNode wrapChild(TreeNode childNode, int index) {
         return new BorderTreeNodeDecorator(
                 childNode,
                 builder()
                         .decorable(decorable)
                         .inherit(inherit)
-                        .forceInherit(forceInherit)
                         .topLeft(topLeft)
                         .top(top)
                         .topRight(topRight)
@@ -125,40 +124,27 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     
     public static class Builder {
-
-        private boolean decorable = true;
         
         private boolean inherit = true;
-        
-        private boolean forceInherit = false;
+
+        private boolean decorable = true;
 
         private char[] characters =
                 UnicodeMode.isUnicodeDefault() ?
                 BORDER_CHARS_UNICODE.clone() :
                 BORDER_CHARS_ASCII.clone();
         
-        
-        public Builder decorable(boolean decorable) {
-            this.decorable = decorable;
-            return this;
-        }
 
         public Builder inherit(boolean inherit) {
             this.inherit = inherit;
             return this;
         }
 
-        public Builder inherit(boolean inherit, boolean forceInherit) {
-            this.inherit = inherit;
-            this.forceInherit = forceInherit;
+        public Builder decorable(boolean decorable) {
+            this.decorable = decorable;
             return this;
         }
 
-        public Builder forceInherit(boolean forceInherit) {
-            this.forceInherit = forceInherit;
-            return this;
-        }
-        
         public Builder ascii() {
             this.characters = BORDER_CHARS_ASCII.clone();
             return this;

@@ -26,7 +26,6 @@ public class ExamplesMain {
 
         ListingTreePrinter.builder().displayRoot(false).align(true).build().print(
                 PadTreeNodeDecorator.builder()
-                        .forceInherit(true)
                         .bottomPad(1)
                         .buildFor(rootNode)
                 );

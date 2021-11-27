@@ -24,12 +24,12 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     
     @Override
-    public String content() {
+    public String decoratedContent() {
         return decoratedNode.content();
     }
 
     @Override
-    protected TreeNode decorateChild(TreeNode childNode, int index) {
+    protected TreeNode wrapChild(TreeNode childNode, int index) {
         return new TrackingTreeNodeDecorator(childNode, this, index);
     }
 

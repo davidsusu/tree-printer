@@ -44,6 +44,7 @@ The following breaking changes was made:
 - Package/class structure was reorganized
 - Method naming convention was changed (e. g. `getChildren()` &rarr; `children()`)
 - Most of the telescoping constructors was removed (use builders instead)
+- Decorator inheritance was simplified, `forceInherit` option was removed
 
 Also, the new major version contains many little changes, extensions and fixes.
 
@@ -252,7 +253,6 @@ alignedTree.addChild(new SimpleTreeNode("RIGHT"));
 
 new TraditionalTreePrinter(displayPlaceholders).print(
         PadTreeNodeDecorator.builder()
-                .forceInherit(true)
                 .horizontalPad(3)
                 .buildFor(new BorderTreeNodeDecorator(alignedTree))
         );

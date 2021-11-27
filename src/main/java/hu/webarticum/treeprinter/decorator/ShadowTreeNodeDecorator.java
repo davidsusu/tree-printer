@@ -46,7 +46,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     private ShadowTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
-        super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
+        super(decoratedNode, builder.inherit, builder.decorable);
         this.shadowChar = builder.shadowChar;
         this.verticalOffset = builder.verticalOffset;
         this.horizontalOffset = builder.horizontalOffset;
@@ -58,7 +58,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
 
     @Override
-    public String content() {
+    public String decoratedContent() {
         List<String> lines = decoratedNode.content().lines().collect(Collectors.toList());
         
         int height = lines.size();
@@ -158,11 +158,10 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode, int index) {
+    protected TreeNode wrapChild(TreeNode childNode, int index) {
         return ShadowTreeNodeDecorator.builder()
                 .decorable(decorable)
                 .inherit(inherit)
-                .forceInherit(forceInherit)
                 .shadowChar(shadowChar)
                 .verticalOffset(verticalOffset)
                 .horizontalOffset(horizontalOffset)
@@ -172,11 +171,9 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     public static class Builder {
         
-        private boolean decorable = true;
-        
         private boolean inherit = true;
         
-        private boolean forceInherit = false;
+        private boolean decorable = true;
 
         private char shadowChar =
                 UnicodeMode.isUnicodeDefault() ?
@@ -187,19 +184,14 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         private int horizontalOffset = 1;
 
-        
-        public Builder decorable(boolean decorable) {
-            this.decorable = decorable;
-            return this;
-        }
 
         public Builder inherit(boolean inherit) {
             this.inherit = inherit;
             return this;
         }
 
-        public Builder forceInherit(boolean forceInherit) {
-            this.forceInherit = forceInherit;
+        public Builder decorable(boolean decorable) {
+            this.decorable = decorable;
             return this;
         }
 

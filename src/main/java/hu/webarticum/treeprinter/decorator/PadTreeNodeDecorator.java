@@ -45,7 +45,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     private PadTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
-        super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
+        super(decoratedNode, builder.inherit, builder.decorable);
         this.insets = new Insets(builder.topPad, builder.rightPad, builder.bottomPad, builder.leftPad);
         this.padCharacter = builder.padCharacter;
     }
@@ -56,7 +56,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     
     @Override
-    public String content() {
+    public String decoratedContent() {
         String content = decoratedNode.content();
 
         String[] contentLines = Util.splitToLines(content);
@@ -100,13 +100,12 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
     
     @Override
-    protected TreeNode decorateChild(TreeNode childNode, int index) {
+    protected TreeNode wrapChild(TreeNode childNode, int index) {
         return new PadTreeNodeDecorator(
                 childNode,
                 builder()
                         .decorable(decorable)
                         .inherit(inherit)
-                        .forceInherit(forceInherit)
                         .insets(insets)
                         .padCharacter(padCharacter)
                 );
@@ -114,12 +113,10 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     
     public static class Builder {
-
-        private boolean decorable = true;
         
         private boolean inherit = true;
-        
-        private boolean forceInherit = false;
+
+        private boolean decorable = true;
 
         private int topPad = 0;
         
@@ -132,27 +129,16 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         private char padCharacter = ' ';
         
 
-        public Builder decorable(boolean decorable) {
-            this.decorable = decorable;
-            return this;
-        }
-
         public Builder inherit(boolean inherit) {
             this.inherit = inherit;
             return this;
         }
 
-        public Builder inherit(boolean inherit, boolean forceInherit) {
-            this.inherit = inherit;
-            this.forceInherit = forceInherit;
+        public Builder decorable(boolean decorable) {
+            this.decorable = decorable;
             return this;
         }
 
-        public Builder forceInherit(boolean forceInherit) {
-            this.forceInherit = forceInherit;
-            return this;
-        }
-        
         public Builder pad(int pad) {
             return pad(pad, pad, pad, pad);
         }

@@ -2,10 +2,6 @@
 
 ## For v2.0.0
 
-### Decorators
-
-Is this `forceInherit` option necessary?
-
 ### BackgroundTreeNodeDecorator (?)
 
 From this:
