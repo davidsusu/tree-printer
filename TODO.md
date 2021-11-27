@@ -6,6 +6,24 @@
 
 Is this `forceInherit` option necessary?
 
+### BackgroundTreeNodeDecorator (?)
+
+From this:
+
+```
+Line 1 asdf
+Line 2
+Line 3 x
+```
+
+make this:
+
+```
+Line 1 asdf
+Line 2~~~~~
+Line 3 x~~~
+```
+
 ## For v2.1.0
 
 ### Add CompactBinaryTreePrinter
