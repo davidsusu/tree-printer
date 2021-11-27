@@ -2,7 +2,7 @@ package hu.webarticum.treeprinter;
 
 public final class UnicodeMode {
     
-    private static boolean enabled = true;
+    private static volatile boolean enabled = true;
     
     
     private UnicodeMode() {
