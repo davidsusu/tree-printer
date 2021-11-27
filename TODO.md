@@ -24,6 +24,10 @@ Line 2~~~~~
 Line 3 x~~~
 ```
 
+### FsTreeNode
+
+Add option for hidden files/directories
+
 ## For v2.1.0
 
 ### Add CompactBinaryTreePrinter
