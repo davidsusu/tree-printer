@@ -47,10 +47,10 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return false;
         }
 
-        TrackingTreeNodeDecorator otherReferenceTreeNode = (TrackingTreeNodeDecorator) other;
-        TrackingTreeNodeDecorator otherParent = otherReferenceTreeNode.parent;
+        TrackingTreeNodeDecorator otherTrackingTreeNodeDecorator = (TrackingTreeNodeDecorator) other;
+        TrackingTreeNodeDecorator otherParent = otherTrackingTreeNodeDecorator.parent;
         
-        if (this == otherReferenceTreeNode) {
+        if (this == otherTrackingTreeNodeDecorator) {
             return true;
         } else if (parent == null) {
             if (otherParent != null) {
@@ -60,7 +60,7 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return false;
         }
         
-        return index == otherReferenceTreeNode.index;
+        return index == otherTrackingTreeNodeDecorator.index;
     }
     
 }
