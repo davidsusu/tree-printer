@@ -61,7 +61,7 @@ In gradle projects:
 ```groovy
 
 dependencies {
-    implementation 'hu.webarticum:tree-printer:<...>'
+    implementation "hu.webarticum:tree-printer:${treePrinterVersion}"
 }
 
 ```
@@ -72,7 +72,7 @@ In maven projects:
 <dependency>
   <groupId>hu.webarticum</groupId>
   <artifactId>tree-printer</artifactId>
-  <version>...</version>
+  <version>${treePrinterVersion}</version>
 </dependency>
 ```
 
