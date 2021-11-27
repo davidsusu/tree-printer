@@ -15,27 +15,27 @@ import hu.webarticum.treeprinter.TreeNode;
  */
 public abstract class AbstractTreeNodeDecorator implements TreeNode {
     
-    protected final TreeNode decoratedNode;
+    protected final TreeNode baseNode;
     
     protected final boolean inherit;
 
     protected final boolean decorable;
     
 
-    public AbstractTreeNodeDecorator(TreeNode decoratedNode) {
-        this(decoratedNode, true);
+    public AbstractTreeNodeDecorator(TreeNode baseNode) {
+        this(baseNode, true);
     }
 
-    public AbstractTreeNodeDecorator(TreeNode decoratedNode, boolean inherit) {
-        this(decoratedNode, inherit, decoratedNode.isDecorable());
+    public AbstractTreeNodeDecorator(TreeNode baseNode, boolean inherit) {
+        this(baseNode, inherit, baseNode.isDecorable());
     }
 
-    public AbstractTreeNodeDecorator(TreeNode decoratedNode, boolean inherit, boolean decorable) {
-        if (decoratedNode == null) {
+    public AbstractTreeNodeDecorator(TreeNode baseNode, boolean inherit, boolean decorable) {
+        if (baseNode == null) {
             throw new IllegalArgumentException("Decorated node must not be null");
         }
         
-        this.decoratedNode = decoratedNode;
+        this.baseNode = baseNode;
         this.inherit = inherit;
         this.decorable = decorable;
     }
@@ -43,25 +43,25 @@ public abstract class AbstractTreeNodeDecorator implements TreeNode {
 
     @Override
     public String content() {
-        if (decoratedNode.isDecorable()) {
+        if (baseNode.isDecorable()) {
             return decoratedContent();
         } else {
-            return decoratedNode.content();
+            return baseNode.content();
         }
     }
     
     public TreeNode getDecoratedNode() {
-        return decoratedNode;
+        return baseNode;
     }
 
     @Override
     public TreeNode originalNode() {
-        return decoratedNode.originalNode();
+        return baseNode.originalNode();
     }
     
     @Override
     public Insets insets() {
-        return decoratedNode.insets();
+        return baseNode.insets();
     }
     
     @Override
@@ -71,13 +71,13 @@ public abstract class AbstractTreeNodeDecorator implements TreeNode {
 
     @Override
     public boolean isPlaceholder() {
-        return decoratedNode.isPlaceholder();
+        return baseNode.isPlaceholder();
     }
 
     @Override
     public List<TreeNode> children() {
         List<TreeNode> wrappedChildren = new ArrayList<>();
-        List<TreeNode> originalChildren = decoratedNode.children();
+        List<TreeNode> originalChildren = baseNode.children();
         int childCount = originalChildren.size();
         for (int i = 0; i < childCount; i++) {
             TreeNode childNode = originalChildren.get(i);

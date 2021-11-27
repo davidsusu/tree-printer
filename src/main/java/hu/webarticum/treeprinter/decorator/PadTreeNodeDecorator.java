@@ -32,20 +32,20 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private final char padCharacter;
     
     
-    public PadTreeNodeDecorator(TreeNode decoratedNode) {
-        this(decoratedNode, 1);
+    public PadTreeNodeDecorator(TreeNode baseNode) {
+        this(baseNode, 1);
     }
 
-    public PadTreeNodeDecorator(TreeNode decoratedNode, int pad) {
-        this(decoratedNode, builder().pad(pad));
+    public PadTreeNodeDecorator(TreeNode baseNode, int pad) {
+        this(baseNode, builder().pad(pad));
     }
 
-    public PadTreeNodeDecorator(TreeNode decoratedNode, Insets insets) {
-        this(decoratedNode, builder().insets(insets));
+    public PadTreeNodeDecorator(TreeNode baseNode, Insets insets) {
+        this(baseNode, builder().insets(insets));
     }
 
-    private PadTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
-        super(decoratedNode, builder.inherit, builder.decorable);
+    private PadTreeNodeDecorator(TreeNode baseNode, Builder builder) {
+        super(baseNode, builder.inherit, builder.decorable);
         this.insets = new Insets(builder.topPad, builder.rightPad, builder.bottomPad, builder.leftPad);
         this.padCharacter = builder.padCharacter;
     }
@@ -57,7 +57,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     @Override
     public String decoratedContent() {
-        String content = decoratedNode.content();
+        String content = baseNode.content();
 
         String[] contentLines = Util.splitToLines(content);
         int contentWidth = Util.getMaxLength(contentLines);
@@ -96,7 +96,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     @Override
     public Insets insets() {
-        return decoratedNode.insets().extendedWith(insets);
+        return baseNode.insets().extendedWith(insets);
     }
     
     @Override

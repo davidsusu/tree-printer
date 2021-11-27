@@ -11,23 +11,23 @@ import hu.webarticum.treeprinter.decorator.AbstractTreeNodeDecorator;
  */
 public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
-    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode) {
-        super(decoratedNode);
+    public DefaultFsTreeNodeDecorator(TreeNode baseNode) {
+        super(baseNode);
     }
 
-    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean inherit) {
-        super(decoratedNode, inherit);
+    public DefaultFsTreeNodeDecorator(TreeNode baseNode, boolean inherit) {
+        super(baseNode, inherit);
     }
 
-    public DefaultFsTreeNodeDecorator(TreeNode decoratedNode, boolean inherit, boolean decorable) {
-        super(decoratedNode, inherit, decorable);
+    public DefaultFsTreeNodeDecorator(TreeNode baseNode, boolean inherit, boolean decorable) {
+        super(baseNode, inherit, decorable);
     }
     
     
     @Override
     public String decoratedContent() {
-        if (decoratedNode instanceof FsTreeNode) {
-            FsTreeNode fsNode = (FsTreeNode) decoratedNode;
+        if (baseNode instanceof FsTreeNode) {
+            FsTreeNode fsNode = (FsTreeNode) baseNode;
             File file = fsNode.getFile();
             if (file.isDirectory()) {
                 return " " + file.getName() + "/";
@@ -35,7 +35,7 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 return " " + file.getName() + " (" + formatFileSize(file.length()) + ")";
             }
         } else {
-            return decoratedNode.content();
+            return baseNode.content();
         }
     }
     

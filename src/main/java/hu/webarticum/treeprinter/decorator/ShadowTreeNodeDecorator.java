@@ -41,12 +41,12 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private final int horizontalOffset;
     
 
-    public ShadowTreeNodeDecorator(TreeNode decoratedNode) {
-        this(decoratedNode, new Builder());
+    public ShadowTreeNodeDecorator(TreeNode baseNode) {
+        this(baseNode, new Builder());
     }
 
-    private ShadowTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
-        super(decoratedNode, builder.inherit, builder.decorable);
+    private ShadowTreeNodeDecorator(TreeNode baseNode, Builder builder) {
+        super(baseNode, builder.inherit, builder.decorable);
         this.shadowChar = builder.shadowChar;
         this.verticalOffset = builder.verticalOffset;
         this.horizontalOffset = builder.horizontalOffset;
@@ -59,7 +59,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     @Override
     public String decoratedContent() {
-        List<String> lines = decoratedNode.content().lines().collect(Collectors.toList());
+        List<String> lines = baseNode.content().lines().collect(Collectors.toList());
         
         int height = lines.size();
         int width = lines.stream().mapToInt(String::length).max().orElse(0);
@@ -154,7 +154,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 Math.max(0, horizontalOffset),
                 Math.max(0, verticalOffset),
                 Math.max(0, -horizontalOffset));
-        return decoratedNode.insets().extendedWith(shadowInsets);
+        return baseNode.insets().extendedWith(shadowInsets);
     }
     
     @Override
@@ -209,8 +209,8 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return this;
         }
 
-        public ShadowTreeNodeDecorator buildFor(TreeNode treeNode) {
-            return new ShadowTreeNodeDecorator(treeNode, this);
+        public ShadowTreeNodeDecorator buildFor(TreeNode node) {
+            return new ShadowTreeNodeDecorator(node, this);
         }
         
     }
