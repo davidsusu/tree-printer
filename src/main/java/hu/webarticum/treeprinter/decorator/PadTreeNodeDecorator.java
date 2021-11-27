@@ -67,7 +67,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         for (String line: lines) {
             Util.repeat(stringBuilder, padCharacter, insets.left());
             stringBuilder.append(line);
-            Util.repeat(stringBuilder, padCharacter, width - line.length() + insets.right());
+            Util.repeat(stringBuilder, ' ', width - line.length());
+            Util.repeat(stringBuilder, padCharacter, insets.right());
             stringBuilder.append('\n');
         }
     }
