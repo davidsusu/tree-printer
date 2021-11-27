@@ -36,9 +36,17 @@ public class FsTreeNode implements TreeNode {
     }
 
     public FsTreeNode(File file) {
-        this(file, DEFAULT_FILE_FILTER, DEFAULT_COMPARATOR, true);
+        this(file, DEFAULT_FILE_FILTER);
     }
 
+    public FsTreeNode(File file, FileFilter filter) {
+        this(file, filter, DEFAULT_COMPARATOR);
+    }
+
+    public FsTreeNode(File file, FileFilter filter, Comparator<File> comparator) {
+        this(file, filter, comparator, true);
+    }
+    
     public FsTreeNode(File file, FileFilter filter, Comparator<File> comparator, boolean decorable) {
         this.file = file;
         this.filter = filter;
