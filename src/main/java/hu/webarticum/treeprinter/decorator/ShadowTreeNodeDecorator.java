@@ -159,14 +159,13 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     @Override
     protected TreeNode wrapChild(TreeNode childNode, int index) {
-        return ShadowTreeNodeDecorator.builder()
+        return builder()
                 .decorable(decorable)
                 .inherit(inherit)
                 .shadowChar(shadowChar)
                 .verticalOffset(verticalOffset)
                 .horizontalOffset(horizontalOffset)
-                .buildFor(childNode)
-                ;
+                .buildFor(childNode);
     }
     
     public static class Builder {

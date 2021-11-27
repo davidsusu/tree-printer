@@ -101,14 +101,12 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     @Override
     protected TreeNode wrapChild(TreeNode childNode, int index) {
-        return new PadTreeNodeDecorator(
-                childNode,
-                builder()
-                        .decorable(decorable)
-                        .inherit(inherit)
-                        .insets(insets)
-                        .padCharacter(padCharacter)
-                );
+        return builder()
+                .decorable(decorable)
+                .inherit(inherit)
+                .insets(insets)
+                .padCharacter(padCharacter)
+                .buildFor(childNode);
     }
     
     

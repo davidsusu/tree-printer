@@ -106,20 +106,18 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     @Override
     protected TreeNode wrapChild(TreeNode childNode, int index) {
-        return new BorderTreeNodeDecorator(
-                childNode,
-                builder()
-                        .decorable(decorable)
-                        .inherit(inherit)
-                        .topLeft(topLeft)
-                        .top(top)
-                        .topRight(topRight)
-                        .right(right)
-                        .bottomRight(bottomRight)
-                        .bottom(bottom)
-                        .bottomLeft(bottomLeft)
-                        .left(left)
-                );
+        return builder()
+                .decorable(decorable)
+                .inherit(inherit)
+                .topLeft(topLeft)
+                .top(top)
+                .topRight(topRight)
+                .right(right)
+                .bottomRight(bottomRight)
+                .bottom(bottom)
+                .bottomLeft(bottomLeft)
+                .left(left)
+                .buildFor(childNode);
     }
 
     
