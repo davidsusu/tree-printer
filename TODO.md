@@ -1,31 +1,5 @@
 # TODO list
 
-## For v2.0.0
-
-### BackgroundTreeNodeDecorator (?)
-
-From this:
-
-```
-Line 1 asdf
-Line 2
-Line 3 x
-```
-
-make this:
-
-```
-Line 1 asdf
-Line 2~~~~~
-Line 3 x~~~
-```
-
-Right align option?
-
-### FsTreeNode
-
-Add option for hidden files/directories
-
 ## For v2.1.0
 
 ### Add CompactBinaryTreePrinter
