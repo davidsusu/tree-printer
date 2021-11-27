@@ -8,6 +8,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private final Insets insets;
     
+    private final char padCharacter;
+    
     
     public PadTreeNodeDecorator(TreeNode decoratedNode) {
         this(decoratedNode, 1);
@@ -24,6 +26,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private PadTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
         super(decoratedNode, builder.decorable, builder.inherit, builder.forceInherit);
         this.insets = new Insets(builder.topPad, builder.rightPad, builder.bottomPad, builder.leftPad);
+        this.padCharacter = builder.padCharacter;
     }
 
     public static Builder builder() {
@@ -47,7 +50,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
         for (int i = 0; i < n; i++) {
-            Util.repeat(stringBuilder, ' ', width);
+            Util.repeat(stringBuilder, padCharacter, width);
             stringBuilder.append('\n');
         }
     }
@@ -62,9 +65,9 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private void appendPaddedContentLines(StringBuilder stringBuilder, String[] lines, int width) {
         for (String line: lines) {
-            Util.repeat(stringBuilder, ' ', insets.left());
+            Util.repeat(stringBuilder, padCharacter, insets.left());
             stringBuilder.append(line);
-            Util.repeat(stringBuilder, ' ', width - line.length() + insets.right());
+            Util.repeat(stringBuilder, padCharacter, width - line.length() + insets.right());
             stringBuilder.append('\n');
         }
     }
@@ -83,6 +86,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
                         .inherit(inherit)
                         .forceInherit(forceInherit)
                         .insets(insets)
+                        .padCharacter(padCharacter)
                 );
     }
     
@@ -102,6 +106,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         private int bottomPad = 0;
         
         private int leftPad = 0;
+        
+        private char padCharacter = ' ';
         
 
         public Builder decorable(boolean decorable) {
@@ -171,6 +177,11 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
         public Builder insets(Insets insets) {
             return pad(insets.top(), insets.right(), insets.bottom(), insets.left());
+        }
+
+        public Builder padCharacter(char padCharacter) {
+            this.padCharacter = padCharacter;
+            return this;
         }
 
         public PadTreeNodeDecorator buildFor(TreeNode node) {
