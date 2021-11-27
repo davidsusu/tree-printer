@@ -1,6 +1,8 @@
 package hu.webarticum.treeprinter.decorator;
 
+import hu.webarticum.treeprinter.HorizontalAlign;
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.VerticalAlign;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -22,7 +24,7 @@ import hu.webarticum.treeprinter.util.Util;
  * <p>By setting <code>minimumHeight</code> to <code>6</code>,
  * <code>minimumWidth</code> to <code>20</code>,
  * <code>verticalAlign</code> to <code>MIDDLE</code>,
- * <code>textAlign</code> to <code>RIGHT</code>
+ * <code>horizontalAlign</code> to <code>RIGHT</code>
  * and <code>background</code> to <code>~</code>,
  * the following content will be produced:
  * </p>
@@ -38,20 +40,11 @@ import hu.webarticum.treeprinter.util.Util;
  */
 public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
-    public enum TextAlign {
-        LEFT, CENTER, RIGHT
-    }
-    
-    public enum VerticalAlign {
-        TOP, MIDDLE, BOTTOM
-    }
-
-
     private final int minimumWidth;
     
     private final int minimumHeight;
     
-    private final TextAlign textAlign;
+    private final HorizontalAlign horizontalAlign;
     
     private final VerticalAlign verticalAlign;
     
@@ -62,15 +55,15 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this(decoratedNode, builder());
     }
 
-    public JustifyTreeNodeDecorator(TreeNode decoratedNode, TextAlign textAlign) {
-        this(decoratedNode, builder().textAlign(textAlign));
+    public JustifyTreeNodeDecorator(TreeNode decoratedNode, HorizontalAlign textAlign) {
+        this(decoratedNode, builder().horizontalAlign(textAlign));
     }
 
     private JustifyTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
         super(decoratedNode, builder.inherit, builder.decorable);
         this.minimumWidth = builder.minimumWidth;
         this.minimumHeight = builder.minimumHeight;
-        this.textAlign = builder.textAlign;
+        this.horizontalAlign = builder.horizontalAlign;
         this.verticalAlign = builder.verticalAlign;
         this.background = builder.background;
     }
@@ -120,7 +113,7 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private void appendMiddleLine(StringBuilder contentBuilder, String baseLine, int fullWidth) {
         int baseLineLength = baseLine.length();
-        int leftPad = getStartPad(fullWidth, baseLineLength, textAlign);
+        int leftPad = getStartPad(fullWidth, baseLineLength, horizontalAlign);
         int rightPad = fullWidth - baseLineLength - leftPad;
         contentBuilder.append(Util.repeat(background, leftPad));
         contentBuilder.append(baseLine);
@@ -135,11 +128,11 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
     }
 
     private int getStartPad(int fullSize, int contentSize, Object alignType) {
-        if (alignType == TextAlign.LEFT || alignType == VerticalAlign.TOP) {
+        if (alignType == HorizontalAlign.LEFT || alignType == VerticalAlign.TOP) {
             return 0;
         }
         int remainingSize = fullSize - contentSize;
-        if (alignType == TextAlign.RIGHT || alignType == VerticalAlign.BOTTOM) {
+        if (alignType == HorizontalAlign.RIGHT || alignType == VerticalAlign.BOTTOM) {
             return remainingSize;
         } else {
             return remainingSize / 2;
@@ -155,7 +148,7 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
                         .inherit(inherit)
                         .minimumWidth(minimumWidth)
                         .minimumHeight(minimumHeight)
-                        .textAlign(textAlign)
+                        .horizontalAlign(horizontalAlign)
                         .verticalAlign(verticalAlign)
                         .background(background)
                 );
@@ -172,7 +165,7 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         private int minimumHeight = 0;
         
-        private TextAlign textAlign = TextAlign.LEFT;
+        private HorizontalAlign horizontalAlign = HorizontalAlign.LEFT;
         
         private VerticalAlign verticalAlign = VerticalAlign.TOP;
         
@@ -199,8 +192,8 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return this;
         }
 
-        public Builder textAlign(TextAlign textAlign) {
-            this.textAlign = textAlign;
+        public Builder horizontalAlign(HorizontalAlign horizontalAlign) {
+            this.horizontalAlign = horizontalAlign;
             return this;
         }
 

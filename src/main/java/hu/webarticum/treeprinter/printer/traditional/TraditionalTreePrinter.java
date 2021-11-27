@@ -70,14 +70,14 @@ public class TraditionalTreePrinter implements TreePrinter {
         
         String rootContent = wrappedRootNode.content();
         int[] rootContentDimension = Util.getContentDimension(rootContent);
-        Align rootAlign = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
+        Placement rootPlacement = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
         Position rootPosition = new Position(
-                0, 0, rootAlign.bottomConnection(), rootAlign.left(), rootContentDimension[1]);
+                0, 0, rootPlacement.bottomConnection(), rootPlacement.left(), rootContentDimension[1]);
         positionMap.put(wrappedRootNode, rootPosition);
         
         LineBuffer buffer = new LineBuffer(out);
         
-        buffer.write(0, rootAlign.left(), rootContent);
+        buffer.write(0, rootPlacement.left(), rootContent);
         
         buffer.flush();
         
@@ -137,15 +137,15 @@ public class TraditionalTreePrinter implements TreePrinter {
             int childWidth = widthMap.get(childNode);
             String childContent = childNode.content();
             int[] childContentDimension = Util.getContentDimension(childContent);
-            Align childAlign = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
+            Placement childPlacement = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
             Position childPositioning = new Position(
                     position.row + position.height,
                     childCol,
-                    childAlign.bottomConnection(),
-                    childAlign.left(),
+                    childPlacement.bottomConnection(),
+                    childPlacement.left(),
                     childContentDimension[1]);
             childrenPositionMap.put(childNode, childPositioning);
-            childConnections.add(childAlign.topConnection());
+            childConnections.add(childPlacement.topConnection());
         }
         
         int connectionRows = liner.printConnections(

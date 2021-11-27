@@ -1,9 +1,9 @@
 package hu.webarticum.treeprinter.printer.traditional;
 
 /**
- * Value class for storing node align settings for {@link TraditionalTreePrinter}
+ * Value class for storing node placement settings for {@link TraditionalTreePrinter}
  */
-public class Align {
+public class Placement {
 
     private final int left;
 
@@ -12,7 +12,7 @@ public class Align {
     private final int bottomConnection;
 
     
-    public Align(int left, int topConnection, int bottomConnection) {
+    public Placement(int left, int topConnection, int bottomConnection) {
         this.left = left;
         this.topConnection = topConnection;
         this.bottomConnection = bottomConnection;
