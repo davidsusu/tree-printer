@@ -6,7 +6,7 @@ import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
- * {@link TreeNode} implementation that draws a border around the node.
+ * {@link TreeNode} decorator implementation that draws a border around the node.
  * 
  * <p>For example, with the default options this content:</p>
  * 

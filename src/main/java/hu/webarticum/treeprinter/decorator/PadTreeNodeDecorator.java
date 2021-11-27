@@ -5,7 +5,7 @@ import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
- * {@link TreeNode} implementation that draws some padding around the node.
+ * {@link TreeNode} decorator implementation that draws some padding around the node.
  * 
  * <p>Given the following content:</p>
  * 
