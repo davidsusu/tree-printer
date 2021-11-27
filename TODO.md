@@ -2,9 +2,9 @@
 
 ## For v2.0.0
 
-### Add minimal documentation to code
+### Decorators
 
-Add useful doc comments to classes
+Is this `forceInherit` option necessary?
 
 ## For v2.1.0
 
