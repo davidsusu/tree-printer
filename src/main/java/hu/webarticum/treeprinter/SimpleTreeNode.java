@@ -9,7 +9,7 @@ public class SimpleTreeNode implements TreeNode {
     
     private final Insets insets;
     
-    private List<TreeNode> children = new ArrayList<>();
+    private final List<TreeNode> children = new ArrayList<>();
     
 
     public SimpleTreeNode(String content) {
