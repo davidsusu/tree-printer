@@ -2,6 +2,7 @@ package hu.webarticum.treeprinter.printer;
 
 import hu.webarticum.treeprinter.TreeNode;
 
+@FunctionalInterface
 public interface TreePrinter {
 
     public void print(TreeNode rootNode, Appendable out);
