@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven'
+    id 'eclipse'
     id 'com.palantir.git-version' version '0.12.3'
 }
 
