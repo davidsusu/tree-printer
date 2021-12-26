@@ -31,3 +31,10 @@ D   E   F
 - Fit the right side of the left and left side of the right subtree
 - Calculate Position taking into account the insets.
 - Use middle of the connection line instead of full contents.
+
+### Separate subprojects
+
+For example:
+
+- fs (standalone cli fs tree printer program with options)
+- antlr (visualizes antlr parse trees)
