@@ -14,6 +14,19 @@ blahh
 
 ## For v2.1.0
 
+### Load from config
+
+For example:
+
+- yaml/toml/json
+- properties
+- xml
+- markdown/latex/mediawiki/html list
+- rich text list
+- bean
+
+## For v2.2.0
+
 ### Add CompactBinaryTreePrinter
 
 Something like this (H?!):
@@ -50,14 +63,3 @@ For example:
 
 - fs (standalone cli fs tree printer program with options)
 - antlr (visualizes antlr parse trees)
-
-### Load from config
-
-For example:
-
-- yaml/toml/json
-- properties
-- xml
-- markdown/latex/mediawiki/html list
-- rich text list
-- bean
