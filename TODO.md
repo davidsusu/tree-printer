@@ -1,5 +1,17 @@
 # TODO list
 
+## Documentation
+
+### Add examples section
+
+Use the `details` tag:
+
+```markdown
+<details><summary><b>Example title</b></summary>
+blahh
+</details>
+```
+
 ## For v2.1.0
 
 ### Add CompactBinaryTreePrinter
