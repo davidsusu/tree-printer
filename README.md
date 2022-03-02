@@ -97,7 +97,8 @@ However, you are free to implement your custom nodes.
 There are multiple built-in implementations of the `TreePrinter` interface
 for printing tree structures via the `print()` method.
 This method accepts a `TreeNode` (the root node of the printed hierarchy),
-and, optionally, an `Appendable` object, to where the output will be flushed.
+and, optionally, an `Appendable` object, to where the output will be flushed
+(by default, output will be printed to `System.out`).
 
 Alternatively, you can get the visualization as `String` via `stringify()`.
 In some cases this is inefficient (especially when you print large data with `ListingTreePrinter`).
