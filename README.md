@@ -199,6 +199,7 @@ new TraditionalTreePrinter().print(decoratedTreeNode);
 
 Result:
 
+<!--
 ```
                ▛▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▜
                ▏  I'm the root!  ▕▒
@@ -211,6 +212,9 @@ Result:
 ▙▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▟▒ ▙▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▟▒
  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 ```
+-->
+
+![Decorated tree example](img/decorated-tree.png)
 
 Decorators inherit by default, but you can change this behavior.
 
