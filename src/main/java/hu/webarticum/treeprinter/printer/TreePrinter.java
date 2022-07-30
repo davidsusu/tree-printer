@@ -10,7 +10,7 @@ import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
  * Any implementation can have its own way to do this.
  * Some implementations (e. g. {@link ListingTreePrinter}) can print
  * large data in a memory efficient way via
- * <code>print(TreeNode)<code> or <code>print(TreeNode, Appendable)<code>.
+ * <code>print(TreeNode)</code> or <code>print(TreeNode, Appendable)</code>.
  */
 @FunctionalInterface
 public interface TreePrinter {
