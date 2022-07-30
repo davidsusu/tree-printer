@@ -1,9 +1,10 @@
 plugins {
     id 'java-library'
-    id 'signing'
-    id 'maven'
     id 'eclipse'
-    id 'com.palantir.git-version' version '0.12.3'
+    id 'signing'
+    id 'maven-publish'
+    id 'com.palantir.git-version' version '0.15.0'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
 sourceCompatibility = "1.8";
@@ -29,7 +30,8 @@ if (versionMatcher.size() > 0) {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
+    mavenLocal()
 }
 
 configurations {
@@ -48,29 +50,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-signing {
-    required { true }
-    sign configurations.archives
-}
+defaultTasks 'build'
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-eclipse {
-    classpath {
-        plusConfigurations.add configurations.demo
-    }
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 jar {
@@ -79,43 +63,67 @@ jar {
     }
 }
 
-if (project.ext.properties.containsKey('mavenRepositoryUrl')) {
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                repository(url: project.ext.mavenRepositoryUrl) {
-                    authentication(
-                        userName: project.ext.mavenRepositoryUsername,
-                        password: project.ext.mavenRepositoryPassword
-                    )
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+signing {
+    required { true }
+    sign configurations.archives
+    sign publishing.publications.mavenJava
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'failed'
+        showExceptions true
+        exceptionFormat 'full'
+        showCauses true
+        showStackTraces true
+        showStandardStreams false
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
+}
+
+project.plugins.withType(MavenPublishPlugin).all {
+    PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
+    publishing.publications.withType(MavenPublication).all { mavenPublication ->
+        mavenPublication.pom {
+            name = project.name
+            description = project.description
+            url = websiteUrl
+            licenses {
+                license {
+                    name = 'The Apache Software License, Version 2.0'
+                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution = 'repo'
                 }
-                beforeDeployment { MavenDeployment deployment ->
-                    signing.signPom(deployment)
-                }
-                pom.artifactId = project.name
-                pom.project {
-                    name = project.name
-                    description = project.description
-                    url = websiteUrl
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution 'repo'
-                        }
-                    }
-                    scm {
-                        connection 'scm:git:' + scmUrl
-                        developerConnection 'scm:git:' + scmUrl
-                        url scmUrl
-                    }
-                    developers {
-                        developer {
-                            id = 'davidsusu'
-                            name = 'Dávid Horváth'
-                            email = 'horvath@webarticum.hu'
-                        }
-                    }
+            }
+            scm {
+                connection = 'scm:git:' + scmUrl
+                developerConnection = 'scm:git:' + scmUrl
+                url = scmUrl
+            }
+            developers {
+                developer {
+                    id = 'davidsusu'
+                    name = 'Dávid Horváth'
+                    email = 'horvath@webarticum.hu'
                 }
             }
         }
