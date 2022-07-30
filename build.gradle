@@ -10,12 +10,23 @@ sourceCompatibility = "1.8";
 targetCompatibility = "1.8";
 
 group = 'hu.webarticum'
-version = gitVersion().replaceAll(/^v|\.dirty$/, '')
 description = 'Simple Java library for visualizing tree structures in the command line'
 
 def moduleName = 'hu.webarticum.treeprinter'
 def scmUrl = 'https://github.com/davidsusu/tree-printer.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
+
+def versionMatcher = gitVersion() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
+if (versionMatcher.size() > 0) {
+    def versionMatch = versionMatcher[0]
+	def isVersionDirty = !versionMatch[3].isEmpty()
+	def versionPrefix = versionMatch[1]
+	def versionPatch = isVersionDirty ? (Integer.parseInt(versionMatch[2]) + 1) + "" : versionMatch[2];
+	def versionSuffix = isVersionDirty ? "-SNAPSHOT" : ""
+    version versionPrefix + versionPatch + versionSuffix
+} else {
+    version '0.1.0-SNAPSHOT'
+}
 
 repositories {
     jcenter()
