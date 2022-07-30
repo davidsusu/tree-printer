@@ -13,6 +13,7 @@ group = 'hu.webarticum'
 version = gitVersion().replaceAll(/^v|\.dirty$/, '')
 description = 'Simple Java library for visualizing tree structures in the command line'
 
+def moduleName = 'hu.webarticum.treeprinter'
 def scmUrl = 'https://github.com/davidsusu/tree-printer.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
@@ -58,6 +59,12 @@ artifacts {
 eclipse {
     classpath {
         plusConfigurations.add configurations.demo
+    }
+}
+
+jar {
+    manifest {
+        attributes('Automatic-Module-Name': moduleName)
     }
 }
 
