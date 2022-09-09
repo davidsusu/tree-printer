@@ -191,8 +191,7 @@ TreeNode decoratedTreeNode = new ShadowTreeNodeDecorator(
         BorderTreeNodeDecorator.builder()
                 .wideUnicode()
                 .buildFor(
-                        new PadTreeNodeDecorator(rootNode, new Insets(0, 2)))
-        );
+                        new PadTreeNodeDecorator(rootNode, new Insets(0, 2))));
 
 new TraditionalTreePrinter().print(decoratedTreeNode);
 ```
@@ -255,8 +254,7 @@ alignedTree.addChild(new SimpleTreeNode("RIGHT"));
 new TraditionalTreePrinter(displayPlaceholders).print(
         PadTreeNodeDecorator.builder()
                 .horizontalPad(3)
-                .buildFor(new BorderTreeNodeDecorator(alignedTree))
-        );
+                .buildFor(new BorderTreeNodeDecorator(alignedTree)));
 ```
 
 ```
@@ -273,3 +271,13 @@ new TraditionalTreePrinter(displayPlaceholders).print(
 Any node whose `isPlaceholder()` method returns `true` is considered a placeholder.
 `hu.webarticum.treeprinter.PlaceholderNode` is a built-in placeholder,
 it's empty and undecorable too.
+
+## Future plans
+
+There are various ideas in the backlog that are planned to be implemented in the next versions, such as:
+
+- ANSI output support
+- More `TreePrinter` implementations
+- More flexible alignment settings
+- Improved `TraditionalTreePrinter`
+- and more
