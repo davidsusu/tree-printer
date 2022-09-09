@@ -22,15 +22,15 @@ public abstract class AbstractTreeNodeDecorator implements TreeNode {
     protected final boolean decorable;
     
 
-    public AbstractTreeNodeDecorator(TreeNode baseNode) {
+    protected AbstractTreeNodeDecorator(TreeNode baseNode) {
         this(baseNode, true);
     }
 
-    public AbstractTreeNodeDecorator(TreeNode baseNode, boolean inherit) {
+    protected AbstractTreeNodeDecorator(TreeNode baseNode, boolean inherit) {
         this(baseNode, inherit, baseNode.isDecorable());
     }
 
-    public AbstractTreeNodeDecorator(TreeNode baseNode, boolean inherit, boolean decorable) {
+    protected AbstractTreeNodeDecorator(TreeNode baseNode, boolean inherit, boolean decorable) {
         if (baseNode == null) {
             throw new IllegalArgumentException("Decorated node must not be null");
         }
