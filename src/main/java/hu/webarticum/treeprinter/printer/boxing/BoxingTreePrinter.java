@@ -372,8 +372,8 @@ public class BoxingTreePrinter implements TreePrinter {
         }
 
         public Builder horizontalLevels(Collection<Integer> horizontalLevels) {
-            horizontalLevels.clear();
-            horizontalLevels.addAll(horizontalLevels);
+            this.horizontalLevels.clear();
+            this.horizontalLevels.addAll(horizontalLevels);
             return this;
         }
 
