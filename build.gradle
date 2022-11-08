@@ -47,6 +47,7 @@ sourceSets {
 }
 
 dependencies {
+    demoImplementation sourceSets.main.output
 }
 
 defaultTasks 'build'
@@ -97,6 +98,14 @@ test {
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:unchecked'
     options.deprecation = true
+}
+
+task demo(type: JavaExec) {
+    dependsOn build
+    group = "Execution"
+    description = "Run the demo class specified with the demoMain property"
+    classpath = sourceSets.demo.runtimeClasspath
+    main = demoMain
 }
 
 project.plugins.withType(MavenPublishPlugin).all {
