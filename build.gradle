@@ -105,7 +105,7 @@ task demo(type: JavaExec) {
     group = "Execution"
     description = "Run the demo class specified with the demoMain property"
     classpath = sourceSets.demo.runtimeClasspath
-    main = demoMain
+    main = project.findProperty('demoMain')
 }
 
 project.plugins.withType(MavenPublishPlugin).all {
