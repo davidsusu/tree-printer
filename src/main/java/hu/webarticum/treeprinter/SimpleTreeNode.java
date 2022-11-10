@@ -3,6 +3,8 @@ package hu.webarticum.treeprinter;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.webarticum.treeprinter.text.ConsoleText;
+
 /**
  * Simple default implementation for {@link TreeNode}.
  * 
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public class SimpleTreeNode implements TreeNode {
 
-    private final String content;
+    private final ConsoleText content;
     
     private final Insets insets;
     
@@ -19,10 +21,18 @@ public class SimpleTreeNode implements TreeNode {
     
 
     public SimpleTreeNode(String content) {
-        this(content, Insets.EMPTY);
+        this(ConsoleText.of(content), Insets.EMPTY);
     }
 
     public SimpleTreeNode(String content, Insets insets) {
+        this(ConsoleText.of(content), insets);
+    }
+
+    public SimpleTreeNode(ConsoleText content) {
+        this(content, Insets.EMPTY);
+    }
+
+    public SimpleTreeNode(ConsoleText content, Insets insets) {
         this.content = content;
         this.insets = insets;
     }
@@ -37,7 +47,7 @@ public class SimpleTreeNode implements TreeNode {
     }
 
     @Override
-    public String content() {
+    public ConsoleText content() {
         return content;
     }
 

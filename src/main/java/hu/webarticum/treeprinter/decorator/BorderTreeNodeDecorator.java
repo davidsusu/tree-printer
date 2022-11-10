@@ -1,8 +1,11 @@
 package hu.webarticum.treeprinter.decorator;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -73,30 +76,31 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     
     @Override
-    public String decoratedContent() {
-        String content = baseNode.content();
-        
-        String[] contentLines = Util.splitToLines(content);
-        int longestLineLength = Util.getMaxLength(contentLines);
+    public ConsoleText decoratedContent() {
+        ConsoleText baseContent = baseNode.content();
+        String contentString = Util.getStringContent(baseContent);
+        String[] contentLines = TextUtil.linesOf(contentString);
+        int baseWidth = baseContent.dimensions().width();
         
         StringBuilder resultBuilder = new StringBuilder();
         
         resultBuilder.append(topLeft);
-        Util.repeat(resultBuilder, top, longestLineLength);
+        TextUtil.repeat(resultBuilder, top, baseWidth);
         resultBuilder.append(topRight);
         resultBuilder.append('\n');
         for (String contentLine: contentLines) {
             resultBuilder.append(left);
             resultBuilder.append(contentLine);
-            Util.repeat(resultBuilder, ' ', longestLineLength - contentLine.length());
+            TextUtil.repeat(resultBuilder, ' ', baseWidth - contentLine.length());
             resultBuilder.append(right);
             resultBuilder.append('\n');
         }
         resultBuilder.append(bottomLeft);
-        Util.repeat(resultBuilder, bottom, longestLineLength);
+        TextUtil.repeat(resultBuilder, bottom, baseWidth);
         resultBuilder.append(bottomRight);
         
-        return resultBuilder.toString();
+        String decoratedContent = resultBuilder.toString();
+        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
     }
 
     @Override

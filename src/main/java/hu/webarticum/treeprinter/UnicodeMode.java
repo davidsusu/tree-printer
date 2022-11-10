@@ -1,12 +1,10 @@
 package hu.webarticum.treeprinter;
 
-import hu.webarticum.treeprinter.printer.TreePrinter;
-
 /**
  * Shared static class for managing global default unicode mode.
  * 
- * Built-in {@link TreePrinter} implementations use this setting
- * for choosing a default set of characters to draw
+ * Built-in printers and node decorators use this setting at construction time
+ * for choosing a default set of characters
  */
 public final class UnicodeMode {
     

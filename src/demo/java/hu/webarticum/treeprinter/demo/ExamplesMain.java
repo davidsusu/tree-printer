@@ -105,8 +105,8 @@ public class ExamplesMain {
 
         @Override
         public boolean isDecorable() {
-            String content = content();
-            return (content.isEmpty() || content.charAt(0) != '(');
+            String plainContent = content().plain();
+            return (plainContent.isEmpty() || plainContent.charAt(0) != '(');
         }
         
     }

@@ -3,8 +3,9 @@ package hu.webarticum.treeprinter.printer.traditional;
 import java.util.List;
 
 import hu.webarticum.treeprinter.UnicodeMode;
-import hu.webarticum.treeprinter.util.LineBuffer;
-import hu.webarticum.treeprinter.util.Util;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.LineBuffer;
+import hu.webarticum.treeprinter.text.TextUtil;
 
 /**
  * Default implementation of {@link Liner}.
@@ -105,11 +106,11 @@ public class DefaultLiner implements Liner {
     
     private void printTopConnection(LineBuffer buffer, int row, int start, int topConnection) {
         StringBuilder topConnectionLineBuilder = new StringBuilder();
-        Util.repeat(topConnectionLineBuilder, ' ', topConnection - start);
+        TextUtil.repeat(topConnectionLineBuilder, ' ', topConnection - start);
         topConnectionLineBuilder.append(topConnectionChar);
         String topConnectionLine = topConnectionLineBuilder.toString();
         for (int i = 0; i < topHeight; i++) {
-            buffer.write(row + i, start, topConnectionLine);
+            buffer.write(row + i, start, ConsoleText.of(topConnectionLine)); // FIXME / TODO: use ANSI formatting
         }
     }
     
@@ -119,7 +120,7 @@ public class DefaultLiner implements Liner {
             char lineCharacter = getNthBracketLineChar(i, start, end, topConnection, bottomConnections);
             bracketLineBuilder.append(lineCharacter);
         }
-        buffer.write(row + topHeight, start, bracketLineBuilder.toString());
+        buffer.write(row + topHeight, start, ConsoleText.of(bracketLineBuilder.toString())); // FIXME / TODO: use ANSI formatting
     }
     
     private char getNthBracketLineChar(int i, int start, int end, int topConnection, List<Integer> bottomConnections) {
@@ -168,9 +169,9 @@ public class DefaultLiner implements Liner {
             bottomConnectionLineBuilder.append(bottomConnectionChar);
             position = bottomConnection + 1;
         }
-        String bottomConnectionLine = bottomConnectionLineBuilder.toString();
+        ConsoleText bottomConnectionLineContent = ConsoleText.of(bottomConnectionLineBuilder.toString()); // FIXME / TODO: use ANSI formatting
         for (int i = topHeightWithBracket; i < fullHeight; i++) {
-            buffer.write(row + i, start, bottomConnectionLine);
+            buffer.write(row + i, start, bottomConnectionLineContent);
         }
     }
     

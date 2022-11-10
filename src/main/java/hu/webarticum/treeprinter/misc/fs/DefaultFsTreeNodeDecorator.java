@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.decorator.AbstractTreeNodeDecorator;
+import hu.webarticum.treeprinter.text.ConsoleText;
 
 /**
  * Decorator for {@link FsTreeNode} that displays more information
@@ -25,14 +26,14 @@ public class DefaultFsTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     
     @Override
-    public String decoratedContent() {
+    public ConsoleText decoratedContent() {
         if (baseNode instanceof FsTreeNode) {
             FsTreeNode fsNode = (FsTreeNode) baseNode;
             File file = fsNode.getFile();
             if (file.isDirectory()) {
-                return " " + file.getName() + "/";
+                return ConsoleText.of(" " + file.getName() + "/");
             } else {
-                return " " + file.getName() + " (" + formatFileSize(file.length()) + ")";
+                return ConsoleText.of(" " + file.getName() + " (" + formatFileSize(file.length()) + ")");
             }
         } else {
             return baseNode.content();

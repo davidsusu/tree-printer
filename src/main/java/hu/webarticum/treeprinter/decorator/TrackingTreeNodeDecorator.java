@@ -1,6 +1,7 @@
 package hu.webarticum.treeprinter.decorator;
 
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.text.ConsoleText;
 
 /**
  * Helper decorator implementation of {@link TreeNode} that tracks its position in the tree
@@ -24,7 +25,7 @@ public class TrackingTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     
     @Override
-    public String decoratedContent() {
+    public ConsoleText decoratedContent() {
         return baseNode.content();
     }
 

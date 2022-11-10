@@ -5,6 +5,7 @@ import java.util.List;
 
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.text.ConsoleText;
 
 /**
  * Base class for {@link TreeNode} decorators.
@@ -42,7 +43,7 @@ public abstract class AbstractTreeNodeDecorator implements TreeNode {
     
 
     @Override
-    public String content() {
+    public ConsoleText content() {
         if (baseNode.isDecorable()) {
             return decoratedContent();
         } else {
@@ -87,7 +88,7 @@ public abstract class AbstractTreeNodeDecorator implements TreeNode {
         return wrappedChildren;
     }
     
-    protected abstract String decoratedContent();
+    protected abstract ConsoleText decoratedContent();
 
     protected abstract TreeNode wrapChild(TreeNode childNode, int index);
 

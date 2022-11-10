@@ -1,7 +1,10 @@
 package hu.webarticum.treeprinter.decorator;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -56,22 +59,24 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     
     @Override
-    public String decoratedContent() {
-        String content = baseNode.content();
-
-        String[] contentLines = Util.splitToLines(content);
-        int contentWidth = Util.getMaxLength(contentLines);
-
+    public ConsoleText decoratedContent() {
+        ConsoleText baseContent = baseNode.content();
+        String baseString = Util.getStringContent(baseContent);
+        String[] baseLines = TextUtil.linesOf(baseString);
+        int baseWidth = baseContent.dimensions().width();
+        
         StringBuilder resultBuilder = new StringBuilder();
-        appendTopPadding(resultBuilder, contentWidth);
-        appendPaddedContentLines(resultBuilder, contentLines, contentWidth);
-        appendBottomPadding(resultBuilder, contentWidth);
-        return resultBuilder.toString();
+        appendTopPadding(resultBuilder, baseWidth);
+        appendPaddedContentLines(resultBuilder, baseLines, baseWidth);
+        appendBottomPadding(resultBuilder, baseWidth);
+        
+        String decoratedContent = resultBuilder.toString();
+        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
     }
     
     private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
         for (int i = 0; i < n; i++) {
-            Util.repeat(stringBuilder, padCharacter, width);
+            TextUtil.repeat(stringBuilder, padCharacter, width);
             stringBuilder.append('\n');
         }
     }
@@ -86,10 +91,10 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private void appendPaddedContentLines(StringBuilder stringBuilder, String[] lines, int width) {
         for (String line: lines) {
-            Util.repeat(stringBuilder, padCharacter, insets.left());
+            TextUtil.repeat(stringBuilder, padCharacter, insets.left());
             stringBuilder.append(line);
-            Util.repeat(stringBuilder, ' ', width - line.length());
-            Util.repeat(stringBuilder, padCharacter, insets.right());
+            TextUtil.repeat(stringBuilder, ' ', width - line.length());
+            TextUtil.repeat(stringBuilder, padCharacter, insets.right());
             stringBuilder.append('\n');
         }
     }

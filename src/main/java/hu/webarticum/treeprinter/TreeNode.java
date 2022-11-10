@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter;
 import java.util.List;
 
 import hu.webarticum.treeprinter.printer.TreePrinter;
+import hu.webarticum.treeprinter.text.ConsoleText;
 
 /**
  * Main interface for trees and tree nodes.
@@ -17,7 +18,7 @@ public interface TreeNode {
     /**
      * Gets the content of this node.
      */
-    public String content();
+    public ConsoleText content();
 
     /**
      * Gets the list of child nodes of this node.

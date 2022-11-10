@@ -10,7 +10,10 @@ import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
-import hu.webarticum.treeprinter.util.LineBuffer;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.Dimensions;
+import hu.webarticum.treeprinter.text.LineBuffer;
+import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -115,33 +118,35 @@ public class BoxingTreePrinter implements TreePrinter {
         return getLevelAsString(rootNode, 0);
     }
     
+    // FIXME
     private String getLevelAsString(TreeNode rootNode, int level) {
         List<TreeNode> children = rootNode.children();
         if (!displayPlaceholders) {
             children.removeIf(TreeNode::isPlaceholder);
         }
-        String content = rootNode.content();
+        
+        ConsoleText rootContent = rootNode.content();
+        Dimensions dimensions = rootContent.dimensions();
         if (children.isEmpty()) {
-            return boxIfEnabled(content);
+            return boxIfEnabled(rootContent, dimensions);
         }
         
         StringBuilder resultBuilder = new StringBuilder();
-        int[] dimensions = Util.getContentDimension(content);
-        LineBuffer lineBuffer = new LineBuffer(resultBuilder);
+        LineBuffer lineBuffer = Util.createLineBuffer(resultBuilder);
         int leftOffset = 1 + insets.left();
-        int topHeight = dimensions[1] + 2;
+        int topHeight = dimensions.height() + 2;
         int topOffset = topHeight + insets.top();
-        int[] subDimensions;
+        Dimensions subDimensions;
         if (horizontalLevels.contains(level)) {
             subDimensions = writeItemsHorizontally(lineBuffer, leftOffset, topOffset, children, level);
         } else {
             subDimensions = writeItemsVertically(lineBuffer, leftOffset, topOffset, children, level);
         }
-        int innerWidth = Math.max(dimensions[0] + 4, subDimensions[0] + insets.left() + insets.right());
-        int topDiff = writeTop(lineBuffer, content, dimensions, innerWidth);
+        int innerWidth = Math.max(dimensions.width() + 4, subDimensions.width() + insets.left() + insets.right());
+        int topDiff = writeTop(lineBuffer, rootContent, dimensions, innerWidth);
         int verticalLineTop = topHeight - topDiff;
-        int verticalLineHeight = subDimensions[1] + topDiff + insets.top() + insets.bottom();
-        int bottomOffset = topOffset + subDimensions[1] + insets.bottom();
+        int verticalLineHeight = subDimensions.height() + topDiff + insets.top() + insets.bottom();
+        int bottomOffset = topOffset + subDimensions.height() + insets.bottom();
         writeBottom(lineBuffer, bottomOffset, innerWidth);
         writeLeft(lineBuffer, verticalLineTop, verticalLineHeight);
         writeRight(lineBuffer, innerWidth + 1, verticalLineTop, verticalLineHeight);
@@ -149,7 +154,7 @@ public class BoxingTreePrinter implements TreePrinter {
         return resultBuilder.toString();
     }
     
-    private int[] writeItemsVertically(
+    private Dimensions writeItemsVertically(
             LineBuffer lineBuffer, int leftOffset, int topOffset, List<TreeNode> nodes, int level) {
         int width = 0;
         int height = 0;
@@ -160,18 +165,20 @@ public class BoxingTreePrinter implements TreePrinter {
             } else {
                 height += verticalGap;
             }
-            String itemContent = getLevelAsString(node, level + 1);
-            int[] childDimensions = Util.getContentDimension(itemContent);
-            lineBuffer.write(topOffset + height, leftOffset, itemContent);
-            height += childDimensions[1];
-            if (childDimensions[0] > width) {
-                width = childDimensions[0];
+            String itemContentString = getLevelAsString(node, level + 1);
+            ConsoleText itemContent = Util.toConsoleText(itemContentString);
+            Dimensions childDimensions = itemContent.dimensions();
+            lineBuffer.write(topOffset + height, leftOffset, itemContent); // FIXME / TODO: ANSI formatting
+            height += childDimensions.height();
+            int childWidth = childDimensions.width();
+            if (childWidth > width) {
+                width = childWidth;
             }
         }
-        return new int[] { width, height };
+        return new Dimensions(width, height);
     }
 
-    private int[] writeItemsHorizontally(
+    private Dimensions writeItemsHorizontally(
             LineBuffer lineBuffer, int leftOffset, int topOffset, List<TreeNode> nodes, int level) {
         int width = 0;
         int height = 0;
@@ -182,99 +189,102 @@ public class BoxingTreePrinter implements TreePrinter {
             } else {
                 width += horizontalGap;
             }
-            String itemContent = getLevelAsString(node, level + 1);
-            int[] childDimensions = Util.getContentDimension(itemContent);
-            lineBuffer.write(topOffset, leftOffset + width, itemContent);
-            width += childDimensions[0];
-            if (childDimensions[1] > height) {
-                height = childDimensions[1];
+            String itemContentString = getLevelAsString(node, level + 1);
+            ConsoleText itemContent = Util.toConsoleText(itemContentString);
+            Dimensions childDimensions = itemContent.dimensions(); // FIXME
+            lineBuffer.write(topOffset, leftOffset + width, itemContent); // FIXME
+            width += childDimensions.width();
+            int childHeight = childDimensions.height();
+            if (childHeight > height) {
+                height = childHeight;
             }
         }
-        return new int[] { width, height };
+        return new Dimensions(width, height);
     }
     
-    private int writeTop(LineBuffer lineBuffer, String content, int[] dimensions, int innerWidth) {
-        int width = dimensions[0];
-        int height = dimensions[1];
+    // TODO: rewrite, make it more sparing
+    private int writeTop(LineBuffer lineBuffer, ConsoleText content, Dimensions dimensions, int innerWidth) {
+        int width = dimensions.width();
+        int height = dimensions.height();
         int lineTop = height - (height / 2);
         int labelRight = width + 3;
         int labelBottom = height + 1;
-        lineBuffer.write(lineTop, 0, topLeft + "");
-        lineBuffer.write(lineTop, 1, top + "");
-        lineBuffer.write(lineTop, 2, leftConnection + "");
-        lineBuffer.write(0, 2, topLeft + "");
-        lineBuffer.write(0, labelRight, topRight + "");
-        lineBuffer.write(labelBottom, 2, bottomLeft + "");
-        lineBuffer.write(labelBottom, labelRight, bottomRight + "");
+        lineBuffer.write(lineTop, 0, ConsoleText.of(topLeft)); // FIXME / TODO: ANSI formatting
+        lineBuffer.write(lineTop, 1, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
+        lineBuffer.write(lineTop, 2, ConsoleText.of(leftConnection)); // FIXME / TODO: ANSI formatting
+        lineBuffer.write(0, 2, ConsoleText.of(topLeft)); // FIXME / TODO: ANSI formatting
+        lineBuffer.write(0, labelRight, ConsoleText.of(topRight)); // FIXME / TODO: ANSI formatting
+        lineBuffer.write(labelBottom, 2, ConsoleText.of(bottomLeft)); // FIXME / TODO: ANSI formatting
+        lineBuffer.write(labelBottom, labelRight, ConsoleText.of(bottomRight)); // FIXME / TODO: ANSI formatting
         for (int i = 3; i < labelRight; i++) {
-            lineBuffer.write(0, i, top + "");
-            lineBuffer.write(labelBottom, i, top + "");
+            lineBuffer.write(0, i, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(labelBottom, i, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
         }
         for (int i = 1; i < lineTop; i++) {
-            lineBuffer.write(i, 2, left + "");
-            lineBuffer.write(i, labelRight, right + "");
+            lineBuffer.write(i, 2, ConsoleText.of(left)); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(i, labelRight, ConsoleText.of(right)); // FIXME / TODO: ANSI formatting
         }
         for (int i = lineTop + 1; i < labelBottom; i++) {
-            lineBuffer.write(i, 2, left + "");
-            lineBuffer.write(i, labelRight, right + "");
+            lineBuffer.write(i, 2, ConsoleText.of(left)); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(i, labelRight, ConsoleText.of(right)); // FIXME / TODO: ANSI formatting
         }
-        lineBuffer.write(lineTop, width + 3, rightConnection + "");
+        lineBuffer.write(lineTop, width + 3, ConsoleText.of(rightConnection)); // FIXME / TODO: ANSI formatting
         for (int i = width + 4; i <= innerWidth; i++) {
-            lineBuffer.write(lineTop, i, top + "");
+            lineBuffer.write(lineTop, i, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
         }
-        lineBuffer.write(lineTop, innerWidth + 1, topRight + "");
+        lineBuffer.write(lineTop, innerWidth + 1, ConsoleText.of(topRight)); // FIXME / TODO: ANSI formatting
         lineBuffer.write(1, 3, content);
         return height - lineTop + 1;
     }
     
     private void writeBottom(LineBuffer lineBuffer, int topOffset, int innerWidth) {
-        lineBuffer.write(topOffset, 0, bottomLeft + "");
+        lineBuffer.write(topOffset, 0, ConsoleText.of(bottomLeft)); // FIXME / TODO: ANSI formatting
         for (int i = 1; i <= innerWidth; i++) {
-            lineBuffer.write(topOffset, i, bottom + "");
+            lineBuffer.write(topOffset, i, ConsoleText.of(bottom)); // FIXME / TODO: ANSI formatting
         }
-        lineBuffer.write(topOffset, innerWidth + 1, bottomRight + "");
+        lineBuffer.write(topOffset, innerWidth + 1, ConsoleText.of(bottomRight)); // FIXME / TODO: ANSI formatting
         
     }
 
     private void writeLeft(LineBuffer lineBuffer, int topOffset, int height) {
         int until = topOffset + height;
         for (int i = topOffset; i < until; i++) {
-            lineBuffer.write(i, 0, left + "");
+            lineBuffer.write(i, 0, ConsoleText.of(left)); // FIXME / TODO: ANSI formatting
         }
     }
 
     private void writeRight(LineBuffer lineBuffer, int leftOffset, int topOffset, int height) {
         int until = topOffset + height;
         for (int i = topOffset; i < until; i++) {
-            lineBuffer.write(i, leftOffset, right + "");
+            lineBuffer.write(i, leftOffset, ConsoleText.of(right));
         }
     }
     
-    private String boxIfEnabled(String content) {
-        return boxLeafs ? boxContent(content) : content;
+    private String boxIfEnabled(ConsoleText content, Dimensions dimensions) {
+        return boxLeafs ? boxContent(content, dimensions) : Util.getStringContent(content);
     }
 
-    private String boxContent(String content) {
-        String[] lines = Util.splitToLines(content);
-        int width = Util.getMaxLength(lines);
+    private String boxContent(ConsoleText content, Dimensions dimensions) {
+        ConsoleText[] consoleTextLines = TextUtil.linesOf(content);
+        int width = dimensions.width();
         
         StringBuilder resultBuilder = new StringBuilder();
         
         resultBuilder.append(topLeft);
-        Util.repeat(resultBuilder, top, width);
+        TextUtil.repeat(resultBuilder, top, width);
         resultBuilder.append(topRight);
         resultBuilder.append('\n');
         
-        for (String line : lines) {
+        for (ConsoleText consoleTextLine : consoleTextLines) {
             resultBuilder.append(left);
-            resultBuilder.append(line);
-            Util.repeat(resultBuilder, ' ', width - line.length());
+            resultBuilder.append(Util.getStringContent(consoleTextLine));
+            TextUtil.repeat(resultBuilder, ' ', width - consoleTextLine.dimensions().width());
             resultBuilder.append(right);
             resultBuilder.append('\n');
         }
         
         resultBuilder.append(bottomLeft);
-        Util.repeat(resultBuilder, bottom, width);
+        TextUtil.repeat(resultBuilder, bottom, width);
         resultBuilder.append(bottomRight);
         resultBuilder.append('\n');
         

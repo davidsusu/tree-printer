@@ -6,7 +6,6 @@ import java.util.Map;
 
 import hu.webarticum.treeprinter.HorizontalAlign;
 import hu.webarticum.treeprinter.TreeNode;
-import hu.webarticum.treeprinter.util.Util;
 
 /**
  * Default implementation of {@link Aligner}.
@@ -181,7 +180,7 @@ public class DefaultAligner implements Aligner {
     
     @Override
     public int collectWidths(Map<TreeNode, Integer> widthMap, TreeNode node) {
-        int contentWidth = Util.getContentDimension(node.content())[0];
+        int contentWidth = node.content().dimensions().width();
         int childrenWidth = 0;
         boolean first = true;
         List<TreeNode> children = node.children();

@@ -1,12 +1,16 @@
-package hu.webarticum.treeprinter.util;
+package hu.webarticum.treeprinter.text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.webarticum.treeprinter.util.Util;
+
 public class LineBuffer {
-    
+
     private final Appendable out;
+    
+    public final LineMerger lineMerger;
     
     private int flushedRowCount = 0;
     
@@ -14,37 +18,42 @@ public class LineBuffer {
     
     
     public LineBuffer(Appendable out) {
+        this(out, new PlainLineMerger());
+    }
+
+    public LineBuffer(Appendable out, LineMerger lineMerger) {
         this.out = out;
+        this.lineMerger = lineMerger;
     }
     
     
-    public void write(int row, int col, String text) {
-        String[] textLines = Util.splitToLines(text);
+    public void write(int row, int col, ConsoleText content) {
+        ConsoleText[] textLines = TextUtil.linesOf(content);
         int lineCount = textLines.length;
         for (int i = 0; i < lineCount; i++) {
-            writeLine(row + i, col, textLines[i]);
+            writeLine(row + i, col, Util.getStringContent(textLines[i]));
         }
     }
 
     public void flush() {
         flush(flushedRowCount + lines.size());
     }
-    
-    public void flush(int rows) {
+
+    public void flush(int untilRowIndex) {
         try {
-            flushThrows(rows);
+            flushThrows(untilRowIndex);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void flushThrows(int rows) throws IOException {
-        if (rows <= flushedRowCount) {
+    private void flushThrows(int untilRowIndex) throws IOException {
+        if (untilRowIndex <= flushedRowCount) {
             return;
         }
         
         int currentLineCount = lines.size();
-        int deleteLineCount = rows - flushedRowCount;
+        int deleteLineCount = untilRowIndex - flushedRowCount;
         if (currentLineCount <= deleteLineCount) {
             for (String line: lines) {
                 out.append(line + "\n");
@@ -58,13 +67,14 @@ public class LineBuffer {
             lines = new ArrayList<>(lines.subList(deleteLineCount, currentLineCount));
         }
         
-        flushedRowCount = rows;
+        flushedRowCount = untilRowIndex;
     }
     
     private void writeLine(int row, int col, String textLine) {
         if (row < flushedRowCount) {
             return;
         }
+        
         int currentLineCount = lines.size();
         int lineIndex = row - flushedRowCount;
         String originalLine;
@@ -76,35 +86,8 @@ public class LineBuffer {
             }
             originalLine = "";
         }
-        String newLine = writeIntoLine(originalLine, col, textLine);
+        String newLine = lineMerger.merge(originalLine, col, textLine);
         lines.set(lineIndex, newLine);
-    }
-    
-    private String writeIntoLine(String contextLine, int pos, String textLine) {
-        String beforeContent;
-        String beforePad;
-
-        int contextLineLength = contextLine.length();
-        
-        if (contextLineLength <= pos) {
-            beforeContent = contextLine;
-            beforePad = Util.repeat(' ', pos - contextLineLength);
-        } else {
-            beforeContent = contextLine.substring(0, pos);
-            beforePad = "";
-        }
-
-        int textLineLength = textLine.length();
-        
-        String afterContent;
-        
-        if (pos + textLineLength < contextLineLength) {
-            afterContent = contextLine.substring(pos + textLineLength);
-        } else {
-            afterContent = "";
-        }
-        
-        return beforeContent + beforePad + textLine + afterContent;
     }
     
 }

@@ -8,7 +8,8 @@ import java.util.Map;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.decorator.TrackingTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.TreePrinter;
-import hu.webarticum.treeprinter.util.LineBuffer;
+import hu.webarticum.treeprinter.text.Dimensions;
+import hu.webarticum.treeprinter.text.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -68,16 +69,15 @@ public class TraditionalTreePrinter implements TreePrinter {
         
         Map<TreeNode, Position> positionMap = new HashMap<>();
         
-        String rootContent = wrappedRootNode.content();
-        int[] rootContentDimension = Util.getContentDimension(rootContent);
-        Placement rootPlacement = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimension[0]);
+        Dimensions rootContentDimensions = wrappedRootNode.content().dimensions();
+        Placement rootPlacement = aligner.alignNode(wrappedRootNode, 0, rootWidth, rootContentDimensions.width());
         Position rootPosition = new Position(
-                0, 0, rootPlacement.bottomConnection(), rootPlacement.left(), rootContentDimension[1]);
+                0, 0, rootPlacement.bottomConnection(), rootPlacement.left(), rootContentDimensions.height());
         positionMap.put(wrappedRootNode, rootPosition);
         
-        LineBuffer buffer = new LineBuffer(out);
-        
-        buffer.write(0, rootPlacement.left(), rootContent);
+        LineBuffer buffer = Util.createLineBuffer(out);
+
+        buffer.write(0, rootPlacement.left(), wrappedRootNode.content());
         
         buffer.flush();
         
@@ -135,15 +135,14 @@ public class TraditionalTreePrinter implements TreePrinter {
             int childCol = childrenAlign[i];
             TreeNode childNode = children.get(i);
             int childWidth = widthMap.get(childNode);
-            String childContent = childNode.content();
-            int[] childContentDimension = Util.getContentDimension(childContent);
-            Placement childPlacement = aligner.alignNode(childNode, childCol, childWidth, childContentDimension[0]);
+            Dimensions childContentDimensions = childNode.content().dimensions();
+            Placement childPlacement = aligner.alignNode(childNode, childCol, childWidth, childContentDimensions.width());
             Position childPositioning = new Position(
                     position.row + position.height,
                     childCol,
                     childPlacement.bottomConnection(),
                     childPlacement.left(),
-                    childContentDimension[1]);
+                    childContentDimensions.height());
             childrenPositionMap.put(childNode, childPositioning);
             childConnections.add(childPlacement.topConnection());
         }

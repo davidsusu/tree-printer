@@ -3,38 +3,33 @@ package hu.webarticum.treeprinter.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.text.AnsiLineMerger;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.LineBuffer;
+import hu.webarticum.treeprinter.text.LineMerger;
+import hu.webarticum.treeprinter.text.PlainLineMerger;
 
 public final class Util {
-    
-    private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\\R");
-    
     
     private Util() {
         // utility class
     }
-    
-    public static int[] getContentDimension(String content) {
-        String[] lines = splitToLines(content);
-        int longestLineLength = getMaxLength(lines);
-        return new int[] { longestLineLength, lines.length };
-    }
-    
-    public static int getMaxLength(String[] lines) {
-        int maxLength = 0;
-        for (String line: lines) {
-            int lineLength = line.length();
-            if (lineLength > maxLength) {
-                maxLength = lineLength;
-            }
-        }
-        return maxLength;
+
+
+    public static String getStringContent(ConsoleText content) {
+        return AnsiMode.isAnsiEnabled() ? content.ansi() : content.plain();
     }
 
-    public static String[] splitToLines(String content) {
-        return LINE_SEPARATOR_PATTERN.split(content);
+    public static ConsoleText toConsoleText(String stringContent) {
+        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(stringContent) : ConsoleText.of(stringContent);
+    }
+
+    public static LineBuffer createLineBuffer(Appendable out) {
+        LineMerger lineMerger = AnsiMode.isAnsiEnabled() ? new AnsiLineMerger() : new PlainLineMerger();
+        return new LineBuffer(out, lineMerger);
     }
     
     public static int getDepth(TreeNode treeNode) {
@@ -57,18 +52,6 @@ public final class Util {
             depth++;
         }
         return depth;
-    }
-
-    public static String repeat(char character, int repeats) {
-        StringBuilder resultBuilder = new StringBuilder();
-        repeat(resultBuilder, character, repeats);
-        return resultBuilder.toString();
-    }
-    
-    public static void repeat(StringBuilder stringBuilder, char character, int repeats) {
-        for (int i = 0; i < repeats; i ++) {
-            stringBuilder.append(character);
-        }
     }
 
     public static void write(Appendable out, String content) {

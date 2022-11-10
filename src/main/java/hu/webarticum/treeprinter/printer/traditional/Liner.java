@@ -2,7 +2,7 @@ package hu.webarticum.treeprinter.printer.traditional;
 
 import java.util.List;
 
-import hu.webarticum.treeprinter.util.LineBuffer;
+import hu.webarticum.treeprinter.text.LineBuffer;
 
 /**
  * Liner strategy interface for {@link TraditionalTreePrinter}

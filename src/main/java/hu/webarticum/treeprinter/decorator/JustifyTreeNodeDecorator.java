@@ -1,8 +1,12 @@
 package hu.webarticum.treeprinter.decorator;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.HorizontalAlign;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.VerticalAlign;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.Dimensions;
+import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -74,27 +78,29 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
 
     @Override
-    protected String decoratedContent() {
-        String baseContent = baseNode.content();
-        String[] baseLines = Util.splitToLines(baseContent);
-        int contentHeight = baseLines.length;
-        int contentWidth = Util.getMaxLength(baseLines);
-        int fullWidth = Math.max(minimumWidth, contentWidth);
-        int fullHeight = Math.max(minimumHeight, contentHeight);
-        int topPad = getStartPad(fullHeight, contentHeight, verticalAlign);
-        int bottomPad = fullHeight - contentHeight - topPad;
+    protected ConsoleText decoratedContent() {
+        ConsoleText baseContent = baseNode.content();
+        String baseString = Util.getStringContent(baseContent);
+        String[] baseLines = TextUtil.linesOf(baseString);
+        Dimensions baseDimensions = baseContent.dimensions();
+        int fullWidth = Math.max(minimumWidth, baseDimensions.width());
+        int fullHeight = Math.max(minimumHeight, baseDimensions.height());
+        int topPad = getStartPad(fullHeight, baseDimensions.height(), verticalAlign);
+        int bottomPad = fullHeight - baseDimensions.height() - topPad;
         
         StringBuilder resultBuilder = new StringBuilder();
         appendTopLines(resultBuilder, fullWidth, topPad);
         appendMiddleLines(resultBuilder, baseLines, fullWidth);
         appendBottomLines(resultBuilder, fullWidth, bottomPad);
-        return resultBuilder.toString();
+
+        String decoratedContent = resultBuilder.toString();
+        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
         
     }
     
     private void appendTopLines(StringBuilder contentBuilder, int width, int height) {
         for (int i = 0; i < height; i++) {
-            contentBuilder.append(Util.repeat(background, width));
+            contentBuilder.append(TextUtil.repeat(background, width));
             contentBuilder.append('\n');
         }
     }
@@ -115,15 +121,15 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         int baseLineLength = baseLine.length();
         int leftPad = getStartPad(fullWidth, baseLineLength, horizontalAlign);
         int rightPad = fullWidth - baseLineLength - leftPad;
-        contentBuilder.append(Util.repeat(background, leftPad));
+        contentBuilder.append(TextUtil.repeat(background, leftPad));
         contentBuilder.append(baseLine);
-        contentBuilder.append(Util.repeat(background, rightPad));
+        contentBuilder.append(TextUtil.repeat(background, rightPad));
     }
     
     private void appendBottomLines(StringBuilder contentBuilder, int width, int height) {
         for (int i = 0; i < height; i++) {
             contentBuilder.append('\n');
-            contentBuilder.append(Util.repeat(background, width));
+            contentBuilder.append(TextUtil.repeat(background, width));
         }
     }
 

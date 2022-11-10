@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.text.ConsoleText;
 
 /**
  * {@link TreeNode} implementation that represents a file system tree.
@@ -72,8 +73,8 @@ public class FsTreeNode implements TreeNode {
     }
     
     @Override
-    public String content() {
-        return file.getName();
+    public ConsoleText content() {
+        return ConsoleText.of(file.getName());
     }
 
     @Override

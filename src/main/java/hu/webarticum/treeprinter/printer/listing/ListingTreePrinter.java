@@ -6,6 +6,7 @@ import java.util.List;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
+import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -85,7 +86,7 @@ public class ListingTreePrinter implements TreePrinter {
     
     private void printSub(
             TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
-        String content = node.content();
+        String content = Util.getStringContent(node.content());
         int connectOffset = node.insets().top();
 
         List<TreeNode> childNodes = new ArrayList<>(node.children());
@@ -93,7 +94,7 @@ public class ListingTreePrinter implements TreePrinter {
             childNodes.removeIf(TreeNode::isPlaceholder);
         }
         
-        String[] lines = Util.splitToLines(content);
+        String[] lines = TextUtil.linesOf(content);
         for (int i = 0; i < lines.length; i++) {
             printContentLine(out, prefix, disposition, !childNodes.isEmpty(), inset, connectOffset, i, lines[i]);
         }
@@ -109,7 +110,7 @@ public class ListingTreePrinter implements TreePrinter {
             printSub(childNode, out, subPrefix, subDisposition, subInset);
         }
     }
-    
+
     private void printContentLine(
             Appendable out,
             String prefix,
@@ -143,7 +144,7 @@ public class ListingTreePrinter implements TreePrinter {
             resultBuilder.append(isLast ? liningSpace : liningGeneral);
         }
         
-        String insetString = buildInsets(hasChildren, inset, connectOffset, i);
+        String insetString = buildInsets(hasChildren, inset, connectOffset, i); // FIXME / TODO: use ANSI formatting
         resultBuilder.append(insetString);
 
         return resultBuilder.toString();

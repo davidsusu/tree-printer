@@ -1,11 +1,12 @@
 package hu.webarticum.treeprinter.decorator;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
+import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.Dimensions;
+import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
 
 /**
@@ -58,13 +59,15 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
 
     @Override
-    public String decoratedContent() {
-        List<String> lines = baseNode.content().lines().collect(Collectors.toList());
+    public ConsoleText decoratedContent() {
+        ConsoleText baseContent = baseNode.content();
+        String baseString = Util.getStringContent(baseContent);
+        String[] baseLines = TextUtil.linesOf(baseString);
+        Dimensions baseDimensions = baseContent.dimensions();
+        int baseWidth = baseDimensions.width();
+        int baseHeight = baseDimensions.height();
         
-        int height = lines.size();
-        int width = lines.stream().mapToInt(String::length).max().orElse(0);
-        
-        String shadowLine = buildShadowLine(width);
+        String shadowLine = buildShadowLine(baseWidth);
         String emptyPrefix = buildEmptyPrefix();
         String shadowPrefix = buildShadowPrefix();
         String shadowSuffix = buildShadowSuffix();
@@ -72,11 +75,11 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         StringBuilder resultBuilder = new StringBuilder();
 
         int topStart = Math.min(0, verticalOffset);
-        int topEnd = Math.min(0, height + verticalOffset);
-        int middleStart = Math.max(0, Math.min(height, verticalOffset));
-        int middleEnd = Math.max(0, Math.min(height, height + verticalOffset));
-        int bottomStart = Math.max(height, verticalOffset);
-        int bottomEnd = Math.max(height, height + verticalOffset);
+        int topEnd = Math.min(0, baseHeight + verticalOffset);
+        int middleStart = Math.max(0, Math.min(baseHeight, verticalOffset));
+        int middleEnd = Math.max(0, Math.min(baseHeight, baseHeight + verticalOffset));
+        int bottomStart = Math.max(baseHeight, verticalOffset);
+        int bottomEnd = Math.max(baseHeight, baseHeight + verticalOffset);
 
         for (int i = topStart; i < topEnd; i++) {
             resultBuilder.append(shadowLine);
@@ -88,38 +91,39 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         for (int i = 0; i < middleStart; i++) {
             resultBuilder.append(emptyPrefix);
-            resultBuilder.append(lines.get(i));
+            resultBuilder.append(baseLines[i]);
             resultBuilder.append('\n');
         }
         for (int i = middleStart; i < middleEnd; i++) {
             resultBuilder.append(shadowPrefix);
-            resultBuilder.append(lines.get(i));
+            resultBuilder.append(baseLines[i]);
             resultBuilder.append(shadowSuffix);
             resultBuilder.append('\n');
         }
-        for (int i = middleEnd; i < height; i++) {
+        for (int i = middleEnd; i < baseHeight; i++) {
             resultBuilder.append(emptyPrefix);
-            resultBuilder.append(lines.get(i));
+            resultBuilder.append(baseLines[i]);
             resultBuilder.append('\n');
         }
 
-        for (int i = height; i < bottomStart; i++) {
+        for (int i = baseHeight; i < bottomStart; i++) {
             resultBuilder.append('\n');
         }
         for (int i = bottomStart; i < bottomEnd; i++) {
             resultBuilder.append(shadowLine);
             resultBuilder.append('\n');
         }
-        
-        return resultBuilder.toString();
+
+        String decoratedContent = resultBuilder.toString();
+        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
     }
     
     private String buildShadowLine(int width) {
         StringBuilder shadowLineBuilder = new StringBuilder();
         if (horizontalOffset > 0) {
-            shadowLineBuilder.append(Util.repeat(EMPTY_CHAR, horizontalOffset));
+            shadowLineBuilder.append(TextUtil.repeat(EMPTY_CHAR, horizontalOffset));
         }
-        shadowLineBuilder.append(Util.repeat(shadowChar, width));
+        shadowLineBuilder.append(TextUtil.repeat(shadowChar, width));
         return shadowLineBuilder.toString();
     }
 
@@ -128,7 +132,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return "";
         }
         
-        return Util.repeat(EMPTY_CHAR, -horizontalOffset);
+        return TextUtil.repeat(EMPTY_CHAR, -horizontalOffset);
     }
 
     private String buildShadowPrefix() {
@@ -136,7 +140,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return "";
         }
         
-        return Util.repeat(shadowChar, -horizontalOffset);
+        return TextUtil.repeat(shadowChar, -horizontalOffset);
     }
     
     private String buildShadowSuffix() {
@@ -144,7 +148,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
             return "";
         }
         
-        return Util.repeat(shadowChar, horizontalOffset);
+        return TextUtil.repeat(shadowChar, horizontalOffset);
     }
     
     @Override
