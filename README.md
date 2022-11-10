@@ -1,4 +1,4 @@
-# Tree Printer
+# Tree Printer &#x1F538; *now with colors (ANSI support)*
 
 Simple Java library for visualizing tree structures in the command line.
 
@@ -32,6 +32,20 @@ natural foods
     ├─ walnut
     └─ peanut
 ```
+
+## Migration from 2.x to 3.x
+
+Support for ANSI formatting escapes added with the following features:
+
+- width of ANSI formatted texts is handled properly
+- ANSI formatting support wad added to built-in decorators and printers (e. g. colored lining)
+- `ConsoleText` and its implementations was added for better handling of texts
+- `AnsiFormat` and its basic constant instances was added, it's composable
+- global `AnsiMode` added (similar to `UnicodeMode`), ANSI can be disabled globally
+
+The following breaking changes was made:
+
+- `TreeNode.content()` returns with `ConsoleText` (instead of `String`)
 
 ## Migration from 1.x to 2.x
 
@@ -276,7 +290,6 @@ it's empty and undecorable too.
 
 There are various ideas in the backlog that are planned to be implemented in the next versions, such as:
 
-- ANSI output support
 - More `TreePrinter` implementations
 - More flexible alignment settings
 - Improved `TraditionalTreePrinter`
