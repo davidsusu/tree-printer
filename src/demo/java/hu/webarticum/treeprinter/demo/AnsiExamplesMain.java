@@ -33,7 +33,10 @@ public class AnsiExamplesMain {
                 ConsoleText.of("Grandchild ").concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN)));
         childNode2.addChild(grandChildNode22);
         
-        new ListingTreePrinter().print(rootNode);
+        ListingTreePrinter.builder()
+                .liningFormat(AnsiFormat.CYAN)
+                .build()
+                .print(rootNode);
         
         System.out.println();
         System.out.println();
