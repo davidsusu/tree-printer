@@ -64,8 +64,16 @@ public class DefaultLiner implements Liner {
         this(builder());
     }
 
+    public DefaultLiner(AnsiFormat format) {
+        this(builder().format(format));
+    }
+
     public DefaultLiner(boolean useUnicode) {
         this(builder().unicode(useUnicode));
+    }
+
+    public DefaultLiner(boolean useUnicode, AnsiFormat format) {
+        this(builder().unicode(useUnicode).format(format));
     }
     
     private DefaultLiner(Builder builder) {

@@ -46,7 +46,11 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
 
     public ShadowTreeNodeDecorator(TreeNode baseNode) {
-        this(baseNode, new Builder());
+        this(baseNode, builder());
+    }
+
+    public ShadowTreeNodeDecorator(TreeNode baseNode, AnsiFormat format) {
+        this(baseNode, builder().format(format));
     }
 
     private ShadowTreeNodeDecorator(TreeNode baseNode, Builder builder) {

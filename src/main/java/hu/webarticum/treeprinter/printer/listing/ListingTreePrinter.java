@@ -65,6 +65,10 @@ public class ListingTreePrinter implements TreePrinter {
         this(builder());
     }
 
+    public ListingTreePrinter(AnsiFormat liningFormat) {
+        this(builder().liningFormat(liningFormat));
+    }
+
     private ListingTreePrinter(Builder builder) {
         this.liningSpace = builder.lines[0];
         this.liningGeneral = builder.lines[1];

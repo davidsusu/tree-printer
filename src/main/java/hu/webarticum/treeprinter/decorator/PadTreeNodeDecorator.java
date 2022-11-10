@@ -42,12 +42,24 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this(baseNode, 1);
     }
 
+    public PadTreeNodeDecorator(TreeNode baseNode, AnsiFormat format) {
+        this(baseNode, 1, format);
+    }
+
     public PadTreeNodeDecorator(TreeNode baseNode, int pad) {
         this(baseNode, builder().pad(pad));
     }
 
+    public PadTreeNodeDecorator(TreeNode baseNode, int pad, AnsiFormat format) {
+        this(baseNode, builder().pad(pad).format(format));
+    }
+
     public PadTreeNodeDecorator(TreeNode baseNode, Insets insets) {
         this(baseNode, builder().insets(insets));
+    }
+
+    public PadTreeNodeDecorator(TreeNode baseNode, Insets insets, AnsiFormat format) {
+        this(baseNode, builder().insets(insets).format(format));
     }
 
     private PadTreeNodeDecorator(TreeNode baseNode, Builder builder) {

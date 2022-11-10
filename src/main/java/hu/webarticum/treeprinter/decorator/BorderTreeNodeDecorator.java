@@ -61,6 +61,10 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this(baseNode, builder());
     }
 
+    public BorderTreeNodeDecorator(TreeNode baseNode, AnsiFormat format) {
+        this(baseNode, builder().format(format));
+    }
+
     private BorderTreeNodeDecorator(TreeNode baseNode, Builder builder) {
         super(baseNode, builder.inherit, builder.decorable);
         this.topLeft = builder.characters[0];

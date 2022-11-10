@@ -19,7 +19,7 @@ public class AnsiExamplesMain {
         
         SimpleTreeNode childNode1 = new SimpleTreeNode(
                 ConsoleText.of("Child 1").format(AnsiFormat.GREEN.compose(AnsiFormat.BOLD)));
-        rootNode.addChild(BorderTreeNodeDecorator.builder().format(AnsiFormat.RED).buildFor(childNode1));
+        rootNode.addChild(new BorderTreeNodeDecorator(childNode1, AnsiFormat.RED));
         
         SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
         rootNode.addChild(childNode2);
@@ -38,12 +38,9 @@ public class AnsiExamplesMain {
                         .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED))
                         .concat(ConsoleText.of("\n"))
                         .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA)));
-        childNode2.addChild(ShadowTreeNodeDecorator.builder().format(AnsiFormat.BLUE).buildFor(grandChildNode22));
+        childNode2.addChild(new ShadowTreeNodeDecorator(grandChildNode22, AnsiFormat.BLUE));
         
-        ListingTreePrinter.builder()
-                .liningFormat(AnsiFormat.CYAN)
-                .build()
-                .print(rootNode);
+        new ListingTreePrinter(AnsiFormat.CYAN).print(rootNode);
         
         System.out.println();
         System.out.println();

@@ -91,6 +91,10 @@ public class BoxingTreePrinter implements TreePrinter {
         this(builder());
     }
 
+    public BoxingTreePrinter(AnsiFormat borderFormat) {
+        this(builder().defaultFormat(borderFormat));
+    }
+
     private BoxingTreePrinter(Builder builder) {
         this.displayPlaceholders = builder.displayPlaceholders;
         this.topLeft = builder.characters[0];
