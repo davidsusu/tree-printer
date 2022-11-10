@@ -22,6 +22,13 @@ public class AnsiExamplesMain {
         SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
         rootNode.addChild(childNode2);
 
+        SimpleTreeNode grandChildNode21 = new SimpleTreeNode(
+                ConsoleText.of("Grandchild ").concat(ConsoleText.of("2-1").format(AnsiFormat.MAGENTA)));
+        childNode2.addChild(grandChildNode21);
+
+        SimpleTreeNode grandGrandChildNode211 = new SimpleTreeNode("Grand-grandchild 2-1-1");
+        grandChildNode21.addChild(grandGrandChildNode211);
+        
         SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
                 ConsoleText.of("Grandchild ").concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN)));
         childNode2.addChild(grandChildNode22);
