@@ -94,6 +94,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         for (int i = middleStart; i < middleEnd; i++) {
             resultBuilder.append(shadowPrefix);
             resultBuilder.append(lines.get(i));
+            Util.repeat(resultBuilder, ' ', width - lines.get(i).length());
             resultBuilder.append(shadowSuffix);
             resultBuilder.append('\n');
         }
