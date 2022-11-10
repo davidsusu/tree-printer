@@ -4,6 +4,7 @@ import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.Dimensions;
 import hu.webarticum.treeprinter.text.TextUtil;
@@ -41,6 +42,8 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private final int horizontalOffset;
     
+    private final AnsiFormat format;
+    
 
     public ShadowTreeNodeDecorator(TreeNode baseNode) {
         this(baseNode, new Builder());
@@ -51,6 +54,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this.shadowChar = builder.shadowChar;
         this.verticalOffset = builder.verticalOffset;
         this.horizontalOffset = builder.horizontalOffset;
+        this.format = builder.format;
     }
 
     public static Builder builder() {
@@ -67,6 +71,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         int baseHeight = baseDimensions.height();
         
         String shadowLine = buildShadowLine(baseWidth);
+        String shadowEmptyPrefix = buildShadowEmptyPrefix();
         String emptyPrefix = buildEmptyPrefix();
         String shadowPrefix = buildShadowPrefix();
         String shadowSuffix = buildShadowSuffix();
@@ -81,6 +86,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         int bottomEnd = Math.max(baseHeight, baseHeight + verticalOffset);
 
         for (int i = topStart; i < topEnd; i++) {
+            resultBuilder.append(shadowEmptyPrefix);
             resultBuilder.append(shadowLine);
             resultBuilder.append('\n');
         }
@@ -94,10 +100,10 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
             resultBuilder.append('\n');
         }
         for (int i = middleStart; i < middleEnd; i++) {
-            resultBuilder.append(shadowPrefix);
+            resultBuilder.append(Util.getStringContent(formatShadow(shadowPrefix)));
             resultBuilder.append(Util.getStringContent(baseLines[i]));
             TextUtil.repeat(resultBuilder, ' ', baseWidth - baseLines[i].dimensions().width());
-            resultBuilder.append(shadowSuffix);
+            resultBuilder.append(Util.getStringContent(formatShadow(shadowSuffix)));
             resultBuilder.append('\n');
         }
         for (int i = middleEnd; i < baseHeight; i++) {
@@ -110,21 +116,29 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
             resultBuilder.append('\n');
         }
         for (int i = bottomStart; i < bottomEnd; i++) {
-            resultBuilder.append(shadowLine);
+            resultBuilder.append(shadowEmptyPrefix);
+            resultBuilder.append(Util.getStringContent(formatShadow(shadowLine)));
             resultBuilder.append('\n');
         }
 
         String decoratedContent = resultBuilder.toString();
         return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
     }
-    
+
+    private ConsoleText formatShadow(String shadowText) {
+        return ConsoleText.of(shadowText).format(format);
+    }
+
     private String buildShadowLine(int width) {
-        StringBuilder shadowLineBuilder = new StringBuilder();
-        if (horizontalOffset > 0) {
-            shadowLineBuilder.append(TextUtil.repeat(EMPTY_CHAR, horizontalOffset));
+        return TextUtil.repeat(shadowChar, width);
+    }
+
+    private String buildShadowEmptyPrefix() {
+        if (horizontalOffset <= 0) {
+            return "";
         }
-        shadowLineBuilder.append(TextUtil.repeat(shadowChar, width));
-        return shadowLineBuilder.toString();
+        
+        return TextUtil.repeat(EMPTY_CHAR, horizontalOffset);
     }
 
     private String buildEmptyPrefix() {
@@ -186,6 +200,8 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         private int verticalOffset = 1;
         
         private int horizontalOffset = 1;
+        
+        private AnsiFormat format = AnsiFormat.NONE;
 
 
         public Builder inherit(boolean inherit) {
@@ -210,6 +226,11 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
         public Builder horizontalOffset(int horizontalOffset) {
             this.horizontalOffset = horizontalOffset;
+            return this;
+        }
+
+        public Builder format(AnsiFormat format) {
+            this.format = format;
             return this;
         }
 

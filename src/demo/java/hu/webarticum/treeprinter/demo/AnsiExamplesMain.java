@@ -37,7 +37,7 @@ public class AnsiExamplesMain {
                         .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED))
                         .concat(ConsoleText.of("\n"))
                         .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA)));
-        childNode2.addChild(new ShadowTreeNodeDecorator(grandChildNode22));
+        childNode2.addChild(ShadowTreeNodeDecorator.builder().format(AnsiFormat.BLUE).buildFor(grandChildNode22));
         
         ListingTreePrinter.builder()
                 .liningFormat(AnsiFormat.CYAN)
