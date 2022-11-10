@@ -45,6 +45,14 @@ public class TraditionalTreePrinter implements TreePrinter {
         this(DEFAULT_ALIGNER, DEFAULT_LINER);
     }
 
+    public TraditionalTreePrinter(Aligner aligner) {
+        this(aligner, DEFAULT_LINER);
+    }
+
+    public TraditionalTreePrinter(Liner liner) {
+        this(DEFAULT_ALIGNER, liner);
+    }
+
     public TraditionalTreePrinter(Aligner aligner, Liner liner) {
         this(aligner, liner, false);
     }
