@@ -187,6 +187,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 .shadowChar(shadowChar)
                 .verticalOffset(verticalOffset)
                 .horizontalOffset(horizontalOffset)
+                .format(format)
                 .buildFor(childNode);
     }
     

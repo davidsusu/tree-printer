@@ -130,6 +130,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 .inherit(inherit)
                 .insets(insets)
                 .padCharacter(padCharacter)
+                .format(format)
                 .buildFor(childNode);
     }
     

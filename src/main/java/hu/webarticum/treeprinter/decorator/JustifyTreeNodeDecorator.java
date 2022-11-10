@@ -167,6 +167,7 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
                         .horizontalAlign(horizontalAlign)
                         .verticalAlign(verticalAlign)
                         .background(background)
+                        .backgroundFormat(backgroundFormat)
                 );
     }
 

@@ -53,8 +53,8 @@ public interface ConsoleText {
             return this;
         }
         
-        String formattedString = Arrays.stream(TextUtil.linesOf(this))
-                .map(t -> formatText + t.ansi() + TextUtil.ansiReset())
+        String formattedString = Arrays.stream(TextUtil.linesOf(ansi()))
+                .map(s -> formatText + s + TextUtil.ansiReset())
                 .reduce((s1, s2) -> s1 + '\n' + s2)
                 .orElse("");
         return ofAnsi(formattedString);

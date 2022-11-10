@@ -149,6 +149,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 .bottom(bottom)
                 .bottomLeft(bottomLeft)
                 .left(left)
+                .format(format)
                 .buildFor(childNode);
     }
 
