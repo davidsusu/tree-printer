@@ -2,6 +2,7 @@ package hu.webarticum.treeprinter.demo;
 
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
+import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import hu.webarticum.treeprinter.printer.traditional.DefaultLiner;
@@ -30,8 +31,13 @@ public class AnsiExamplesMain {
         grandChildNode21.addChild(grandGrandChildNode211);
         
         SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
-                ConsoleText.of("Grandchild ").concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN)));
-        childNode2.addChild(grandChildNode22);
+                ConsoleText.of("Grandchild ")
+                        .concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN))
+                        .concat(ConsoleText.of("\n"))
+                        .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED))
+                        .concat(ConsoleText.of("\n"))
+                        .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA)));
+        childNode2.addChild(new ShadowTreeNodeDecorator(grandChildNode22));
         
         ListingTreePrinter.builder()
                 .liningFormat(AnsiFormat.CYAN)

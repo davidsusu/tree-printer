@@ -61,8 +61,7 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     public ConsoleText decoratedContent() {
         ConsoleText baseContent = baseNode.content();
-        String baseString = Util.getStringContent(baseContent);
-        String[] baseLines = TextUtil.linesOf(baseString);
+        ConsoleText[] baseLines = TextUtil.linesOf(baseContent);
         Dimensions baseDimensions = baseContent.dimensions();
         int baseWidth = baseDimensions.width();
         int baseHeight = baseDimensions.height();
@@ -91,18 +90,19 @@ public class ShadowTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         for (int i = 0; i < middleStart; i++) {
             resultBuilder.append(emptyPrefix);
-            resultBuilder.append(baseLines[i]);
+            resultBuilder.append(Util.getStringContent(baseLines[i]));
             resultBuilder.append('\n');
         }
         for (int i = middleStart; i < middleEnd; i++) {
             resultBuilder.append(shadowPrefix);
-            resultBuilder.append(baseLines[i]);
+            resultBuilder.append(Util.getStringContent(baseLines[i]));
+            TextUtil.repeat(resultBuilder, ' ', baseWidth - baseLines[i].dimensions().width());
             resultBuilder.append(shadowSuffix);
             resultBuilder.append('\n');
         }
         for (int i = middleEnd; i < baseHeight; i++) {
             resultBuilder.append(emptyPrefix);
-            resultBuilder.append(baseLines[i]);
+            resultBuilder.append(Util.getStringContent(baseLines[i]));
             resultBuilder.append('\n');
         }
 

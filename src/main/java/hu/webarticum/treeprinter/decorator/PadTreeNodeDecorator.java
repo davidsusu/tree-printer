@@ -61,8 +61,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     public ConsoleText decoratedContent() {
         ConsoleText baseContent = baseNode.content();
-        String baseString = Util.getStringContent(baseContent);
-        String[] baseLines = TextUtil.linesOf(baseString);
+        ConsoleText[] baseLines = TextUtil.linesOf(baseContent);
         int baseWidth = baseContent.dimensions().width();
         
         StringBuilder resultBuilder = new StringBuilder();
@@ -89,11 +88,11 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         appendEmptyLines(stringBuilder, insets.bottom(), insets.left() + width + insets.right());
     }
     
-    private void appendPaddedContentLines(StringBuilder stringBuilder, String[] lines, int width) {
-        for (String line: lines) {
+    private void appendPaddedContentLines(StringBuilder stringBuilder, ConsoleText[] lines, int width) {
+        for (ConsoleText line: lines) {
             TextUtil.repeat(stringBuilder, padCharacter, insets.left());
-            stringBuilder.append(line);
-            TextUtil.repeat(stringBuilder, ' ', width - line.length());
+            stringBuilder.append(Util.getStringContent(line));
+            TextUtil.repeat(stringBuilder, ' ', width - line.dimensions().width());
             TextUtil.repeat(stringBuilder, padCharacter, insets.right());
             stringBuilder.append('\n');
         }
