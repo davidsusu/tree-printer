@@ -54,7 +54,7 @@ public class AnsiExamplesMain {
         BoxingTreePrinter.builder()
                 .defaultFormat(AnsiFormat.CYAN)
                 .levelFormat(1, AnsiFormat.YELLOW)
-                .levelFormat(2, AnsiFormat.RED)
+                .levelFormat(2, AnsiFormat.MAGENTA)
                 .build()
                 .print(rootNode);
     }
