@@ -41,11 +41,12 @@ public class AnsiExamplesMain {
         
         SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
                 ConsoleText.of("Grandchild ")
-                        .concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN.compose(AnsiFormat.BOLD)))
+                        .concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN))
                         .concat(ConsoleText.of("\n"))
                         .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED))
                         .concat(ConsoleText.of("\n"))
-                        .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA)));
+                        .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA))
+                        .format(AnsiFormat.BOLD));
         childNode2.addChild(new ShadowTreeNodeDecorator(
                 JustifyTreeNodeDecorator.builder()
                         .minimumHeight(5)

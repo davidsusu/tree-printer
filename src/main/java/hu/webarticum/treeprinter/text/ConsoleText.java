@@ -1,5 +1,7 @@
 package hu.webarticum.treeprinter.text;
 
+import java.util.Arrays;
+
 public interface ConsoleText {
     
     public String plain();
@@ -51,7 +53,11 @@ public interface ConsoleText {
             return this;
         }
         
-        return ofAnsi(formatText + ansi() + TextUtil.ansiReset());
+        String formattedString = Arrays.stream(TextUtil.linesOf(this))
+                .map(t -> formatText + t.ansi() + TextUtil.ansiReset())
+                .reduce((s1, s2) -> s1 + '\n' + s2)
+                .orElse("");
+        return ofAnsi(formattedString);
     }
     
 }
