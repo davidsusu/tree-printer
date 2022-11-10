@@ -18,7 +18,8 @@ import hu.webarticum.treeprinter.text.ConsoleText;
 public class AnsiExamplesMain {
 
     public static void main(String[] args) {
-        SimpleTreeNode rootNode = new SimpleTreeNode("Root");
+        SimpleTreeNode rootNode = new SimpleTreeNode(ConsoleText.of("Root").format(
+                AnsiFormat.UNDERLINE.compose(AnsiFormat.BOLD).compose(AnsiFormat.RED)));
         
         SimpleTreeNode childNode1 = new SimpleTreeNode(
                 ConsoleText.of("Child 1").format(AnsiFormat.GREEN.compose(AnsiFormat.BOLD)));
@@ -32,11 +33,15 @@ public class AnsiExamplesMain {
         childNode2.addChild(grandChildNode21);
 
         SimpleTreeNode grandGrandChildNode211 = new SimpleTreeNode("Grand-grandchild 2-1-1");
-        grandChildNode21.addChild(PadTreeNodeDecorator.builder().pad(1).format(AnsiFormat.BG_YELLOW).buildFor(grandGrandChildNode211));
+        grandChildNode21.addChild(PadTreeNodeDecorator.builder()
+                .verticalPad(1)
+                .horizontalPad(2)
+                .format(AnsiFormat.BG_YELLOW)
+                .buildFor(grandGrandChildNode211));
         
         SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
                 ConsoleText.of("Grandchild ")
-                        .concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN))
+                        .concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN.compose(AnsiFormat.BOLD)))
                         .concat(ConsoleText.of("\n"))
                         .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED))
                         .concat(ConsoleText.of("\n"))
