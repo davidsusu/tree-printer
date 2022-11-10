@@ -222,7 +222,7 @@ public class DefaultAligner implements Aligner {
         private int gap = 1;
 
         
-        public DefaultAligner.Builder align(HorizontalAlign align) {
+        public Builder align(HorizontalAlign align) {
             this.contentAlign = align;
             this.topConnectionAlign = align;
             this.bottomConnectionAlign = align;
@@ -230,52 +230,52 @@ public class DefaultAligner implements Aligner {
             return this;
         }
 
-        public DefaultAligner.Builder contentAlign(HorizontalAlign contentAlign) {
+        public Builder contentAlign(HorizontalAlign contentAlign) {
             this.contentAlign = contentAlign;
             return this;
         }
 
-        public DefaultAligner.Builder contentOffset(int contentOffset) {
+        public Builder contentOffset(int contentOffset) {
             this.contentOffset = contentOffset;
             return this;
         }
 
-        public DefaultAligner.Builder topConnectionConnect(ConnectMode topConnectionConnect) {
+        public Builder topConnectionConnect(ConnectMode topConnectionConnect) {
             this.topConnectionConnect = topConnectionConnect;
             return this;
         }
 
-        public DefaultAligner.Builder topConnectionAlign(HorizontalAlign topConnectionAlign) {
+        public Builder topConnectionAlign(HorizontalAlign topConnectionAlign) {
             this.topConnectionAlign = topConnectionAlign;
             return this;
         }
 
-        public DefaultAligner.Builder topConnectionOffset(int topConnectionOffset) {
+        public Builder topConnectionOffset(int topConnectionOffset) {
             this.topConnectionOffset = topConnectionOffset;
             return this;
         }
 
-        public DefaultAligner.Builder bottomConnectionConnect(ConnectMode bottomConnectionConnect) {
+        public Builder bottomConnectionConnect(ConnectMode bottomConnectionConnect) {
             this.bottomConnectionConnect = bottomConnectionConnect;
             return this;
         }
 
-        public DefaultAligner.Builder bottomConnectionAlign(HorizontalAlign bottomConnectionAlign) {
+        public Builder bottomConnectionAlign(HorizontalAlign bottomConnectionAlign) {
             this.bottomConnectionAlign = bottomConnectionAlign;
             return this;
         }
 
-        public DefaultAligner.Builder bottomConnectionOffset(int bottomConnectionOffset) {
+        public Builder bottomConnectionOffset(int bottomConnectionOffset) {
             this.bottomConnectionOffset = bottomConnectionOffset;
             return this;
         }
 
-        public DefaultAligner.Builder childrenAlign(HorizontalAlign childrenAlign) {
+        public Builder childrenAlign(HorizontalAlign childrenAlign) {
             this.childrenAlign = childrenAlign;
             return this;
         }
 
-        public DefaultAligner.Builder gap(int gap) {
+        public Builder gap(int gap) {
             this.gap = gap;
             return this;
         }

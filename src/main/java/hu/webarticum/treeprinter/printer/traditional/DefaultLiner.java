@@ -188,97 +188,97 @@ public class DefaultLiner implements Liner {
                 UnicodeMode.isUnicodeDefault() ?
                 LINE_CHARS_UNICODE.clone() :
                 LINE_CHARS_ASCII.clone();
-
-                
-        public DefaultLiner.Builder topHeight(int topHeight) {
+        
+        
+        public Builder topHeight(int topHeight) {
             this.topHeight = topHeight;
             return this;
         }
 
-        public DefaultLiner.Builder bottomHeight(int bottomHeight) {
+        public Builder bottomHeight(int bottomHeight) {
             this.bottomHeight = bottomHeight;
             return this;
         }
 
-        public DefaultLiner.Builder displayBracket(boolean displayBracket) {
+        public Builder displayBracket(boolean displayBracket) {
             this.displayBracket = displayBracket;
             return this;
         }
 
-        public DefaultLiner.Builder ascii() {
+        public Builder ascii() {
             return unicode(false);
         }
 
-        public DefaultLiner.Builder unicode() {
+        public Builder unicode() {
             return unicode(true);
         }
 
-        public DefaultLiner.Builder unicode(boolean useUnicode) {
+        public Builder unicode(boolean useUnicode) {
             this.characters = useUnicode ? LINE_CHARS_UNICODE : LINE_CHARS_ASCII;
             return this;
         }
 
-        public DefaultLiner.Builder topConnectionChar(char topConnectionChar) {
+        public Builder topConnectionChar(char topConnectionChar) {
             this.characters[0] = topConnectionChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketLeftChar(char bracketLeftChar) {
+        public Builder bracketLeftChar(char bracketLeftChar) {
             this.characters[1] = bracketLeftChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketChar(char bracketChar) {
+        public Builder bracketChar(char bracketChar) {
             this.characters[2] = bracketChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketTopChar(char bracketTopChar) {
+        public Builder bracketTopChar(char bracketTopChar) {
             this.characters[3] = bracketTopChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketTopLeftChar(char bracketTopLeftChar) {
+        public Builder bracketTopLeftChar(char bracketTopLeftChar) {
             this.characters[4] = bracketTopLeftChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketTopRightChar(char bracketTopRightChar) {
+        public Builder bracketTopRightChar(char bracketTopRightChar) {
             this.characters[5] = bracketTopRightChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketBottomChar(char bracketBottomChar) {
+        public Builder bracketBottomChar(char bracketBottomChar) {
             this.characters[6] = bracketBottomChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketTopAndBottomChar(char bracketTopAndBottomChar) {
+        public Builder bracketTopAndBottomChar(char bracketTopAndBottomChar) {
             this.characters[7] = bracketTopAndBottomChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketTopAndBottomLeftChar(char bracketTopAndBottomLeftChar) {
+        public Builder bracketTopAndBottomLeftChar(char bracketTopAndBottomLeftChar) {
             this.characters[8] = bracketTopAndBottomLeftChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketTopAndBottomRightChar(char bracketTopAndBottomRightChar) {
+        public Builder bracketTopAndBottomRightChar(char bracketTopAndBottomRightChar) {
             this.characters[9] = bracketTopAndBottomRightChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketRightChar(char bracketRightChar) {
+        public Builder bracketRightChar(char bracketRightChar) {
             this.characters[10] = bracketRightChar;
             return this;
         }
 
-        public DefaultLiner.Builder bracketOnlyChar(char bracketOnlyChar) {
+        public Builder bracketOnlyChar(char bracketOnlyChar) {
             this.characters[11] = bracketOnlyChar;
             return this;
         }
 
-        public DefaultLiner.Builder bottomConnectionChar(char bottomConnectionChar) {
+        public Builder bottomConnectionChar(char bottomConnectionChar) {
             this.characters[12] = bottomConnectionChar;
             return this;
         }
