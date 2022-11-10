@@ -4,6 +4,7 @@ import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
@@ -53,6 +54,8 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private final char left;
     
+    private final AnsiFormat format;
+    
     
     public BorderTreeNodeDecorator(TreeNode baseNode) {
         this(baseNode, builder());
@@ -68,6 +71,7 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this.bottom = builder.characters[5];
         this.bottomLeft = builder.characters[6];
         this.left = builder.characters[7];
+        this.format = builder.format;
     }
 
     public static Builder builder() {
@@ -84,25 +88,45 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
         
         StringBuilder resultBuilder = new StringBuilder();
         
-        resultBuilder.append(topLeft);
-        TextUtil.repeat(resultBuilder, top, baseWidth);
-        resultBuilder.append(topRight);
+        resultBuilder.append(Util.getStringContent(formatBorder(composeRoofString(baseWidth))));
         resultBuilder.append('\n');
         for (String contentLine: contentLines) {
-            resultBuilder.append(left);
+            resultBuilder.append(Util.getStringContent(formatBorder(left)));
             resultBuilder.append(contentLine);
             TextUtil.repeat(resultBuilder, ' ', baseWidth - contentLine.length());
-            resultBuilder.append(right);
+            resultBuilder.append(Util.getStringContent(formatBorder(right)));
             resultBuilder.append('\n');
         }
-        resultBuilder.append(bottomLeft);
-        TextUtil.repeat(resultBuilder, bottom, baseWidth);
-        resultBuilder.append(bottomRight);
+        resultBuilder.append(Util.getStringContent(formatBorder(composeBeddingString(baseWidth))));
         
         String decoratedContent = resultBuilder.toString();
         return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
     }
 
+    private ConsoleText formatBorder(char borderChar) {
+        return formatBorder("" + borderChar);
+    }
+    
+    private ConsoleText formatBorder(String borderText) {
+        return ConsoleText.of(borderText).format(format);
+    }
+
+    private String composeRoofString(int innerWidth) {
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(topLeft);
+        TextUtil.repeat(resultBuilder, top, innerWidth);
+        resultBuilder.append(topRight);
+        return resultBuilder.toString();
+    }
+
+    private String composeBeddingString(int innerWidth) {
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(bottomLeft);
+        TextUtil.repeat(resultBuilder, bottom, innerWidth);
+        resultBuilder.append(bottomRight);
+        return resultBuilder.toString();
+    }
+    
     @Override
     public Insets insets() {
         return baseNode.insets().extendedWith(1);
@@ -135,6 +159,8 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
                 UnicodeMode.isUnicodeDefault() ?
                 BORDER_CHARS_UNICODE.clone() :
                 BORDER_CHARS_ASCII.clone();
+        
+        private AnsiFormat format = AnsiFormat.NONE;
         
 
         public Builder inherit(boolean inherit) {
@@ -199,6 +225,11 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
         public Builder left(char left) {
             this.characters[7] = left;
+            return this;
+        }
+
+        public Builder format(AnsiFormat format) {
+            this.format = format;
             return this;
         }
         

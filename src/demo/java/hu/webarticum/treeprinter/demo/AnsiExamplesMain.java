@@ -17,7 +17,7 @@ public class AnsiExamplesMain {
         
         SimpleTreeNode childNode1 = new SimpleTreeNode(
                 ConsoleText.of("Child 1").format(AnsiFormat.GREEN.compose(AnsiFormat.BOLD)));
-        rootNode.addChild(new BorderTreeNodeDecorator(childNode1));
+        rootNode.addChild(BorderTreeNodeDecorator.builder().format(AnsiFormat.RED).buildFor(childNode1));
         
         SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
         rootNode.addChild(childNode2);
