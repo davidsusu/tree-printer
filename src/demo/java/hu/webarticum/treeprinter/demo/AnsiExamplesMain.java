@@ -7,8 +7,8 @@ import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import hu.webarticum.treeprinter.printer.traditional.DefaultLiner;
 import hu.webarticum.treeprinter.printer.traditional.Liner;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
-import hu.webarticum.treeprinter.text.AnsiConsoleText;
 import hu.webarticum.treeprinter.text.AnsiFormat;
+import hu.webarticum.treeprinter.text.ConsoleText;
 
 public class AnsiExamplesMain {
 
@@ -16,13 +16,14 @@ public class AnsiExamplesMain {
         SimpleTreeNode rootNode = new SimpleTreeNode("Root");
         
         SimpleTreeNode childNode1 = new SimpleTreeNode(
-                new AnsiConsoleText("\u001B[1;32mChild 1\u001B[0m"));
+                ConsoleText.of("Child 1").format(AnsiFormat.GREEN.compose(AnsiFormat.BOLD)));
         rootNode.addChild(new BorderTreeNodeDecorator(childNode1));
         
         SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
         rootNode.addChild(childNode2);
 
-        SimpleTreeNode grandChildNode22 = new SimpleTreeNode("Grandchild 2-2");
+        SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
+                ConsoleText.of("Grandchild ").concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN)));
         childNode2.addChild(grandChildNode22);
         
         new ListingTreePrinter().print(rootNode);
