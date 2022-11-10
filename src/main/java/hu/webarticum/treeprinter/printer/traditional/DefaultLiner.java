@@ -3,9 +3,9 @@ package hu.webarticum.treeprinter.printer.traditional;
 import java.util.List;
 
 import hu.webarticum.treeprinter.UnicodeMode;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.LineBuffer;
-import hu.webarticum.treeprinter.text.TextUtil;
 
 /**
  * Default implementation of {@link Liner}.
@@ -56,6 +56,8 @@ public class DefaultLiner implements Liner {
     private final int bottomHeight;
 
     private final boolean displayBracket;
+    
+    private final AnsiFormat format;
 
     
     public DefaultLiner() {
@@ -83,6 +85,7 @@ public class DefaultLiner implements Liner {
         this.topHeight = builder.topHeight;
         this.bottomHeight = builder.bottomHeight;
         this.displayBracket = builder.displayBracket;
+        this.format = builder.format;
     }
 
     public static DefaultLiner.Builder builder() {
@@ -97,20 +100,16 @@ public class DefaultLiner implements Liner {
         int topHeightWithBracket = topHeight + (displayBracket ? 1 : 0);
         int fullHeight = topHeightWithBracket + bottomHeight;
         
-        printTopConnection(buffer, row, start, topConnection);
+        printTopConnection(buffer, row, topConnection);
         printConnectionBracketLine(buffer, row, start, end, topConnection, bottomConnections);
         printBottomConnections(buffer, row, start, topHeightWithBracket, fullHeight, bottomConnections);
         
         return fullHeight;
     }
     
-    private void printTopConnection(LineBuffer buffer, int row, int start, int topConnection) {
-        StringBuilder topConnectionLineBuilder = new StringBuilder();
-        TextUtil.repeat(topConnectionLineBuilder, ' ', topConnection - start);
-        topConnectionLineBuilder.append(topConnectionChar);
-        String topConnectionLine = topConnectionLineBuilder.toString();
+    private void printTopConnection(LineBuffer buffer, int row, int topConnection) {
         for (int i = 0; i < topHeight; i++) {
-            buffer.write(row + i, start, ConsoleText.of(topConnectionLine)); // FIXME / TODO: use ANSI formatting
+            buffer.write(row + i, topConnection, formatLining(topConnectionChar));
         }
     }
     
@@ -120,7 +119,7 @@ public class DefaultLiner implements Liner {
             char lineCharacter = getNthBracketLineChar(i, start, end, topConnection, bottomConnections);
             bracketLineBuilder.append(lineCharacter);
         }
-        buffer.write(row + topHeight, start, ConsoleText.of(bracketLineBuilder.toString())); // FIXME / TODO: use ANSI formatting
+        buffer.write(row + topHeight, start, formatLining(bracketLineBuilder.toString()));
     }
     
     private char getNthBracketLineChar(int i, int start, int end, int topConnection, List<Integer> bottomConnections) {
@@ -169,10 +168,18 @@ public class DefaultLiner implements Liner {
             bottomConnectionLineBuilder.append(bottomConnectionChar);
             position = bottomConnection + 1;
         }
-        ConsoleText bottomConnectionLineContent = ConsoleText.of(bottomConnectionLineBuilder.toString()); // FIXME / TODO: use ANSI formatting
+        ConsoleText bottomConnectionLineContent = formatLining(bottomConnectionLineBuilder.toString());
         for (int i = topHeightWithBracket; i < fullHeight; i++) {
             buffer.write(row + i, start, bottomConnectionLineContent);
         }
+    }
+
+    private ConsoleText formatLining(char liningChar) {
+        return formatLining("" + liningChar);
+    }
+    
+    private ConsoleText formatLining(String liningText) {
+        return ConsoleText.of(liningText).format(format);
     }
     
     
@@ -188,6 +195,8 @@ public class DefaultLiner implements Liner {
                 UnicodeMode.isUnicodeDefault() ?
                 LINE_CHARS_UNICODE.clone() :
                 LINE_CHARS_ASCII.clone();
+        
+        private AnsiFormat format = AnsiFormat.NONE;
         
         
         public Builder topHeight(int topHeight) {
@@ -280,6 +289,11 @@ public class DefaultLiner implements Liner {
 
         public Builder bottomConnectionChar(char bottomConnectionChar) {
             this.characters[12] = bottomConnectionChar;
+            return this;
+        }
+
+        public Builder format(AnsiFormat format) {
+            this.format = format;
             return this;
         }
 
