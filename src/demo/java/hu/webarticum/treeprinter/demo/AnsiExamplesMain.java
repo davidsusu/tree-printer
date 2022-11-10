@@ -1,7 +1,10 @@
 package hu.webarticum.treeprinter.demo;
 
+import hu.webarticum.treeprinter.HorizontalAlign;
 import hu.webarticum.treeprinter.SimpleTreeNode;
+import hu.webarticum.treeprinter.VerticalAlign;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
+import hu.webarticum.treeprinter.decorator.JustifyTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
@@ -38,7 +41,15 @@ public class AnsiExamplesMain {
                         .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED))
                         .concat(ConsoleText.of("\n"))
                         .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA)));
-        childNode2.addChild(new ShadowTreeNodeDecorator(grandChildNode22, AnsiFormat.BLUE));
+        childNode2.addChild(new ShadowTreeNodeDecorator(
+                JustifyTreeNodeDecorator.builder()
+                        .minimumHeight(5)
+                        .minimumWidth(20)
+                        .verticalAlign(VerticalAlign.MIDDLE)
+                        .horizontalAlign(HorizontalAlign.CENTER)
+                        .background('~')
+                        .backgroundFormat(AnsiFormat.CYAN)
+                        .buildFor(grandChildNode22), AnsiFormat.BLUE));
         
         new ListingTreePrinter(AnsiFormat.CYAN).print(rootNode);
         

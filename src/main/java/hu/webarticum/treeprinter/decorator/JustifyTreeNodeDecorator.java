@@ -1,9 +1,9 @@
 package hu.webarticum.treeprinter.decorator;
 
-import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.HorizontalAlign;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.VerticalAlign;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.Dimensions;
 import hu.webarticum.treeprinter.text.TextUtil;
@@ -54,13 +54,19 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private final char background;
     
+    private final AnsiFormat backgroundFormat;
+    
 
     public JustifyTreeNodeDecorator(TreeNode decoratedNode) {
         this(decoratedNode, builder());
     }
 
-    public JustifyTreeNodeDecorator(TreeNode decoratedNode, HorizontalAlign textAlign) {
-        this(decoratedNode, builder().horizontalAlign(textAlign));
+    public JustifyTreeNodeDecorator(TreeNode decoratedNode, AnsiFormat backgroundFormat) {
+        this(decoratedNode, builder().backgroundFormat(backgroundFormat));
+    }
+
+    public JustifyTreeNodeDecorator(TreeNode decoratedNode, HorizontalAlign textAlign, AnsiFormat backgroundFormat) {
+        this(decoratedNode, builder().horizontalAlign(textAlign).backgroundFormat(backgroundFormat));
     }
 
     private JustifyTreeNodeDecorator(TreeNode decoratedNode, Builder builder) {
@@ -70,6 +76,7 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         this.horizontalAlign = builder.horizontalAlign;
         this.verticalAlign = builder.verticalAlign;
         this.background = builder.background;
+        this.backgroundFormat = builder.backgroundFormat;
     }
 
     public static Builder builder() {
@@ -80,8 +87,7 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     protected ConsoleText decoratedContent() {
         ConsoleText baseContent = baseNode.content();
-        String baseString = Util.getStringContent(baseContent);
-        String[] baseLines = TextUtil.linesOf(baseString);
+        ConsoleText[] baseLines = TextUtil.linesOf(baseContent);
         Dimensions baseDimensions = baseContent.dimensions();
         int fullWidth = Math.max(minimumWidth, baseDimensions.width());
         int fullHeight = Math.max(minimumHeight, baseDimensions.height());
@@ -94,20 +100,20 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         appendBottomLines(resultBuilder, fullWidth, bottomPad);
 
         String decoratedContent = resultBuilder.toString();
-        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
+        return Util.toConsoleText(decoratedContent);
         
     }
     
     private void appendTopLines(StringBuilder contentBuilder, int width, int height) {
         for (int i = 0; i < height; i++) {
-            contentBuilder.append(TextUtil.repeat(background, width));
+            contentBuilder.append(Util.getStringContent(composeBackground(width)));
             contentBuilder.append('\n');
         }
     }
 
-    private void appendMiddleLines(StringBuilder contentBuilder, String[] baseLines, int fullWidth) {
+    private void appendMiddleLines(StringBuilder contentBuilder, ConsoleText[] baseLines, int fullWidth) {
         boolean first = true;
-        for (String baseLine : baseLines) {
+        for (ConsoleText baseLine : baseLines) {
             if (first) {
                 first = false;
             } else {
@@ -117,19 +123,19 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         }
     }
 
-    private void appendMiddleLine(StringBuilder contentBuilder, String baseLine, int fullWidth) {
-        int baseLineLength = baseLine.length();
-        int leftPad = getStartPad(fullWidth, baseLineLength, horizontalAlign);
-        int rightPad = fullWidth - baseLineLength - leftPad;
-        contentBuilder.append(TextUtil.repeat(background, leftPad));
-        contentBuilder.append(baseLine);
-        contentBuilder.append(TextUtil.repeat(background, rightPad));
+    private void appendMiddleLine(StringBuilder contentBuilder, ConsoleText baseLine, int fullWidth) {
+        int baseLineWidth = baseLine.dimensions().width();
+        int leftPad = getStartPad(fullWidth, baseLineWidth, horizontalAlign);
+        int rightPad = fullWidth - baseLineWidth - leftPad;
+        contentBuilder.append(Util.getStringContent(composeBackground(leftPad)));
+        contentBuilder.append(Util.getStringContent(baseLine));
+        contentBuilder.append(Util.getStringContent(composeBackground(rightPad)));
     }
     
     private void appendBottomLines(StringBuilder contentBuilder, int width, int height) {
         for (int i = 0; i < height; i++) {
             contentBuilder.append('\n');
-            contentBuilder.append(TextUtil.repeat(background, width));
+            contentBuilder.append(Util.getStringContent(composeBackground(width)));
         }
     }
 
@@ -143,6 +149,10 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         } else {
             return remainingSize / 2;
         }
+    }
+    
+    private ConsoleText composeBackground(int width) {
+        return ConsoleText.of(TextUtil.repeat(background, width)).format(backgroundFormat);
     }
     
     @Override
@@ -176,6 +186,8 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         private VerticalAlign verticalAlign = VerticalAlign.TOP;
         
         private char background = ' ';
+        
+        private AnsiFormat backgroundFormat = AnsiFormat.NONE;
 
         
         public Builder inherit(boolean inherit) {
@@ -210,6 +222,11 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
         public Builder background(char background) {
             this.background = background;
+            return this;
+        }
+
+        public Builder backgroundFormat(AnsiFormat backgroundFormat) {
+            this.backgroundFormat = backgroundFormat;
             return this;
         }
         
