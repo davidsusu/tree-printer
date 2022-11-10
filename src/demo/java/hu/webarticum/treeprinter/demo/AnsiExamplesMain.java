@@ -6,8 +6,9 @@ import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 import hu.webarticum.treeprinter.text.AnsiConsoleText;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 
-public class AnsiExampleMain {
+public class AnsiExamplesMain {
 
     public static void main(String[] args) {
         SimpleTreeNode rootNode = new SimpleTreeNode("Root");
@@ -18,6 +19,9 @@ public class AnsiExampleMain {
         
         SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
         rootNode.addChild(childNode2);
+
+        SimpleTreeNode grandChildNode22 = new SimpleTreeNode("Grandchild 2-2");
+        childNode2.addChild(grandChildNode22);
         
         new ListingTreePrinter().print(rootNode);
         
@@ -29,7 +33,12 @@ public class AnsiExampleMain {
         System.out.println();
         System.out.println();
         
-        new BoxingTreePrinter().print(rootNode);
+        BoxingTreePrinter.builder()
+                .defaultFormat(AnsiFormat.CYAN)
+                .levelFormat(1, AnsiFormat.YELLOW)
+                .levelFormat(2, AnsiFormat.RED)
+                .build()
+                .print(rootNode);
     }
     
 }

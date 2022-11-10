@@ -2,14 +2,17 @@ package hu.webarticum.treeprinter.printer.boxing;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.Dimensions;
 import hu.webarticum.treeprinter.text.LineBuffer;
@@ -79,6 +82,10 @@ public class BoxingTreePrinter implements TreePrinter {
 
     private final int horizontalGap;
     
+    private final AnsiFormat defaultFormat;
+    
+    private final Map<Integer, AnsiFormat> levelFormats;
+    
 
     public BoxingTreePrinter() {
         this(builder());
@@ -101,6 +108,8 @@ public class BoxingTreePrinter implements TreePrinter {
         this.insets = builder.insets;
         this.verticalGap = builder.verticalGap;
         this.horizontalGap = builder.horizontalGap;
+        this.defaultFormat = builder.defaultFormat;
+        this.levelFormats = new HashMap<>(builder.levelFormats);
     }
 
     public static Builder builder() {
@@ -118,7 +127,6 @@ public class BoxingTreePrinter implements TreePrinter {
         return getLevelAsString(rootNode, 0);
     }
     
-    // FIXME
     private String getLevelAsString(TreeNode rootNode, int level) {
         List<TreeNode> children = rootNode.children();
         if (!displayPlaceholders) {
@@ -128,7 +136,7 @@ public class BoxingTreePrinter implements TreePrinter {
         ConsoleText rootContent = rootNode.content();
         Dimensions dimensions = rootContent.dimensions();
         if (children.isEmpty()) {
-            return boxIfEnabled(rootContent, dimensions);
+            return boxIfEnabled(rootContent, level);
         }
         
         StringBuilder resultBuilder = new StringBuilder();
@@ -143,13 +151,13 @@ public class BoxingTreePrinter implements TreePrinter {
             subDimensions = writeItemsVertically(lineBuffer, leftOffset, topOffset, children, level);
         }
         int innerWidth = Math.max(dimensions.width() + 4, subDimensions.width() + insets.left() + insets.right());
-        int topDiff = writeTop(lineBuffer, rootContent, dimensions, innerWidth);
+        int topDiff = writeTop(lineBuffer, level, rootContent, innerWidth);
         int verticalLineTop = topHeight - topDiff;
         int verticalLineHeight = subDimensions.height() + topDiff + insets.top() + insets.bottom();
         int bottomOffset = topOffset + subDimensions.height() + insets.bottom();
-        writeBottom(lineBuffer, bottomOffset, innerWidth);
-        writeLeft(lineBuffer, verticalLineTop, verticalLineHeight);
-        writeRight(lineBuffer, innerWidth + 1, verticalLineTop, verticalLineHeight);
+        writeBottom(lineBuffer, level, bottomOffset, innerWidth);
+        writeLeft(lineBuffer, level, verticalLineTop, verticalLineHeight);
+        writeRight(lineBuffer, level, innerWidth + 1, verticalLineTop, verticalLineHeight);
         lineBuffer.flush();
         return resultBuilder.toString();
     }
@@ -191,8 +199,8 @@ public class BoxingTreePrinter implements TreePrinter {
             }
             String itemContentString = getLevelAsString(node, level + 1);
             ConsoleText itemContent = Util.toConsoleText(itemContentString);
-            Dimensions childDimensions = itemContent.dimensions(); // FIXME
-            lineBuffer.write(topOffset, leftOffset + width, itemContent); // FIXME
+            Dimensions childDimensions = itemContent.dimensions();
+            lineBuffer.write(topOffset, leftOffset + width, itemContent);
             width += childDimensions.width();
             int childHeight = childDimensions.height();
             if (childHeight > height) {
@@ -202,95 +210,117 @@ public class BoxingTreePrinter implements TreePrinter {
         return new Dimensions(width, height);
     }
     
-    // TODO: rewrite, make it more sparing
-    private int writeTop(LineBuffer lineBuffer, ConsoleText content, Dimensions dimensions, int innerWidth) {
-        int width = dimensions.width();
-        int height = dimensions.height();
+    private int writeTop(LineBuffer lineBuffer, int level, ConsoleText content, int innerWidth) {
+        lineBuffer.write(1, 3, content);
+        return writeTopLines(lineBuffer, level, content.dimensions(), innerWidth);
+    }
+
+    private int writeTopLines(LineBuffer lineBuffer, int level, Dimensions contentDimensions, int innerWidth) {
+        int width = contentDimensions.width();
+        int height = contentDimensions.height();
         int lineTop = height - (height / 2);
         int labelRight = width + 3;
         int labelBottom = height + 1;
-        lineBuffer.write(lineTop, 0, ConsoleText.of(topLeft)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(lineTop, 1, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(lineTop, 2, ConsoleText.of(leftConnection)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(0, 2, ConsoleText.of(topLeft)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(0, labelRight, ConsoleText.of(topRight)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(labelBottom, 2, ConsoleText.of(bottomLeft)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(labelBottom, labelRight, ConsoleText.of(bottomRight)); // FIXME / TODO: ANSI formatting
-        for (int i = 3; i < labelRight; i++) {
-            lineBuffer.write(0, i, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
-            lineBuffer.write(labelBottom, i, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
-        }
+        
+        lineBuffer.write(0, 2, formatLining(composeRoofString(width), level));
+        lineBuffer.write(lineTop, 0, formatLining(composeLeftAsideRoofString(), level));
+        lineBuffer.write(lineTop, labelRight, formatLining(composeRightAsideRoofString(innerWidth - labelRight), level));
+        lineBuffer.write(labelBottom, 2, formatLining(composeBeddingString(width), level));
         for (int i = 1; i < lineTop; i++) {
-            lineBuffer.write(i, 2, ConsoleText.of(left)); // FIXME / TODO: ANSI formatting
-            lineBuffer.write(i, labelRight, ConsoleText.of(right)); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(i, 2, formatLining(left, level));
+            lineBuffer.write(i, labelRight, formatLining(right, level));
         }
         for (int i = lineTop + 1; i < labelBottom; i++) {
-            lineBuffer.write(i, 2, ConsoleText.of(left)); // FIXME / TODO: ANSI formatting
-            lineBuffer.write(i, labelRight, ConsoleText.of(right)); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(i, 2, formatLining(left, level));
+            lineBuffer.write(i, labelRight, formatLining(right, level));
         }
-        lineBuffer.write(lineTop, width + 3, ConsoleText.of(rightConnection)); // FIXME / TODO: ANSI formatting
-        for (int i = width + 4; i <= innerWidth; i++) {
-            lineBuffer.write(lineTop, i, ConsoleText.of(top)); // FIXME / TODO: ANSI formatting
-        }
-        lineBuffer.write(lineTop, innerWidth + 1, ConsoleText.of(topRight)); // FIXME / TODO: ANSI formatting
-        lineBuffer.write(1, 3, content);
+        
         return height - lineTop + 1;
     }
     
-    private void writeBottom(LineBuffer lineBuffer, int topOffset, int innerWidth) {
-        lineBuffer.write(topOffset, 0, ConsoleText.of(bottomLeft)); // FIXME / TODO: ANSI formatting
-        for (int i = 1; i <= innerWidth; i++) {
-            lineBuffer.write(topOffset, i, ConsoleText.of(bottom)); // FIXME / TODO: ANSI formatting
-        }
-        lineBuffer.write(topOffset, innerWidth + 1, ConsoleText.of(bottomRight)); // FIXME / TODO: ANSI formatting
-        
+    private void writeBottom(LineBuffer lineBuffer, int level, int topOffset, int innerWidth) {
+        lineBuffer.write(topOffset, 0, formatLining(composeBeddingString(innerWidth), level));
     }
 
-    private void writeLeft(LineBuffer lineBuffer, int topOffset, int height) {
+    private void writeLeft(LineBuffer lineBuffer, int level, int topOffset, int height) {
         int until = topOffset + height;
         for (int i = topOffset; i < until; i++) {
-            lineBuffer.write(i, 0, ConsoleText.of(left)); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(i, 0, formatLining(left, level));
         }
     }
 
-    private void writeRight(LineBuffer lineBuffer, int leftOffset, int topOffset, int height) {
+    private void writeRight(LineBuffer lineBuffer, int level, int leftOffset, int topOffset, int height) {
         int until = topOffset + height;
         for (int i = topOffset; i < until; i++) {
-            lineBuffer.write(i, leftOffset, ConsoleText.of(right));
+            lineBuffer.write(i, leftOffset, formatLining(right, level));
         }
     }
     
-    private String boxIfEnabled(ConsoleText content, Dimensions dimensions) {
-        return boxLeafs ? boxContent(content, dimensions) : Util.getStringContent(content);
+    private String boxIfEnabled(ConsoleText content, int level) {
+        return boxLeafs ? boxContent(content, level) : Util.getStringContent(content);
     }
 
-    private String boxContent(ConsoleText content, Dimensions dimensions) {
+    private String boxContent(ConsoleText content, int level) {
+        StringBuilder resultBuilder = new StringBuilder();
+        
+        Dimensions dimensions = content.dimensions();
         ConsoleText[] consoleTextLines = TextUtil.linesOf(content);
         int width = dimensions.width();
         
-        StringBuilder resultBuilder = new StringBuilder();
-        
-        resultBuilder.append(topLeft);
-        TextUtil.repeat(resultBuilder, top, width);
-        resultBuilder.append(topRight);
+        resultBuilder.append(Util.getStringContent(formatLining(composeRoofString(width), level)));
         resultBuilder.append('\n');
         
         for (ConsoleText consoleTextLine : consoleTextLines) {
-            resultBuilder.append(left);
+            resultBuilder.append(Util.getStringContent(formatLining(left, level)));
             resultBuilder.append(Util.getStringContent(consoleTextLine));
             TextUtil.repeat(resultBuilder, ' ', width - consoleTextLine.dimensions().width());
-            resultBuilder.append(right);
+            resultBuilder.append(Util.getStringContent(formatLining(right, level)));
             resultBuilder.append('\n');
         }
-        
-        resultBuilder.append(bottomLeft);
-        TextUtil.repeat(resultBuilder, bottom, width);
-        resultBuilder.append(bottomRight);
+
+        resultBuilder.append(Util.getStringContent(formatLining(composeBeddingString(width), level)));
         resultBuilder.append('\n');
         
         return resultBuilder.toString();
     }
 
+    private ConsoleText formatLining(char liningChar, int level) {
+        return formatLining("" + liningChar, level);
+    }
+    
+    private ConsoleText formatLining(String liningText, int level) {
+        AnsiFormat levelFormat = levelFormats.getOrDefault(level, defaultFormat);
+        return ConsoleText.of(liningText).format(levelFormat);
+    }
+    
+    private String composeLeftAsideRoofString() {
+        return "" + topLeft + top + leftConnection;
+    }
+
+    private String composeRightAsideRoofString(int rightWidth) {
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(rightConnection);
+        TextUtil.repeat(resultBuilder, top, rightWidth);
+        resultBuilder.append(topRight);
+        return resultBuilder.toString();
+    }
+
+    private String composeRoofString(int innerWidth) {
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(topLeft);
+        TextUtil.repeat(resultBuilder, top, innerWidth);
+        resultBuilder.append(topRight);
+        return resultBuilder.toString();
+    }
+
+    private String composeBeddingString(int innerWidth) {
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append(bottomLeft);
+        TextUtil.repeat(resultBuilder, bottom, innerWidth);
+        resultBuilder.append(bottomRight);
+        return resultBuilder.toString();
+    }
+    
     
     public static class Builder {
 
@@ -310,6 +340,10 @@ public class BoxingTreePrinter implements TreePrinter {
         private int verticalGap = 0;
 
         private int horizontalGap = 1;
+        
+        private AnsiFormat defaultFormat = AnsiFormat.NONE;
+        
+        private Map<Integer, AnsiFormat> levelFormats = new HashMap<>();
         
         
         public Builder displayPlaceholders(boolean displayPlaceholders) {
@@ -404,6 +438,21 @@ public class BoxingTreePrinter implements TreePrinter {
 
         public Builder horizontalGap(int horizontalGap) {
             this.horizontalGap = horizontalGap;
+            return this;
+        }
+        
+        public Builder defaultFormat(AnsiFormat defaultFormat) {
+            this.defaultFormat = defaultFormat;
+            return this;
+        }
+        
+        public Builder levelFormats(Map<Integer, AnsiFormat> levelFormats) {
+            this.levelFormats = new HashMap<>(levelFormats);
+            return this;
+        }
+
+        public Builder levelFormat(int level, AnsiFormat formats) {
+            this.levelFormats.put(level, formats);
             return this;
         }
         
