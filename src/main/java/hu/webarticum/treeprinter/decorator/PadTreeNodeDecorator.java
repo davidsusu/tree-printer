@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter.decorator;
 import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.TextUtil;
 import hu.webarticum.treeprinter.util.Util;
@@ -34,6 +35,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     
     private final char padCharacter;
     
+    private final AnsiFormat format;
+    
     
     public PadTreeNodeDecorator(TreeNode baseNode) {
         this(baseNode, 1);
@@ -51,6 +54,7 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         super(baseNode, builder.inherit, builder.decorable);
         this.insets = new Insets(builder.topPad, builder.rightPad, builder.bottomPad, builder.leftPad);
         this.padCharacter = builder.padCharacter;
+        this.format = builder.format;
     }
 
     public static Builder builder() {
@@ -73,13 +77,6 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
     }
     
-    private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
-        for (int i = 0; i < n; i++) {
-            TextUtil.repeat(stringBuilder, padCharacter, width);
-            stringBuilder.append('\n');
-        }
-    }
-
     private void appendTopPadding(StringBuilder stringBuilder, int width) {
         appendEmptyLines(stringBuilder, insets.top(), insets.left() + width + insets.right());
     }
@@ -87,15 +84,26 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
     private void appendBottomPadding(StringBuilder stringBuilder, int width) {
         appendEmptyLines(stringBuilder, insets.bottom(), insets.left() + width + insets.right());
     }
-    
-    private void appendPaddedContentLines(StringBuilder stringBuilder, ConsoleText[] lines, int width) {
-        for (ConsoleText line: lines) {
-            TextUtil.repeat(stringBuilder, padCharacter, insets.left());
-            stringBuilder.append(Util.getStringContent(line));
-            TextUtil.repeat(stringBuilder, ' ', width - line.dimensions().width());
-            TextUtil.repeat(stringBuilder, padCharacter, insets.right());
+
+    private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
+        for (int i = 0; i < n; i++) {
+            stringBuilder.append(Util.getStringContent(formattedPadding(width)));
             stringBuilder.append('\n');
         }
+    }
+
+    private void appendPaddedContentLines(StringBuilder stringBuilder, ConsoleText[] lines, int width) {
+        for (ConsoleText line: lines) {
+            stringBuilder.append(Util.getStringContent(formattedPadding(insets.left())));
+            stringBuilder.append(Util.getStringContent(line));
+            TextUtil.repeat(stringBuilder, ' ', width - line.dimensions().width());
+            stringBuilder.append(Util.getStringContent(formattedPadding(insets.right())));
+            stringBuilder.append('\n');
+        }
+    }
+    
+    private ConsoleText formattedPadding(int width) {
+        return ConsoleText.of(TextUtil.repeat(padCharacter, width)).format(format);
     }
 
     @Override
@@ -129,6 +137,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         private int leftPad = 0;
         
         private char padCharacter = ' ';
+        
+        private AnsiFormat format = AnsiFormat.NONE;
         
 
         public Builder inherit(boolean inherit) {
@@ -191,6 +201,11 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
         public Builder padCharacter(char padCharacter) {
             this.padCharacter = padCharacter;
+            return this;
+        }
+
+        public Builder format(AnsiFormat format) {
+            this.format = format;
             return this;
         }
 

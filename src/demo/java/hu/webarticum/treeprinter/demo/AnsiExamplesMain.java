@@ -2,6 +2,7 @@ package hu.webarticum.treeprinter.demo;
 
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
+import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
@@ -28,7 +29,7 @@ public class AnsiExamplesMain {
         childNode2.addChild(grandChildNode21);
 
         SimpleTreeNode grandGrandChildNode211 = new SimpleTreeNode("Grand-grandchild 2-1-1");
-        grandChildNode21.addChild(grandGrandChildNode211);
+        grandChildNode21.addChild(PadTreeNodeDecorator.builder().pad(1).format(AnsiFormat.BG_YELLOW).buildFor(grandGrandChildNode211));
         
         SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
                 ConsoleText.of("Grandchild ")
