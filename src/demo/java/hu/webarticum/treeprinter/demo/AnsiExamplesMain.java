@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter.demo;
 import hu.webarticum.treeprinter.HorizontalAlign;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.VerticalAlign;
+import hu.webarticum.treeprinter.decorator.AnsiFormatTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.BorderTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.JustifyTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
@@ -57,7 +58,7 @@ public class AnsiExamplesMain {
                         .backgroundFormat(AnsiFormat.CYAN)
                         .buildFor(grandChildNode22), AnsiFormat.BLUE));
         
-        new ListingTreePrinter(AnsiFormat.CYAN).print(rootNode);
+        new ListingTreePrinter(AnsiFormat.CYAN).print(new AnsiFormatTreeNodeDecorator(rootNode, AnsiFormat.BOLD));
         
         System.out.println();
         System.out.println();

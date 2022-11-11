@@ -46,15 +46,13 @@ public interface ConsoleText {
         return new AnsiConsoleText(ansiText);
     }
     
-    
     public default ConsoleText format(AnsiFormat format) {
-        String formatText = format.toString();
-        if (formatText.isEmpty()) {
+        if (format.toString().isEmpty()) {
             return this;
         }
         
         String formattedString = Arrays.stream(TextUtil.linesOf(ansi()))
-                .map(s -> formatText + s + TextUtil.ansiReset())
+                .map(s -> TextUtil.formatLine(s, format))
                 .reduce((s1, s2) -> s1 + '\n' + s2)
                 .orElse("");
         return ofAnsi(formattedString);

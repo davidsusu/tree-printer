@@ -1,5 +1,6 @@
 package hu.webarticum.treeprinter.text;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.Normalizer;
 
@@ -10,6 +11,8 @@ public class TextUtil {
     private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\\R");
     
     private static final Pattern ANSI_ESCAPE_PATTERN = Pattern.compile("\\e\\[[0-9;]*m");
+    
+    private static final Pattern ANSI_ESCAPES_PATTERN = Pattern.compile("(?:\\e\\[[0-9;]*m)+");
 
     private static final Pattern ASCII_CONTROL_PATTERN = Pattern.compile("[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F]");
 
@@ -54,6 +57,34 @@ public class TextUtil {
     
     public static String cleanAnsi(String rawAnsiText) {
         return clean(rawAnsiText, ASCII_CONTROL_EXCEPT_FORMATTING_ESC_PATTERN);
+    }
+
+    public static String formatLine(String line, AnsiFormat format) {
+        String formatString = format.toString();
+        if (formatString.isEmpty()) {
+            return line;
+        }
+        
+        int length = line.length();
+        StringBuffer resultBuffer = new StringBuffer();
+        Matcher matcher = ANSI_ESCAPES_PATTERN.matcher(line);
+        int endPos = 0;
+        while (matcher.find()) {
+            String ansiEscapes = matcher.group();
+            boolean isEmpty = matcher.start() == endPos;
+            if (!isEmpty) {
+                resultBuffer.append(formatString);
+            }
+            boolean mustReset = !isEmpty && !ansiEscapes.startsWith(TextUtil.ansiReset());
+            matcher.appendReplacement(resultBuffer, mustReset ? TextUtil.ansiReset() + ansiEscapes : ansiEscapes);
+            endPos = matcher.end();
+        }
+        if (endPos < length) {
+            resultBuffer.append(formatString);
+            matcher.appendTail(resultBuffer);
+            resultBuffer.append(TextUtil.ansiReset());
+        }
+        return resultBuffer.toString();
     }
 
     private static String clean(String rawText, Pattern controlPattern) {
