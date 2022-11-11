@@ -35,13 +35,8 @@ natural foods
 
 ## Migration from 2.x to 3.x
 
-Support for ANSI formatting escapes added with the following features:
-
-- width of ANSI formatted texts is handled properly
-- ANSI formatting support wad added to built-in decorators and printers (e. g. colored lining)
-- `ConsoleText` and its implementations was added for better handling of texts
-- `AnsiFormat` and its basic constant instances was added, it's composable
-- global `AnsiMode` added (similar to `UnicodeMode`), ANSI can be disabled globally
+Now coloring and other ANSI escapes are supported.
+[See below for more information.](#coloring-and-other-ansi-formatters)
 
 The following breaking changes was made:
 
@@ -231,27 +226,6 @@ Result:
 
 Decorators inherit by default, but you can change this behavior.
 
-## ASCII vs Unicode mode
-
-Built-in objects that print lines or borders have a built-in set of characters, both for ASCII and Unicode mode.
-Affected classes have a constructor/builder parameter `useUnicode`.
-You can globally change the default mode with `UnicodeMode.setUnicodeAsDefault()`.
-(Initial global default is Unicode.)
-
-The first example with ASCII rendering:
-
-```java
-ListingTreePrinter.builder().ascii().build().print(rootNode);
-```
-
-Result:
-
-```
-I'm the root!
- |-I'm a child...
- '-I'm an other child...
- ```
-
 ## Placeholders
 
 You can put placeholder nodes into the tree.
@@ -285,6 +259,108 @@ new TraditionalTreePrinter(displayPlaceholders).print(
 Any node whose `isPlaceholder()` method returns `true` is considered a placeholder.
 `hu.webarticum.treeprinter.PlaceholderNode` is a built-in placeholder,
 it's empty and undecorable too.
+
+## ASCII vs Unicode mode
+
+Built-in objects that print lines or borders have a built-in set of characters, both for ASCII and Unicode mode.
+Affected classes have a constructor/builder parameter `useUnicode`.
+You can globally change the default mode with `UnicodeMode.setUnicodeAsDefault()`.
+(Initial global default is Unicode.)
+
+The first example with ASCII rendering:
+
+```java
+ListingTreePrinter.builder().ascii().build().print(rootNode);
+```
+
+Result:
+
+```
+I'm the root!
+ |-I'm a child...
+ '-I'm an other child...
+ ```
+
+## Coloring and other ANSI formatters
+
+Coloring and other ANSI escapes are supported with the following features:
+
+- ANSI formatting support was added to built-in decorators and printers (e. g. colored lining)
+- `ConsoleText` and its implementations was added for better handling of texts
+- `AnsiFormat` and its basic constant instances was added, it's composable
+- global `AnsiMode` added (similar to `UnicodeMode`), ANSI can be disabled globally
+- width of custom ANSI formatted texts is handled properly
+
+Interface `ConsoleText` represents textual content intended for display in the command line.
+`ConsoleText.of(String)` (or `new PlainConsoleText(String)`) represents some plain text (without formatting).
+`ConsoleText.ofAnsi(String)` (or `new AnsiConsoleText(String)`) holds text possibly with format escapes.
+Both normalizes newlines and unicode codepoints.
+Both clears non-printable characters, expect that the latter keeps ANSI format escapes.
+
+It's not necessary to write ANSI escapes by hand.
+The `AnsiFormat` class represents a formatting, and can be applied to any `ConsoleText`.
+Also, it's composable.
+Let's see a simple example:
+
+```java
+ConsoleText.of("Hello ANSI").format(AnsiFormat.GREEN);
+```
+
+This will make the text "Hello ANSI", in green.
+
+Here is a little bit more complex use case:
+
+```java
+ConsoleText.of("Hello ").concat(ConsoleText.of("ANSI").format(AnsiFormat.GREEN)).format(AnsiFormat.BOLD);
+```
+
+Now only the word "ANSI" is green, but the whole text is in bold.
+
+We can create a colorful tree:
+
+```java
+SimpleTreeNode rootNode = new SimpleTreeNode(ConsoleText.of("Root").format(
+        AnsiFormat.UNDERLINE.compose(AnsiFormat.BOLD).compose(AnsiFormat.RED)));
+
+SimpleTreeNode childNode1 = new SimpleTreeNode(
+        ConsoleText.of("Child 1").format(AnsiFormat.GREEN.compose(AnsiFormat.BOLD)));
+rootNode.addChild(new BorderTreeNodeDecorator(childNode1, AnsiFormat.RED));
+
+SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
+rootNode.addChild(childNode2);
+```
+
+The built-in printers and decorators are formattable too.
+Let's print the above nodes connected with some blue lines:
+
+```java
+new TraditionalTreePrinter(AnsiFormat.BLUE).print(rootNode);
+```
+
+Depending on the terminal, the result will be something like this:
+
+<!--
+```
+                           Root
+    ┌────────────────────────┴───┐
+    │                            │
+┌───────┐                     Child 2
+│Child 1│              ┌─────────┴─────────────┐
+└───────┘              │                       │
+                Grandchild 2-1       ~~~~~~~~~~~~~~~~~~~~
+                       │             ~~~Grandchild 2-2~~~▒
+                       │             ~~~~~~~Line 2~~~~~~~▒
+                                     ~~~~Line line 3~~~~~▒
+            Grand-grandchild 2-1-1   ~~~~~~~~~~~~~~~~~~~~▒
+                                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+```
+-->
+
+![ANSI formatted tree example](img/ansi-formatted-tree.png)
+
+For more examples see the `AnsiExamplesMain` demo.
+Study the API to find more possibilities.
 
 ## Future plans
 
