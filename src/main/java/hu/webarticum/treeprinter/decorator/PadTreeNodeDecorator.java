@@ -1,12 +1,11 @@
 package hu.webarticum.treeprinter.decorator;
 
-import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.PlainConsoleText;
 import hu.webarticum.treeprinter.text.TextUtil;
-import hu.webarticum.treeprinter.util.Util;
 
 /**
  * {@link TreeNode} decorator implementation that draws some padding around the node.
@@ -86,7 +85,8 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
         appendBottomPadding(resultBuilder, baseWidth);
         
         String decoratedContent = resultBuilder.toString();
-        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
+        boolean isPlain = (baseNode instanceof PlainConsoleText) && (format == AnsiFormat.NONE);
+        return isPlain ? ConsoleText.of(decoratedContent) : ConsoleText.ofAnsi(decoratedContent);
     }
     
     private void appendTopPadding(StringBuilder stringBuilder, int width) {
@@ -99,17 +99,17 @@ public class PadTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private void appendEmptyLines(StringBuilder stringBuilder, int n, int width) {
         for (int i = 0; i < n; i++) {
-            stringBuilder.append(Util.getStringContent(formattedPadding(width)));
+            stringBuilder.append(formattedPadding(width).ansi());
             stringBuilder.append('\n');
         }
     }
 
     private void appendPaddedContentLines(StringBuilder stringBuilder, ConsoleText[] lines, int width) {
         for (ConsoleText line: lines) {
-            stringBuilder.append(Util.getStringContent(formattedPadding(insets.left())));
-            stringBuilder.append(Util.getStringContent(line));
+            stringBuilder.append(formattedPadding(insets.left()).ansi());
+            stringBuilder.append(line.ansi());
             TextUtil.repeat(stringBuilder, ' ', width - line.dimensions().width());
-            stringBuilder.append(Util.getStringContent(formattedPadding(insets.right())));
+            stringBuilder.append(formattedPadding(insets.right()).ansi());
             stringBuilder.append('\n');
         }
     }

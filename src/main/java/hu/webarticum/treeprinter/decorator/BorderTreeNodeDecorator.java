@@ -1,13 +1,12 @@
 package hu.webarticum.treeprinter.decorator;
 
-import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
+import hu.webarticum.treeprinter.text.PlainConsoleText;
 import hu.webarticum.treeprinter.text.TextUtil;
-import hu.webarticum.treeprinter.util.Util;
 
 /**
  * {@link TreeNode} decorator implementation that draws a border around the node.
@@ -86,25 +85,26 @@ public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
     @Override
     public ConsoleText decoratedContent() {
         ConsoleText baseContent = baseNode.content();
-        String contentString = Util.getStringContent(baseContent);
+        String contentString = baseContent.ansi();
         String[] contentLines = TextUtil.linesOf(contentString);
         int baseWidth = baseContent.dimensions().width();
         
         StringBuilder resultBuilder = new StringBuilder();
         
-        resultBuilder.append(Util.getStringContent(formatBorder(composeRoofString(baseWidth))));
+        resultBuilder.append(formatBorder(composeRoofString(baseWidth)).ansi());
         resultBuilder.append('\n');
         for (String contentLine: contentLines) {
-            resultBuilder.append(Util.getStringContent(formatBorder(left)));
+            resultBuilder.append(formatBorder(left).ansi());
             resultBuilder.append(contentLine);
             TextUtil.repeat(resultBuilder, ' ', baseWidth - contentLine.length());
-            resultBuilder.append(Util.getStringContent(formatBorder(right)));
+            resultBuilder.append(formatBorder(right).ansi());
             resultBuilder.append('\n');
         }
-        resultBuilder.append(Util.getStringContent(formatBorder(composeBeddingString(baseWidth))));
+        resultBuilder.append(formatBorder(composeBeddingString(baseWidth)).ansi());
         
         String decoratedContent = resultBuilder.toString();
-        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(decoratedContent) : ConsoleText.of(decoratedContent);
+        boolean isPlain = (baseNode instanceof PlainConsoleText) && (format == AnsiFormat.NONE);
+        return isPlain ? ConsoleText.of(decoratedContent) : ConsoleText.ofAnsi(decoratedContent);
     }
 
     private ConsoleText formatBorder(char borderChar) {

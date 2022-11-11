@@ -3,6 +3,7 @@ package hu.webarticum.treeprinter.printer.listing;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
 import hu.webarticum.treeprinter.printer.TreePrinter;
@@ -57,6 +58,8 @@ public class ListingTreePrinter implements TreePrinter {
     private final boolean align;
     
     private final boolean connectAlignedChildren;
+    
+    private final AnsiMode ansiMode;
 
     private final AnsiFormat liningFormat;
 
@@ -80,6 +83,7 @@ public class ListingTreePrinter implements TreePrinter {
         this.displayPlaceholders = builder.displayPlaceholders;
         this.align = builder.align;
         this.connectAlignedChildren = builder.connectAlignedChildren;
+        this.ansiMode = builder.ansiMode;
         this.liningFormat = builder.liningFormat;
     }
 
@@ -95,7 +99,8 @@ public class ListingTreePrinter implements TreePrinter {
     
     private void printSub(
             TreeNode node, Appendable out, String prefix, NodeDisposition disposition, int inset) {
-        String content = Util.getStringContent(node.content());
+        String content = Util.getStringContent(node.content(), ansiMode);
+        
         int connectOffset = node.insets().top();
 
         List<TreeNode> childNodes = new ArrayList<>(node.children());
@@ -138,7 +143,7 @@ public class ListingTreePrinter implements TreePrinter {
         
         String itemPrefix = buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
         String fullPrefix = prefix + itemPrefix;
-        String formattedFullPrefix = Util.getStringContent(ConsoleText.of(fullPrefix).format(liningFormat));
+        String formattedFullPrefix = Util.getStringContent(ConsoleText.of(fullPrefix).format(liningFormat), ansiMode);
         Util.writeln(out, formattedFullPrefix + line);
     }
     
@@ -199,6 +204,8 @@ public class ListingTreePrinter implements TreePrinter {
                 UnicodeMode.isUnicodeDefault() ?
                 DEFAULT_UNICODE_LINE_STRINGS.clone() :
                 DEFAULT_ASCII_LINE_STRINGS.clone();
+        
+        private AnsiMode ansiMode = AnsiMode.AUTO;
         
         private AnsiFormat liningFormat = AnsiFormat.NONE;
 
@@ -262,7 +269,12 @@ public class ListingTreePrinter implements TreePrinter {
             this.lines[4] = liningInset;
             return this;
         }
-        
+
+        public Builder ansiMode(AnsiMode ansiMode) {
+            this.ansiMode = ansiMode;
+            return this;
+        }
+
         public Builder liningFormat(AnsiFormat liningFormat) {
             this.liningFormat = liningFormat;
             return this;

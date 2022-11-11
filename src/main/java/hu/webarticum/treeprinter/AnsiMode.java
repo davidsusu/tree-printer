@@ -7,22 +7,47 @@ import hu.webarticum.treeprinter.printer.TreePrinter;
  * 
  * Built-in {@link TreePrinter} implementations use this setting.
  */
-public final class AnsiMode {
+public enum AnsiMode {
+    
+    AUTO {
+        
+        public boolean isEnabled() {
+            return enabled;
+        }
+        
+    },
+    
+    ENABLED {
+        
+        public boolean isEnabled() {
+            return true;
+        }
+        
+    },
+    
+    DISABLED {
+        
+        public boolean isEnabled() {
+            return false;
+        }
+        
+    },
+    
+    ;
+    
     
     private static volatile boolean enabled = true;
     
     
-    private AnsiMode() {
-        // static class
-    }
-    
-    
-    public static void setAnsiEnabled(boolean enabled) {
+    public static void setAnsiAsDefault(boolean enabled) {
         AnsiMode.enabled = enabled;
     }
 
-    public static boolean isAnsiEnabled() {
+    public static boolean isAnsiAsDefault() {
         return enabled;
     }
+
+    
+    public abstract boolean isEnabled();
     
 }

@@ -10,8 +10,6 @@ import hu.webarticum.treeprinter.decorator.PadTreeNodeDecorator;
 import hu.webarticum.treeprinter.decorator.ShadowTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.boxing.BoxingTreePrinter;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
-import hu.webarticum.treeprinter.printer.traditional.DefaultLiner;
-import hu.webarticum.treeprinter.printer.traditional.Liner;
 import hu.webarticum.treeprinter.printer.traditional.TraditionalTreePrinter;
 import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
@@ -63,12 +61,7 @@ public class AnsiExamplesMain {
         System.out.println();
         System.out.println();
         
-        Liner liner = DefaultLiner.builder()
-                .topHeight(1)
-                .bottomHeight(1)
-                .format(AnsiFormat.BLUE)
-                .build();
-        new TraditionalTreePrinter(liner).print(rootNode);
+        new TraditionalTreePrinter(AnsiFormat.BLUE).print(rootNode);
         
         System.out.println();
         System.out.println();

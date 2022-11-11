@@ -19,17 +19,17 @@ public final class Util {
     }
 
 
-    public static String getStringContent(ConsoleText content) {
-        return AnsiMode.isAnsiEnabled() ? content.ansi() : content.plain();
+    public static String getStringContent(ConsoleText content, AnsiMode ansiMode) {
+        return ansiMode.isEnabled() ? content.ansi() : content.plain();
     }
 
-    public static ConsoleText toConsoleText(String stringContent) {
-        return AnsiMode.isAnsiEnabled() ? ConsoleText.ofAnsi(stringContent) : ConsoleText.of(stringContent);
+    public static ConsoleText toConsoleText(String stringContent, AnsiMode ansiMode) {
+        return ansiMode.isEnabled() ? ConsoleText.ofAnsi(stringContent) : ConsoleText.of(stringContent);
     }
 
-    public static LineBuffer createLineBuffer(Appendable out) {
-        LineMerger lineMerger = AnsiMode.isAnsiEnabled() ? new AnsiLineMerger() : new PlainLineMerger();
-        return new LineBuffer(out, lineMerger);
+    public static LineBuffer createLineBuffer(Appendable out, AnsiMode ansiMode) {
+        LineMerger lineMerger = ansiMode.isEnabled() ? new AnsiLineMerger() : new PlainLineMerger();
+        return new LineBuffer(out, lineMerger, ansiMode);
     }
     
     public static int getDepth(TreeNode treeNode) {

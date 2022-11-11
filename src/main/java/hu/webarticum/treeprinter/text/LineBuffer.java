@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.util.Util;
 
 public class LineBuffer {
 
     private final Appendable out;
     
-    public final LineMerger lineMerger;
+    private final LineMerger lineMerger;
+    
+    private final AnsiMode ansiMode;
     
     private int flushedRowCount = 0;
     
@@ -22,8 +25,13 @@ public class LineBuffer {
     }
 
     public LineBuffer(Appendable out, LineMerger lineMerger) {
+        this(out, lineMerger, AnsiMode.AUTO);
+    }
+    
+    public LineBuffer(Appendable out, LineMerger lineMerger, AnsiMode ansiMode) {
         this.out = out;
         this.lineMerger = lineMerger;
+        this.ansiMode = ansiMode;
     }
     
     
@@ -31,7 +39,7 @@ public class LineBuffer {
         ConsoleText[] textLines = TextUtil.linesOf(content);
         int lineCount = textLines.length;
         for (int i = 0; i < lineCount; i++) {
-            writeLine(row + i, col, Util.getStringContent(textLines[i]));
+            writeLine(row + i, col, Util.getStringContent(textLines[i], ansiMode));
         }
     }
 

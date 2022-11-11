@@ -6,8 +6,8 @@ import hu.webarticum.treeprinter.VerticalAlign;
 import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.ConsoleText;
 import hu.webarticum.treeprinter.text.Dimensions;
+import hu.webarticum.treeprinter.text.PlainConsoleText;
 import hu.webarticum.treeprinter.text.TextUtil;
-import hu.webarticum.treeprinter.util.Util;
 
 /**
  * {@link TreeNode} decorator implementation with justifying functionality.
@@ -100,13 +100,13 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         appendBottomLines(resultBuilder, fullWidth, bottomPad);
 
         String decoratedContent = resultBuilder.toString();
-        return Util.toConsoleText(decoratedContent);
-        
+        boolean isPlain = (baseNode instanceof PlainConsoleText) && (backgroundFormat == AnsiFormat.NONE);
+        return isPlain ? ConsoleText.of(decoratedContent) : ConsoleText.ofAnsi(decoratedContent);
     }
     
     private void appendTopLines(StringBuilder contentBuilder, int width, int height) {
         for (int i = 0; i < height; i++) {
-            contentBuilder.append(Util.getStringContent(composeBackground(width)));
+            contentBuilder.append(composeBackground(width).ansi());
             contentBuilder.append('\n');
         }
     }
@@ -127,15 +127,15 @@ public class JustifyTreeNodeDecorator extends AbstractTreeNodeDecorator {
         int baseLineWidth = baseLine.dimensions().width();
         int leftPad = getStartPad(fullWidth, baseLineWidth, horizontalAlign);
         int rightPad = fullWidth - baseLineWidth - leftPad;
-        contentBuilder.append(Util.getStringContent(composeBackground(leftPad)));
-        contentBuilder.append(Util.getStringContent(baseLine));
-        contentBuilder.append(Util.getStringContent(composeBackground(rightPad)));
+        contentBuilder.append(composeBackground(leftPad).ansi());
+        contentBuilder.append(baseLine.ansi());
+        contentBuilder.append(composeBackground(rightPad).ansi());
     }
     
     private void appendBottomLines(StringBuilder contentBuilder, int width, int height) {
         for (int i = 0; i < height; i++) {
             contentBuilder.append('\n');
-            contentBuilder.append(Util.getStringContent(composeBackground(width)));
+            contentBuilder.append(composeBackground(width).ansi());
         }
     }
 

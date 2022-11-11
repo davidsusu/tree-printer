@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.decorator.TrackingTreeNodeDecorator;
 import hu.webarticum.treeprinter.printer.TreePrinter;
+import hu.webarticum.treeprinter.text.AnsiFormat;
 import hu.webarticum.treeprinter.text.Dimensions;
 import hu.webarticum.treeprinter.text.LineBuffer;
 import hu.webarticum.treeprinter.util.Util;
@@ -40,9 +42,19 @@ public class TraditionalTreePrinter implements TreePrinter {
     
     private final boolean displayPlaceholders;
     
+    private final AnsiMode ansiMode;
+    
     
     public TraditionalTreePrinter() {
         this(DEFAULT_ALIGNER, DEFAULT_LINER);
+    }
+
+    public TraditionalTreePrinter(AnsiFormat ansiFormat) {
+        this(DEFAULT_ALIGNER, new DefaultLiner(ansiFormat));
+    }
+
+    public TraditionalTreePrinter(AnsiMode ansiMode, AnsiFormat ansiFormat) {
+        this(DEFAULT_ALIGNER, new DefaultLiner(ansiFormat), false, ansiMode);
     }
 
     public TraditionalTreePrinter(Aligner aligner) {
@@ -60,11 +72,16 @@ public class TraditionalTreePrinter implements TreePrinter {
     public TraditionalTreePrinter(boolean displayPlaceholders) {
         this(DEFAULT_ALIGNER, DEFAULT_LINER, displayPlaceholders);
     }
-    
+
     public TraditionalTreePrinter(Aligner aligner, Liner liner, boolean displayPlaceholders) {
+        this(aligner, liner, displayPlaceholders, AnsiMode.AUTO);
+    }
+    
+    public TraditionalTreePrinter(Aligner aligner, Liner liner, boolean displayPlaceholders, AnsiMode ansiMode) {
         this.aligner = aligner;
         this.liner = liner;
         this.displayPlaceholders = displayPlaceholders;
+        this.ansiMode = ansiMode;
     }
     
     
@@ -83,7 +100,7 @@ public class TraditionalTreePrinter implements TreePrinter {
                 0, 0, rootPlacement.bottomConnection(), rootPlacement.left(), rootContentDimensions.height());
         positionMap.put(wrappedRootNode, rootPosition);
         
-        LineBuffer buffer = Util.createLineBuffer(out);
+        LineBuffer buffer = Util.createLineBuffer(out, ansiMode);
 
         buffer.write(0, rootPlacement.left(), wrappedRootNode.content());
         

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.Insets;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.UnicodeMode;
@@ -82,6 +83,8 @@ public class BoxingTreePrinter implements TreePrinter {
 
     private final int horizontalGap;
     
+    private final AnsiMode ansiMode;
+    
     private final AnsiFormat defaultFormat;
     
     private final Map<Integer, AnsiFormat> levelFormats;
@@ -112,6 +115,7 @@ public class BoxingTreePrinter implements TreePrinter {
         this.insets = builder.insets;
         this.verticalGap = builder.verticalGap;
         this.horizontalGap = builder.horizontalGap;
+        this.ansiMode = builder.ansiMode;
         this.defaultFormat = builder.defaultFormat;
         this.levelFormats = new HashMap<>(builder.levelFormats);
     }
@@ -144,7 +148,7 @@ public class BoxingTreePrinter implements TreePrinter {
         }
         
         StringBuilder resultBuilder = new StringBuilder();
-        LineBuffer lineBuffer = Util.createLineBuffer(resultBuilder);
+        LineBuffer lineBuffer = Util.createLineBuffer(resultBuilder, ansiMode);
         int leftOffset = 1 + insets.left();
         int topHeight = dimensions.height() + 2;
         int topOffset = topHeight + insets.top();
@@ -178,9 +182,9 @@ public class BoxingTreePrinter implements TreePrinter {
                 height += verticalGap;
             }
             String itemContentString = getLevelAsString(node, level + 1);
-            ConsoleText itemContent = Util.toConsoleText(itemContentString);
+            ConsoleText itemContent = Util.toConsoleText(itemContentString, ansiMode);
             Dimensions childDimensions = itemContent.dimensions();
-            lineBuffer.write(topOffset + height, leftOffset, itemContent); // FIXME / TODO: ANSI formatting
+            lineBuffer.write(topOffset + height, leftOffset, itemContent);
             height += childDimensions.height();
             int childWidth = childDimensions.width();
             if (childWidth > width) {
@@ -202,7 +206,7 @@ public class BoxingTreePrinter implements TreePrinter {
                 width += horizontalGap;
             }
             String itemContentString = getLevelAsString(node, level + 1);
-            ConsoleText itemContent = Util.toConsoleText(itemContentString);
+            ConsoleText itemContent = Util.toConsoleText(itemContentString, ansiMode);
             Dimensions childDimensions = itemContent.dimensions();
             lineBuffer.write(topOffset, leftOffset + width, itemContent);
             width += childDimensions.width();
@@ -261,7 +265,7 @@ public class BoxingTreePrinter implements TreePrinter {
     }
     
     private String boxIfEnabled(ConsoleText content, int level) {
-        return boxLeafs ? boxContent(content, level) : Util.getStringContent(content);
+        return boxLeafs ? boxContent(content, level) : Util.getStringContent(content, ansiMode);
     }
 
     private String boxContent(ConsoleText content, int level) {
@@ -271,18 +275,18 @@ public class BoxingTreePrinter implements TreePrinter {
         ConsoleText[] consoleTextLines = TextUtil.linesOf(content);
         int width = dimensions.width();
         
-        resultBuilder.append(Util.getStringContent(formatLining(composeRoofString(width), level)));
+        resultBuilder.append(Util.getStringContent(formatLining(composeRoofString(width), level), ansiMode));
         resultBuilder.append('\n');
         
         for (ConsoleText consoleTextLine : consoleTextLines) {
-            resultBuilder.append(Util.getStringContent(formatLining(left, level)));
-            resultBuilder.append(Util.getStringContent(consoleTextLine));
+            resultBuilder.append(Util.getStringContent(formatLining(left, level), ansiMode));
+            resultBuilder.append(Util.getStringContent(consoleTextLine, ansiMode));
             TextUtil.repeat(resultBuilder, ' ', width - consoleTextLine.dimensions().width());
-            resultBuilder.append(Util.getStringContent(formatLining(right, level)));
+            resultBuilder.append(Util.getStringContent(formatLining(right, level), ansiMode));
             resultBuilder.append('\n');
         }
 
-        resultBuilder.append(Util.getStringContent(formatLining(composeBeddingString(width), level)));
+        resultBuilder.append(Util.getStringContent(formatLining(composeBeddingString(width), level), ansiMode));
         resultBuilder.append('\n');
         
         return resultBuilder.toString();
@@ -344,6 +348,8 @@ public class BoxingTreePrinter implements TreePrinter {
         private int verticalGap = 0;
 
         private int horizontalGap = 1;
+        
+        private AnsiMode ansiMode = AnsiMode.AUTO;
         
         private AnsiFormat defaultFormat = AnsiFormat.NONE;
         
@@ -442,6 +448,11 @@ public class BoxingTreePrinter implements TreePrinter {
 
         public Builder horizontalGap(int horizontalGap) {
             this.horizontalGap = horizontalGap;
+            return this;
+        }
+        
+        public Builder ansiMode(AnsiMode ansiMode) {
+            this.ansiMode = ansiMode;
             return this;
         }
         
