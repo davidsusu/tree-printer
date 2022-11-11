@@ -91,7 +91,7 @@ public class TextUtil {
         String cleanText = controlPattern.matcher(rawText).replaceAll("");
         cleanText = Normalizer.normalize(cleanText, Normalizer.Form.NFD);
         cleanText = cleanText.replace("\t", TAB_SPACES);
-        // TODO: normalize newlines?
+        cleanText = LINE_SEPARATOR_PATTERN.matcher(cleanText).replaceAll("\n");
         return cleanText.equals(rawText) ? rawText : cleanText;
     }
 
