@@ -28,7 +28,7 @@ import hu.webarticum.treeprinter.text.TextUtil;
 public class BorderTreeNodeDecorator extends AbstractTreeNodeDecorator {
 
     private static final char[] BORDER_CHARS_ASCII = new char[] {
-            '.', '-', '.', '|', '\'', '-', '`', '|' };
+            '+', '-', '+', '|', '+', '-', '+', '|' };
     
     private static final char[] BORDER_CHARS_UNICODE = new char[] {
             '┌', '─', '┐', '│', '┘', '─', '└', '│' };

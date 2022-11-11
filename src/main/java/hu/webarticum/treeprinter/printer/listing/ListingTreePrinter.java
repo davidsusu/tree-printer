@@ -33,7 +33,7 @@ public class ListingTreePrinter implements TreePrinter {
     
     
     private static final String[] DEFAULT_ASCII_LINE_STRINGS = new String[] {
-            "   ", " | ", " |-", " '-", "---", "-+-" };
+            "   ", " | ", " +-", " +-", "---", "-+-" };
 
     private static final String[] DEFAULT_UNICODE_LINE_STRINGS = new String[] {
             "   ", " │ ", " ├─", " └─", "───", "─┬─" };

@@ -45,7 +45,7 @@ import hu.webarticum.treeprinter.util.Util;
 public class BoxingTreePrinter implements TreePrinter {
 
     private static final char[] BOX_CHARS_ASCII = new char[] {
-            '.', '-', '.', '|', '\'', '-', '`', '|', '+', '+' };
+            '+', '-', '+', '|', '+', '-', '+', '|', '|', '|' };
     
     private static final char[] BOX_CHARS_UNICODE = new char[] {
             '┌', '─', '┐', '│', '┘', '─', '└', '│', '┤', '├' };
