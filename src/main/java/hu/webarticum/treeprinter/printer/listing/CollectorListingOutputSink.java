@@ -7,14 +7,14 @@ import java.util.List;
 
 public class CollectorListingOutputSink implements ListingOutputSink {
 
-    private final List<ListingTreeNode> output = new ArrayList<>();
+    private final List<ListingLineEntry> output = new ArrayList<>();
 
     @Override
     public void writeln(TreeNode node, String prefix, String line) {
-        output.add(new ListingTreeNode(node, prefix, line));
+        output.add(new ListingLineEntry(node, prefix, line));
     }
 
-    public List<ListingTreeNode> getOutput() {
+    public List<ListingLineEntry> getOutput() {
         return output;
     }
 }
