@@ -94,7 +94,7 @@ public class ListingTreePrinter implements TreePrinter {
 
     @Override
     public void print(TreeNode rootNode, Appendable out) {
-        AppendableListingOutputSink sink = new AppendableListingOutputSink(out);
+        AppendableListingOutputSink sink = new AppendableListingOutputSink(out, ansiMode);
         printSub(rootNode, sink, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
     }
 
@@ -106,14 +106,13 @@ public class ListingTreePrinter implements TreePrinter {
      * @return an order list of tree output elements
      */
     public List<ListingLineEntry> collectLineEntries(TreeNode rootNode) {
-        CollectorListingOutputSink sink = new CollectorListingOutputSink();
+        CollectorListingOutputSink sink = new CollectorListingOutputSink(ansiMode);
         printSub(rootNode, sink, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
         return sink.getOutput();
     }
 
     private void printSub(
             TreeNode node, ListingOutputSink sink, String prefix, NodeDisposition disposition, int inset) {
-        String content = Util.getStringContent(node.content(), ansiMode);
 
         int connectOffset = node.insets().top();
 
@@ -122,7 +121,7 @@ public class ListingTreePrinter implements TreePrinter {
             childNodes.removeIf(TreeNode::isPlaceholder);
         }
 
-        String[] lines = TextUtil.linesOf(content);
+        ConsoleText[] lines = TextUtil.linesOf(node.content());
         for (int i = 0; i < lines.length; i++) {
             printContentLine(node, sink, prefix, disposition, !childNodes.isEmpty(), inset, connectOffset, i, lines[i]);
         }
@@ -148,17 +147,17 @@ public class ListingTreePrinter implements TreePrinter {
             int inset,
             int connectOffset,
             int i,
-            String line) {
+            ConsoleText line) {
         if (disposition == NodeDisposition.ROOT) {
             if (displayRoot) {
-                sink.writeln(node, prefix , line);
+                sink.writeln(node, ConsoleText.of(prefix) , line);
             }
             return;
         }
 
         String itemPrefix = buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
         String fullPrefix = prefix + itemPrefix;
-        String formattedFullPrefix = Util.getStringContent(ConsoleText.of(fullPrefix).format(liningFormat), ansiMode);
+        ConsoleText formattedFullPrefix = ConsoleText.of(fullPrefix).format(liningFormat);
         sink.writeln(node, formattedFullPrefix, line);
     }
 

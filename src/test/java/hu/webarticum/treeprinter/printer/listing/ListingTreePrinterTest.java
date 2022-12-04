@@ -173,8 +173,8 @@ class ListingTreePrinterTest {
     private void assertListingLineEntry(ListingLineEntry actual, SimpleTreeNode expectedNode, String expectedPrefix,
             String expectedLine) {
         assertThat(actual.getNode()).isEqualTo(expectedNode);
-        assertThat(actual.getLiningPrefix()).isEqualTo(expectedPrefix);
-        assertThat(actual.getContentLine()).isEqualTo(expectedLine);
+        assertThat(actual.getStringLiningPrefix()).isEqualTo(expectedPrefix);
+        assertThat(actual.getStringContentLine()).isEqualTo(expectedLine);
     }
 
 }
