@@ -1,9 +1,7 @@
 package hu.webarticum.treeprinter.printer.listing;
 
-import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.text.ConsoleText;
-import hu.webarticum.treeprinter.util.Util;
 
 public class ListingLineEntry {
 
@@ -13,32 +11,22 @@ public class ListingLineEntry {
 
     private final ConsoleText contentLine;
 
-    private final AnsiMode ansiMode;
-
-    public ListingLineEntry(TreeNode node, ConsoleText liningPrefix, ConsoleText contentLine, AnsiMode ansiMode) {
+    public ListingLineEntry(TreeNode node, ConsoleText liningPrefix, ConsoleText contentLine) {
         this.node = node;
         this.liningPrefix = liningPrefix;
         this.contentLine = contentLine;
-        this.ansiMode = ansiMode;
     }
 
-    public TreeNode getNode() {
+    public TreeNode node() {
         return node;
     }
 
-    public ConsoleText getLiningPrefix() {
+    public ConsoleText liningPrefix() {
         return liningPrefix;
     }
 
-    public String getStringLiningPrefix() {
-        return Util.getStringContent(liningPrefix, ansiMode);
-    }
-
-    public ConsoleText getContentLine() {
+    public ConsoleText contentLine() {
         return contentLine;
     }
-
-    public String getStringContentLine() {
-        return Util.getStringContent(contentLine, ansiMode);
-    }
+    
 }

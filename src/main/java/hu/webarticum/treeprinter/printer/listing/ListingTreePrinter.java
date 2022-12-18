@@ -106,7 +106,7 @@ public class ListingTreePrinter implements TreePrinter {
      * @return an order list of tree output elements
      */
     public List<ListingLineEntry> collectLineEntries(TreeNode rootNode) {
-        CollectorListingOutputSink sink = new CollectorListingOutputSink(ansiMode);
+        CollectorListingOutputSink sink = new CollectorListingOutputSink();
         printSub(rootNode, sink, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
         return sink.getOutput();
     }
