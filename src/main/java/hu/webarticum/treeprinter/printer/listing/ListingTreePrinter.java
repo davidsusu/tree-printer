@@ -2,6 +2,7 @@ package hu.webarticum.treeprinter.printer.listing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import hu.webarticum.treeprinter.AnsiMode;
 import hu.webarticum.treeprinter.TreeNode;
@@ -94,26 +95,27 @@ public class ListingTreePrinter implements TreePrinter {
 
     @Override
     public void print(TreeNode rootNode, Appendable out) {
-        AppendableListingOutputSink sink = new AppendableListingOutputSink(out, ansiMode);
-        printSub(rootNode, sink, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
+        forEachLineEntries(rootNode, e -> printLineEntry(e, out));
+    }
+    
+    private void printLineEntry(ListingLineEntry entry, Appendable out) {
+        String liningPrefix = Util.getStringContent(entry.liningPrefix(), ansiMode);
+        String contentLine = Util.getStringContent(entry.contentLine(), ansiMode);
+        Util.writeln(out, liningPrefix + contentLine);
     }
 
-    /**
-     * An alternate way to retrieve the tree in List form where the original node as well as the separated
-     * presentation elements are available. Unlike the print() method, this may be memory hungry as it returns
-     * all the data in a List
-     * @param rootNode the root node
-     * @return an order list of tree output elements
-     */
     public List<ListingLineEntry> collectLineEntries(TreeNode rootNode) {
-        CollectorListingOutputSink sink = new CollectorListingOutputSink();
-        printSub(rootNode, sink, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
-        return sink.getOutput();
+        List<ListingLineEntry> result = new ArrayList<>();
+        forEachLineEntries(rootNode, result::add);
+        return result;
     }
 
-    private void printSub(
-            TreeNode node, ListingOutputSink sink, String prefix, NodeDisposition disposition, int inset) {
-
+    public void forEachLineEntries(TreeNode rootNode, Consumer<ListingLineEntry> consumer) {
+        flushSub(rootNode, consumer, "", NodeDisposition.ROOT, align ? Util.getDepth(rootNode) : 0);
+    }
+    
+    private void flushSub(
+            TreeNode node, Consumer<ListingLineEntry> consumer, String prefix, NodeDisposition disposition, int inset) {
         int connectOffset = node.insets().top();
 
         List<TreeNode> childNodes = new ArrayList<>(node.children());
@@ -123,7 +125,7 @@ public class ListingTreePrinter implements TreePrinter {
 
         ConsoleText[] lines = TextUtil.linesOf(node.content());
         for (int i = 0; i < lines.length; i++) {
-            printContentLine(node, sink, prefix, disposition, !childNodes.isEmpty(), inset, connectOffset, i, lines[i]);
+            flushContentLine(node, consumer, prefix, disposition, !childNodes.isEmpty(), inset, connectOffset, i, lines[i]);
         }
 
         int childNodeCount = childNodes.size();
@@ -134,13 +136,13 @@ public class ListingTreePrinter implements TreePrinter {
             String subPrefix = (disposition == NodeDisposition.ROOT) ? prefix : prefix + lining;
             int subInset = Math.max(0, inset - 1);
             NodeDisposition subDisposition = childIsLast ? NodeDisposition.LAST : NodeDisposition.GENERAL;
-            printSub(childNode, sink, subPrefix, subDisposition, subInset);
+            flushSub(childNode, consumer, subPrefix, subDisposition, subInset);
         }
     }
 
-    private void printContentLine(
+    private void flushContentLine(
             TreeNode node,
-            ListingOutputSink sink,
+            Consumer<ListingLineEntry> consumer,
             String prefix,
             NodeDisposition disposition,
             boolean hasChildren,
@@ -148,17 +150,21 @@ public class ListingTreePrinter implements TreePrinter {
             int connectOffset,
             int i,
             ConsoleText line) {
-        if (disposition == NodeDisposition.ROOT) {
-            if (displayRoot) {
-                sink.writeln(node, ConsoleText.of(prefix) , line);
-            }
+        if (disposition == NodeDisposition.ROOT && !displayRoot) {
             return;
         }
-
-        String itemPrefix = buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
-        String fullPrefix = prefix + itemPrefix;
-        ConsoleText formattedFullPrefix = ConsoleText.of(fullPrefix).format(liningFormat);
-        sink.writeln(node, formattedFullPrefix, line);
+        
+        String fullPrefix = prefix;
+        if (disposition != NodeDisposition.ROOT) {
+            String itemPrefix = buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
+            fullPrefix += itemPrefix;
+        }
+        ConsoleText formattedFullPrefix = ConsoleText.of(fullPrefix);
+        if (!fullPrefix.isEmpty()) {
+            formattedFullPrefix = formattedFullPrefix.format(liningFormat);
+        }
+        ListingLineEntry entry = new ListingLineEntry(node, formattedFullPrefix, line);
+        consumer.accept(entry);
     }
 
     private String buildItemPrefix(
