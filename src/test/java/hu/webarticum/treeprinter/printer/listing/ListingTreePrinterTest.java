@@ -18,24 +18,23 @@ class ListingTreePrinterTest {
     }
 
     @Test
-    void print_oneLevel() {
+    void testPrintOneLevel() {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         StringBuilder out = new StringBuilder();
         treePrinter.print(root, out);
-        assertThat(out.toString()).isEqualTo(
-                "ROOT\n");
+        assertThat(out).hasToString("ROOT\n");
     }
 
     @Test
-    void collectLineEntries_oneLevel() {
+    void testCollectLineEntriesOneLevel() {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
-        assertThat(treeNodes.size()).isEqualTo(1);
+        assertThat(treeNodes).hasSize(1);
         assertListingLineEntry(treeNodes.get(0), root, "", "ROOT");
     }
 
     @Test
-    void print_twoLevels() {
+    void testPrintTwoLevels() {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         SimpleTreeNode child1 = new SimpleTreeNode("CHILD1");
         SimpleTreeNode child2 = new SimpleTreeNode("CHILD2");
@@ -43,29 +42,28 @@ class ListingTreePrinterTest {
         root.addChild(child2);
         StringBuilder out = new StringBuilder();
         treePrinter.print(root, out);
-        assertThat(out.toString()).isEqualTo(
-                "ROOT\n"
-                        + " ├─CHILD1\n"
-                        + " └─CHILD2\n");
+        assertThat(out).hasToString(
+                "ROOT\n" +
+                " ├─CHILD1\n" +
+                " └─CHILD2\n");
     }
 
-
     @Test
-    void collectLineEntries_twoLevels() {
+    void testCollectLineEntriesTwoLevels() {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         SimpleTreeNode child1 = new SimpleTreeNode("CHILD1");
         SimpleTreeNode child2 = new SimpleTreeNode("CHILD2");
         root.addChild(child1);
         root.addChild(child2);
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
-        assertThat(treeNodes.size()).isEqualTo(3);
+        assertThat(treeNodes).hasSize(3);
         assertListingLineEntry(treeNodes.get(0), root, "", "ROOT");
         assertListingLineEntry(treeNodes.get(1), child1, " ├─", "CHILD1");
         assertListingLineEntry(treeNodes.get(2), child2, " └─", "CHILD2");
     }
 
     @Test
-    void print_fourLevels() {
+    void testPrintFourLevels() {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         SimpleTreeNode n1 = new SimpleTreeNode("N1");
         SimpleTreeNode n1_1 = new SimpleTreeNode("N1.1");
@@ -88,21 +86,21 @@ class ListingTreePrinterTest {
 
         StringBuilder out = new StringBuilder();
         treePrinter.print(root, out);
-        assertThat(out.toString()).isEqualTo(
-                "ROOT\n"
-                        + " ├─N1\n"
-                        + " │  ├─N1.1\n"
-                        + " │  ├─N1.2\n"
-                        + " │  │  ├─N1.2.1\n"
-                        + " │  │  └─N1.2.2\n"
-                        + " │  ├─N1.3\n"
-                        + " │  └─N1.4\n"
-                        + " ├─N2\n"
-                        + " └─N3\n");
+        assertThat(out).hasToString(
+                "ROOT\n" +
+                " ├─N1\n" +
+                " │  ├─N1.1\n" +
+                " │  ├─N1.2\n" +
+                " │  │  ├─N1.2.1\n" +
+                " │  │  └─N1.2.2\n" +
+                " │  ├─N1.3\n" +
+                " │  └─N1.4\n" +
+                " ├─N2\n" +
+                " └─N3\n");
     }
 
     @Test
-    void collectLineEntries_fourLevels() {
+    void testCollectLineEntriesFourLevels() {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         SimpleTreeNode n1 = new SimpleTreeNode("N1");
         SimpleTreeNode n1_1 = new SimpleTreeNode("N1.1");
@@ -124,7 +122,7 @@ class ListingTreePrinterTest {
         root.addChild(n3);
 
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
-        assertThat(treeNodes.size()).isEqualTo(10);
+        assertThat(treeNodes).hasSize(10);
         assertListingLineEntry(treeNodes.get(0), root, "", "ROOT");
         assertListingLineEntry(treeNodes.get(1), n1, " ├─", "N1");
         assertListingLineEntry(treeNodes.get(2), n1_1, " │  ├─", "N1.1");
@@ -138,7 +136,7 @@ class ListingTreePrinterTest {
     }
 
     @Test
-    void print_twoLevelsWithLineBreaks() {
+    void testPrintTwoLevelsWithLineBreaks() {
         SimpleTreeNode root = new SimpleTreeNode("ROOTa\nROOTb");
         SimpleTreeNode child1 = new SimpleTreeNode("CHILD1a\nCHILD1b");
         SimpleTreeNode child2 = new SimpleTreeNode("CHILD2");
@@ -146,23 +144,23 @@ class ListingTreePrinterTest {
         root.addChild(child2);
         StringBuilder out = new StringBuilder();
         treePrinter.print(root, out);
-        assertThat(out.toString()).isEqualTo(
-                "ROOTa\n"
-                        + "ROOTb\n"
-                        + " ├─CHILD1a\n"
-                        + " │ CHILD1b\n"
-                        + " └─CHILD2\n");
+        assertThat(out).hasToString(
+                "ROOTa\n" +
+                "ROOTb\n" +
+                " ├─CHILD1a\n" +
+                " │ CHILD1b\n" +
+                " └─CHILD2\n");
     }
 
     @Test
-    void collectLineEntries_twoLevelsWithLineBreaks() {
+    void testCollectLineEntriesTwoLevelsWithLineBreaks() {
         SimpleTreeNode root = new SimpleTreeNode("ROOTa\nROOTb");
         SimpleTreeNode child1 = new SimpleTreeNode("CHILD1a\nCHILD1b");
         SimpleTreeNode child2 = new SimpleTreeNode("CHILD2");
         root.addChild(child1);
         root.addChild(child2);
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
-        assertThat(treeNodes.size()).isEqualTo(5);
+        assertThat(treeNodes).hasSize(5);
         assertListingLineEntry(treeNodes.get(0), root, "", "ROOTa");
         assertListingLineEntry(treeNodes.get(1), root, "", "ROOTb");
         assertListingLineEntry(treeNodes.get(2), child1, " ├─", "CHILD1a");
@@ -170,8 +168,8 @@ class ListingTreePrinterTest {
         assertListingLineEntry(treeNodes.get(4), child2, " └─", "CHILD2");
     }
 
-    private void assertListingLineEntry(ListingLineEntry actual, SimpleTreeNode expectedNode, String expectedPrefix,
-            String expectedLine) {
+    private void assertListingLineEntry(
+            ListingLineEntry actual, SimpleTreeNode expectedNode, String expectedPrefix, String expectedLine) {
         assertThat(actual.node()).isEqualTo(expectedNode);
         assertThat(actual.liningPrefix().plain()).isEqualTo(expectedPrefix);
         assertThat(actual.contentLine().plain()).isEqualTo(expectedLine);
