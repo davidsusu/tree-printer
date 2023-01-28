@@ -124,8 +124,22 @@ public class ListingTreePrinter implements TreePrinter {
         }
 
         ConsoleText[] lines = TextUtil.linesOf(node.content());
-        for (int i = 0; i < lines.length; i++) {
-            flushContentLine(node, consumer, prefix, disposition, !childNodes.isEmpty(), inset, connectOffset, i, lines[i]);
+        if (disposition != NodeDisposition.ROOT || displayRoot) {
+            for (int i = 0; i < lines.length; i++) {
+                boolean hasMoreForThisNode = (i < lines.length - 1);
+                boolean hasChildren = !childNodes.isEmpty();
+                ConsoleText line = lines[i];
+                String fullPrefix = prefix;
+                if (disposition != NodeDisposition.ROOT) {
+                    fullPrefix += buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
+                }
+                ConsoleText formattedFullPrefix = ConsoleText.of(fullPrefix);
+                if (!fullPrefix.isEmpty()) {
+                    formattedFullPrefix = formattedFullPrefix.format(liningFormat);
+                }
+                ListingLineEntry entry = new ListingLineEntry(node, formattedFullPrefix, line, hasMoreForThisNode);
+                consumer.accept(entry);
+            }
         }
 
         int childNodeCount = childNodes.size();
@@ -138,33 +152,6 @@ public class ListingTreePrinter implements TreePrinter {
             NodeDisposition subDisposition = childIsLast ? NodeDisposition.LAST : NodeDisposition.GENERAL;
             flushSub(childNode, consumer, subPrefix, subDisposition, subInset);
         }
-    }
-
-    private void flushContentLine(
-            TreeNode node,
-            Consumer<ListingLineEntry> consumer,
-            String prefix,
-            NodeDisposition disposition,
-            boolean hasChildren,
-            int inset,
-            int connectOffset,
-            int i,
-            ConsoleText line) {
-        if (disposition == NodeDisposition.ROOT && !displayRoot) {
-            return;
-        }
-        
-        String fullPrefix = prefix;
-        if (disposition != NodeDisposition.ROOT) {
-            String itemPrefix = buildItemPrefix(disposition, hasChildren, inset, connectOffset, i);
-            fullPrefix += itemPrefix;
-        }
-        ConsoleText formattedFullPrefix = ConsoleText.of(fullPrefix);
-        if (!fullPrefix.isEmpty()) {
-            formattedFullPrefix = formattedFullPrefix.format(liningFormat);
-        }
-        ListingLineEntry entry = new ListingLineEntry(node, formattedFullPrefix, line);
-        consumer.accept(entry);
     }
 
     private String buildItemPrefix(

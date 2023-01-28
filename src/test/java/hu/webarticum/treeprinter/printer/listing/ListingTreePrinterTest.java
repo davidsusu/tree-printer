@@ -30,7 +30,7 @@ class ListingTreePrinterTest {
         SimpleTreeNode root = new SimpleTreeNode("ROOT");
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
         assertThat(treeNodes).hasSize(1);
-        assertListingLineEntry(treeNodes.get(0), root, "", "ROOT");
+        assertListingLineEntry(treeNodes.get(0), root, "", "ROOT", false);
     }
 
     @Test
@@ -57,9 +57,9 @@ class ListingTreePrinterTest {
         root.addChild(child2);
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
         assertThat(treeNodes).hasSize(3);
-        assertListingLineEntry(treeNodes.get(0), root, "", "ROOT");
-        assertListingLineEntry(treeNodes.get(1), child1, " ├─", "CHILD1");
-        assertListingLineEntry(treeNodes.get(2), child2, " └─", "CHILD2");
+        assertListingLineEntry(treeNodes.get(0), root, "", "ROOT", false);
+        assertListingLineEntry(treeNodes.get(1), child1, " ├─", "CHILD1", false);
+        assertListingLineEntry(treeNodes.get(2), child2, " └─", "CHILD2", false);
     }
 
     @Test
@@ -123,16 +123,16 @@ class ListingTreePrinterTest {
 
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
         assertThat(treeNodes).hasSize(10);
-        assertListingLineEntry(treeNodes.get(0), root, "", "ROOT");
-        assertListingLineEntry(treeNodes.get(1), n1, " ├─", "N1");
-        assertListingLineEntry(treeNodes.get(2), n1_1, " │  ├─", "N1.1");
-        assertListingLineEntry(treeNodes.get(3), n1_2, " │  ├─", "N1.2");
-        assertListingLineEntry(treeNodes.get(4), n1_2_1, " │  │  ├─", "N1.2.1");
-        assertListingLineEntry(treeNodes.get(5), n1_2_2, " │  │  └─", "N1.2.2");
-        assertListingLineEntry(treeNodes.get(6), n1_3, " │  ├─", "N1.3");
-        assertListingLineEntry(treeNodes.get(7), n1_4, " │  └─", "N1.4");
-        assertListingLineEntry(treeNodes.get(8), n2, " ├─", "N2");
-        assertListingLineEntry(treeNodes.get(9), n3, " └─", "N3");
+        assertListingLineEntry(treeNodes.get(0), root, "", "ROOT", false);
+        assertListingLineEntry(treeNodes.get(1), n1, " ├─", "N1", false);
+        assertListingLineEntry(treeNodes.get(2), n1_1, " │  ├─", "N1.1", false);
+        assertListingLineEntry(treeNodes.get(3), n1_2, " │  ├─", "N1.2", false);
+        assertListingLineEntry(treeNodes.get(4), n1_2_1, " │  │  ├─", "N1.2.1", false);
+        assertListingLineEntry(treeNodes.get(5), n1_2_2, " │  │  └─", "N1.2.2", false);
+        assertListingLineEntry(treeNodes.get(6), n1_3, " │  ├─", "N1.3", false);
+        assertListingLineEntry(treeNodes.get(7), n1_4, " │  └─", "N1.4", false);
+        assertListingLineEntry(treeNodes.get(8), n2, " ├─", "N2", false);
+        assertListingLineEntry(treeNodes.get(9), n3, " └─", "N3", false);
     }
 
     @Test
@@ -161,18 +161,23 @@ class ListingTreePrinterTest {
         root.addChild(child2);
         List<ListingLineEntry> treeNodes = treePrinter.collectLineEntries(root);
         assertThat(treeNodes).hasSize(5);
-        assertListingLineEntry(treeNodes.get(0), root, "", "ROOTa");
-        assertListingLineEntry(treeNodes.get(1), root, "", "ROOTb");
-        assertListingLineEntry(treeNodes.get(2), child1, " ├─", "CHILD1a");
-        assertListingLineEntry(treeNodes.get(3), child1, " │ ", "CHILD1b");
-        assertListingLineEntry(treeNodes.get(4), child2, " └─", "CHILD2");
+        assertListingLineEntry(treeNodes.get(0), root, "", "ROOTa", true);
+        assertListingLineEntry(treeNodes.get(1), root, "", "ROOTb", false);
+        assertListingLineEntry(treeNodes.get(2), child1, " ├─", "CHILD1a", true);
+        assertListingLineEntry(treeNodes.get(3), child1, " │ ", "CHILD1b", false);
+        assertListingLineEntry(treeNodes.get(4), child2, " └─", "CHILD2", false);
     }
 
     private void assertListingLineEntry(
-            ListingLineEntry actual, SimpleTreeNode expectedNode, String expectedPrefix, String expectedLine) {
+            ListingLineEntry actual,
+            SimpleTreeNode expectedNode,
+            String expectedPrefix,
+            String expectedLine,
+            boolean expectedHasMoreForThisNode) {
         assertThat(actual.node()).isEqualTo(expectedNode);
         assertThat(actual.liningPrefix().plain()).isEqualTo(expectedPrefix);
         assertThat(actual.contentLine().plain()).isEqualTo(expectedLine);
+        assertThat(actual.hasMoreForThisNode()).isEqualTo(expectedHasMoreForThisNode);
     }
 
 }
