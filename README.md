@@ -328,6 +328,19 @@ rootNode.addChild(new BorderTreeNodeDecorator(childNode1, AnsiFormat.RED));
 
 SimpleTreeNode childNode2 = new SimpleTreeNode("Child 2");
 rootNode.addChild(childNode2);
+
+SimpleTreeNode grandChildNode22 = new SimpleTreeNode(
+        ConsoleText.of("Grandchild ")
+                .concat(ConsoleText.of("2-2").format(AnsiFormat.CYAN)).breakLine()
+                .concat(ConsoleText.of("Line 2").format(AnsiFormat.RED)).breakLine()
+                .concat(ConsoleText.of("Line line 3").format(AnsiFormat.MAGENTA))
+                .format(AnsiFormat.BOLD));
+childNode2.addChild(new ShadowTreeNodeDecorator(
+        JustifyTreeNodeDecorator.builder()
+                .minimumHeight(5).minimumWidth(20)
+                .verticalAlign(VerticalAlign.MIDDLE).horizontalAlign(HorizontalAlign.CENTER)
+                .background('~').backgroundFormat(AnsiFormat.CYAN)
+                .buildFor(grandChildNode22), AnsiFormat.BLUE));
 ```
 
 The built-in printers and decorators are formattable too.
