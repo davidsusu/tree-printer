@@ -10,6 +10,14 @@ public interface ConsoleText {
     
     public ConsoleText concat(ConsoleText consoleText);
     
+    public default ConsoleText concat(String content) {
+        return this.concat(ConsoleText.of(content));
+    }
+    
+    public default ConsoleText breakLine() {
+        return this.concat("\n");
+    }
+    
     public default int length() {
         return plain().length();
     }
