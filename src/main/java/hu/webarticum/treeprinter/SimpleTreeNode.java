@@ -20,6 +20,10 @@ public class SimpleTreeNode implements TreeNode {
     private final List<TreeNode> children = new ArrayList<>();
     
 
+    public SimpleTreeNode() {
+        this("");
+    }
+    
     public SimpleTreeNode(String content) {
         this(ConsoleText.of(content), Insets.EMPTY);
     }
