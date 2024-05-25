@@ -2,6 +2,7 @@
 
 > [!IMPORTANT]
 > Declarative construction of trees is coming.
+> 
 > **[Please leave a comment on the related issue, if you have an idea about better declaring a tree!](https://github.com/davidsusu/tree-printer/issues/15)**
 
 Simple Java library for visualizing tree structures in the command line.
