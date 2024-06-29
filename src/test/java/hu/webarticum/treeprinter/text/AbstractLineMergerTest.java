@@ -33,7 +33,7 @@ abstract class AbstractLineMergerTest {
 
     @Test
     void testInsertEmptyFar() {
-        assertThat(new PlainLineMerger().merge("lorem", 10, "").stripTrailing()).isEqualTo("lorem");
+        assertThat(new PlainLineMerger().merge("lorem", 10, "")).isEqualTo("lorem     ");
     }
 
     @Test

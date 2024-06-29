@@ -28,7 +28,7 @@ public class AnsiLineMerger implements LineMerger {
             leadingLength = locate(existingLine, 0, 0, fromPosition, leadingEscapeStack);
             String leading = leadingLength > 0 ? existingLine.substring(0, leadingLength) : existingLine;
             resultBuilder.append(leading);
-            if (!leadingEscapeStack.isEmpty()) {
+            if (leadingEscapeStack.length() > 0) {
                 resultBuilder.append(TextUtil.ansiReset());
             }
         }
@@ -38,7 +38,7 @@ public class AnsiLineMerger implements LineMerger {
         }
         
         resultBuilder.append(replacement);
-        if (!replacementEscapeStack.isEmpty()) {
+        if (replacementEscapeStack.length() > 0) {
             resultBuilder.append(TextUtil.ansiReset());
         }
 
